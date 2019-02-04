@@ -70,11 +70,22 @@ class Loady : UIButton {
      */
     private func copyBeforeAnyChanges(){
         _cacheButtonBeforeAnimation = UIButton();
-        
-        guard  let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false),  let btn = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archivedData) as? UIButton else {
-            return
+
+        if #available(iOS 11.0, *) {
+            guard  let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false),  let btn = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archivedData) as? UIButton else {
+                return
+            }
+            
+            _cacheButtonBeforeAnimation = btn
+        } else {
+            let archivedData = NSKeyedArchiver.archivedData(withRootObject:  self)
+            guard  let btn = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archivedData) as? UIButton else {
+                return
+            }
+            
+            _cacheButtonBeforeAnimation = btn
         }
-        _cacheButtonBeforeAnimation = btn
+       
         _cacheButtonBeforeAnimation?.layer.cornerRadius = self.layer.cornerRadius
 
     }
