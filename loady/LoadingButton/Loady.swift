@@ -353,7 +353,7 @@ class Loady : UIButton {
     }
     
     func createAppstore(){
-        let center = self.center
+        //        let center = self.center
         self.copyBeforeAnyChanges()
         let radius = min(self.frame.size.width, self.frame.size.height)
         self.setTitle("", for: .normal);
