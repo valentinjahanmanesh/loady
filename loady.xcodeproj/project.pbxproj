@@ -24,6 +24,14 @@
 		8E3350CB2205BA2F0040321D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8E3350CD2205BA2F0040321D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E3350D42205BA680040321D /* Loady.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loady.swift; sourceTree = "<group>"; };
+		8EEBA8A222083044006D0957 /* _properties.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _properties.png; sourceTree = "<group>"; };
+		8EEBA8A322083044006D0957 /* __circleEx.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __circleEx.gif; sourceTree = "<group>"; };
+		8EEBA8A422083044006D0957 /* _setClass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _setClass.png; sourceTree = "<group>"; };
+		8EEBA8A522083044006D0957 /* gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gif.gif; sourceTree = "<group>"; };
+		8EEBA8A622083044006D0957 /* __fillngEx.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __fillngEx.gif; sourceTree = "<group>"; };
+		8EEBA8A722083044006D0957 /* __indicatorViewEx.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __indicatorViewEx.gif; sourceTree = "<group>"; };
+		8EEBA8A822083044006D0957 /* __uberLike.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __uberLike.gif; sourceTree = "<group>"; };
+		8EEBA8A922083044006D0957 /* __allInOneEx.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __allInOneEx.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +64,7 @@
 		8E3350C02205BA2E0040321D /* loady */ = {
 			isa = PBXGroup;
 			children = (
+				8EEBA8A02208301B006D0957 /* examples */,
 				8E3350D32205BA470040321D /* LoadingButton */,
 				8E3350C12205BA2E0040321D /* AppDelegate.swift */,
 				8E3350C32205BA2E0040321D /* ViewController.swift */,
@@ -73,6 +82,21 @@
 				8E3350D42205BA680040321D /* Loady.swift */,
 			);
 			path = LoadingButton;
+			sourceTree = "<group>";
+		};
+		8EEBA8A02208301B006D0957 /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				8EEBA8A222083044006D0957 /* _properties.png */,
+				8EEBA8A322083044006D0957 /* __circleEx.gif */,
+				8EEBA8A422083044006D0957 /* _setClass.png */,
+				8EEBA8A522083044006D0957 /* gif.gif */,
+				8EEBA8A622083044006D0957 /* __fillngEx.gif */,
+				8EEBA8A722083044006D0957 /* __indicatorViewEx.gif */,
+				8EEBA8A822083044006D0957 /* __uberLike.gif */,
+				8EEBA8A922083044006D0957 /* __allInOneEx.gif */,
+			);
+			path = examples;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
