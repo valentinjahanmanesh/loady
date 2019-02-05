@@ -4,7 +4,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 ## todo
 - [x] animation style like appstore download button
 
-![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/iOSLoadingButtonView/master/loadingButton/examples/_gif.gif)
+![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
 
 
 # installation cocoapods
