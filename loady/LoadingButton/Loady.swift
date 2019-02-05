@@ -138,7 +138,7 @@ class Loady : UIButton {
     /**
      move the text a little left and add the loading
      */
-    func createIndicatorLoading(){
+    private func createIndicatorLoading(){
         UIView.animate(withDuration: 0.3) {
             self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 30);
             self.layoutIfNeeded()
@@ -150,7 +150,7 @@ class Loady : UIButton {
     /**
      create indicator view
      */
-    func createIndicatorView(){
+    private func createIndicatorView(){
         let indicator = UIActivityIndicatorView();
         indicator.style = self.setIndicatorViewDarkStyle ? .gray : .white;
         indicator.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -171,13 +171,13 @@ class Loady : UIButton {
         }, completion: nil)
         
     }
-    func removeIndicatorView(){
+    private func removeIndicatorView(){
         self.viewWithTag(-11111111)?.removeFromSuperview();
     }
     
     
     ///line loading
-    func createTopLineLoading(){
+    private func createTopLineLoading(){
         //create our loading layer and line path
         let loadingLayer = CAShapeLayer();
         let path = UIBezierPath();
@@ -221,7 +221,7 @@ class Loady : UIButton {
     }
     
     
-    func removeTopLineLayer(){
+    private func removeTopLineLayer(){
         //Reset button
         self.layer.sublayers?.forEach({layer in
             if layer.accessibilityHint == "button_topline_loading" {
@@ -266,7 +266,7 @@ class Loady : UIButton {
     /**
      remove itemes that related to views
      */
-    func endAndDeleteLoading(){
+    private func endAndDeleteLoading(){
         _isloadingShowing = false;
         _percentFilled = 0;
         
@@ -305,7 +305,7 @@ class Loady : UIButton {
     /**
      create loading animation and layer
      */
-    func createFillingLoading(){
+    private func createFillingLoading(){
         _percentFilled = 0;
         //a shape for filling the button
         let layer = CAShapeLayer();
@@ -326,12 +326,12 @@ class Loady : UIButton {
         self._filledLoadingLayer?.insertSublayer(layer,at:0)
         self.layer.insertSublayer(self._filledLoadingLayer!,at:0);
     }
-    func removeFillingLayer(){
+    private func removeFillingLayer(){
         self._filledLoadingLayer?.removeFromSuperlayer();
         _filledLoadingLayer = nil;
     }
     
-    func createCircleAndTick(){
+    private func createCircleAndTick(){
         let center = self.center
         self.copyBeforeAnyChanges()
         let radius = min(self.frame.size.width, self.frame.size.height)
@@ -353,7 +353,7 @@ class Loady : UIButton {
         }
     }
     
-    func createAppstore(){
+    private func createAppstore(){
         //        let center = self.center
         self.copyBeforeAnyChanges()
         let radius = min(self.frame.size.width, self.frame.size.height)
@@ -379,7 +379,7 @@ class Loady : UIButton {
         }
     }
     
-    func removeAppstoreLayer(){
+    private func removeAppstoreLayer(){
         if animationType != .appstore{
             return
         }
@@ -409,7 +409,7 @@ class Loady : UIButton {
         }
     }
     
-    func removeCircleLoadingLayer(){
+    private func removeCircleLoadingLayer(){
         if  animationType != .circleAndTick{
             return
         }
@@ -448,7 +448,7 @@ class Loady : UIButton {
         })
     }
     
-    func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
+    private func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
         self._circleStrokeLoadingLayer = CAShapeLayer()
         let path = UIBezierPath()
         self._percentFilled = 0
@@ -470,7 +470,7 @@ class Loady : UIButton {
         self.layer.addSublayer(self._circleStrokeLoadingLayer!)
         
     }
-    func createAppstoreLoadingLayer(){
+    private func createAppstoreLoadingLayer(){
         // creates the circle loading
         createCircleLoadingLayer(radius: self.frame.midX ,centerX: self.frame.maxX - self.frame.midX)
         
@@ -548,7 +548,7 @@ class Loady : UIButton {
     ///
     /// - Parameter degree: degree
     /// - Returns: calculated radian
-    func degreeToRadian(degree : CGFloat)->CGFloat{
+    private func degreeToRadian(degree : CGFloat)->CGFloat{
         return degree * .pi / 180;
     }
 }
