@@ -22,8 +22,14 @@ or simply copy the source codes into your project, take a look at the example pr
 
 also you can use it as a class for your buttons in interface builder, and change those options from interface builder
 
+
+## specs
+![ALL](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_specs.jpeg)
+
+
 ## set class
-![ALL](https://raw.githubusercontent.com/farshadjahanmanesh/iOSLoadingButtonView/master/loadingButton/examples/_setClass.png)
+![ALL](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png)
 
 ## change attributes
-![ALL](https://raw.githubusercontent.com/farshadjahanmanesh/iOSLoadingButtonView/master/loadingButton/examples/_properties.png)
+![ALL](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png)
+
