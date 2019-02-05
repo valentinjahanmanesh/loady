@@ -346,6 +346,7 @@ class Loady : UIButton {
                 self.layoutIfNeeded()
             }, completion: { (finished) in
                 if(finished){
+                    self.titleLabel?.text  = ""
                     self.createCircleLoadingLayer()
                 }
             })
@@ -369,7 +370,7 @@ class Loady : UIButton {
                 self.layoutIfNeeded()
             }, completion: { (finished) in
                 if(finished){
-                   
+                    self.titleLabel?.text  = ""
                 }
             })
         }
@@ -379,7 +380,7 @@ class Loady : UIButton {
     }
     
     func removeAppstoreLayer(){
-        if self._circleStrokeLoadingLayer == nil,animationType == .appstore{
+        if animationType != .appstore{
             return
         }
         self.clearTempLayers()
@@ -388,10 +389,11 @@ class Loady : UIButton {
             guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
                 return
             }
-            weakSelf.frame.origin.x = cached.frame.origin.x
+            
             weakSelf.bounds = CGRect(x:0,y: 0,width: cached.frame.size.width,height: cached.frame.size.height);
             weakSelf.layer.cornerRadius = cached.layer.cornerRadius;
-            weakSelf.transform = .identity;
+            weakSelf.frame.origin.x = 0
+            //weakSelf.transform = .identity;
             weakSelf.backgroundColor = cached.backgroundColor;
             weakSelf.layoutIfNeeded();
         }) {[weak self] (finished) in
@@ -400,6 +402,7 @@ class Loady : UIButton {
                     return
                 }
                 weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
+                
                 weakSelf._circleStrokeLoadingLayer?.removeFromSuperlayer()
                 weakSelf._circleStrokeLoadingLayer = nil;
             }
@@ -407,11 +410,11 @@ class Loady : UIButton {
     }
     
     func removeCircleLoadingLayer(){
-        if self._circleStrokeLoadingLayer == nil, animationType == .circleAndTick{
+        if  animationType != .circleAndTick{
             return
         }
         self.clearTempLayers()
-        self.setTitle("", for: .normal)
+        self.titleLabel?.text  = ""
         self._circleStrokeLoadingLayer?.removeAllAnimations()
         UIView.animate(withDuration: 0.5, animations: {[weak self] in
             guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
@@ -428,7 +431,9 @@ class Loady : UIButton {
                 guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
                     return
                 }
-                weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
+                UIView.performWithoutAnimation {
+                    weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
+                }
                 weakSelf._circleStrokeLoadingLayer?.removeFromSuperlayer()
                 weakSelf._circleStrokeLoadingLayer = nil;
             }
