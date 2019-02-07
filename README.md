@@ -19,7 +19,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 ![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
 
 
-# Installation, cocoapods
+## Installation, cocoapods
 just add this line into your podfile
 ```swift
   pod 'loady'
