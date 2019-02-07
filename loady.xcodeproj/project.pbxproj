@@ -24,7 +24,6 @@
 		8E3350C62205BA2E0040321D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8E3350C82205BA2F0040321D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E3350CB2205BA2F0040321D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8E3350CD2205BA2F0040321D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E3350D42205BA680040321D /* Loady.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loady.swift; sourceTree = "<group>"; };
 		8EEBA8A222083044006D0957 /* _properties.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _properties.png; sourceTree = "<group>"; };
 		8EEBA8A322083044006D0957 /* __circleEx.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __circleEx.gif; sourceTree = "<group>"; };
@@ -35,6 +34,7 @@
 		8EEBA8A922083044006D0957 /* __allInOneEx.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = __allInOneEx.gif; sourceTree = "<group>"; };
 		8EFA19D42209B1BA00DF2F58 /* _gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = _gif.gif; sourceTree = "<group>"; };
 		8EFA19D62209BD8C00DF2F58 /* _specs.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = _specs.jpeg; sourceTree = "<group>"; };
+		F86C2C51220CC56F003243B2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,10 +71,10 @@
 				8E3350D32205BA470040321D /* LoadingButton */,
 				8E3350C12205BA2E0040321D /* AppDelegate.swift */,
 				8E3350C32205BA2E0040321D /* ViewController.swift */,
+				F86C2C51220CC56F003243B2 /* Info.plist */,
 				8E3350C52205BA2E0040321D /* Main.storyboard */,
 				8E3350C82205BA2F0040321D /* Assets.xcassets */,
 				8E3350CA2205BA2F0040321D /* LaunchScreen.storyboard */,
-				8E3350CD2205BA2F0040321D /* Info.plist */,
 			);
 			path = loady;
 			sourceTree = "<group>";
@@ -326,7 +326,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QGFPA9QY4R;
-				INFOPLIST_FILE = loady/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/loady/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -344,7 +344,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QGFPA9QY4R;
-				INFOPLIST_FILE = loady/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/loady/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
