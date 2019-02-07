@@ -1,5 +1,7 @@
+<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/logo.png" width="100%" style="text-align:center">
+
 # loady
-this is a small library to show loading and indicator in UIButton, with fully customizable styles
+### this is a small library to show loading and indicator in UIButton, with fully customizable styles
 
 ## todo
 - [x] animation style like appstore download button
