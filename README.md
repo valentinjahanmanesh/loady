@@ -1,6 +1,5 @@
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/logo.png" width="100%" style="text-align:center">
 
-![CircleCI](https://circleci.com/gh/hyperoslo/Whisper.png)
 [![Version](https://img.shields.io/cocoapods/v/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
 [![License](https://img.shields.io/cocoapods/l/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
 [![Platform](https://img.shields.io/cocoapods/p/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
@@ -30,8 +29,32 @@ or simply copy the source codes into your project, take a look at the example pr
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_specs.jpeg" width="50%" style="text-align:center">
 
 ## Setup programmatically :
-also you can use it as a class for your buttons in interface builder, and change those options from interface builder
+```swift
 
+       // sets animation type
+        self.allInOneviewButton?.setAnimationType = LoadingType.all.rawValue
+        
+        // sets the color that fills the button after percent value changed
+        self.allInOneviewButton?.setFilledBackgroundColor = .purple
+        
+        // sets the indicator color above the button
+        self.allInOneviewButton?.setLoadingColor = .yellow
+
+        // sets the indictore view color (dark or light) inside the button
+        self.allInOneviewButton?.setIndicatorViewDarkStyle = false
+        
+        // some animations have image inside (e.g appstore pause image), this line sets that image
+        self.allInOneviewButton?.pauseImage = UIImage(named: "pause.png")
+        
+        // starts loading animation
+        self.allInOneviewButton?.startLoading()
+        
+        // some animations have filling background, this sets the filling percent, number is something between 0 to 100
+        self.allInOneviewButton?.fillTheButton(with: 10)
+        
+        // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
+        self.allInOneviewButton?.fillTheCircleStrokeLoadingWith(percent: percent)
+```
 ## Set class and change attributes
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="50%" style="text-align:center">
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png" width="50%" style="text-align:center">
