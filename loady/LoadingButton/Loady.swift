@@ -7,7 +7,16 @@
 //
 
 import UIKit
-
+struct LoadyAnimationOptions {
+    struct FourPhase {
+        enum Phases {
+            case normal(title:String,image : UIImage?,background:UIColor)
+            case loading(title:String,image : UIImage?,background:UIColor)
+            case success(title:String,image : UIImage?,background:UIColor)
+            case error(title:String,image : UIImage?,background:UIColor)
+        }
+    }
+}
 enum LoadingType: Int {
     case none
     case topLine
@@ -16,6 +25,7 @@ enum LoadingType: Int {
     case circleAndTick
     case all
     case appstore
+    case fourPhases
 }
 typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
@@ -25,26 +35,39 @@ extension IndicatorViewStyle {
 
 class Loady : UIButton {
     // public settings
-
-    @IBInspectable var animationType = 0 {
+    @IBInspectable var animationType : Int = 0 {
         didSet{
             self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
-    } 
+    }
     @IBInspectable var loadingColor : UIColor = UIColor.black
     @IBInspectable var backgroundFillColor : UIColor = UIColor.black
     @IBInspectable var indicatorViewStyle: IndicatorViewStyle = .light
-    open var pauseImage : UIImage? 
-    
+    open var pauseImage : UIImage?
+    var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
+        didSet{
+            guard let normal =  fourPhases?.normal else {
+                return
+            }
+            self._fourPhasesNextPhase = normal
+            self.createFourPhaseButton()
+        }
+    }
     // private settings
     private(set) var _animationType = LoadingType.none
     
     // this key is used to mark some layers as temps layer and we will remove them after animation is done
-    private let _tempsLayerKey = "temps"
+    private struct LayerTempKeys {
+        static let tempLayer = "temps"
+        static let circularLoading = "circularLoading"
+    }
+    
     fileprivate var _percentFilled : CGFloat = 0
     fileprivate var _isloadingShowing = false
     fileprivate var _filledLoadingLayer : CAShapeLayer?
     fileprivate var _circleStrokeLoadingLayer : CAShapeLayer?
+    
+    private(set) var _fourPhasesNextPhase : LoadyAnimationOptions.FourPhase.Phases?
     
     // we keep a copy of before animation button properties and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
@@ -84,7 +107,7 @@ class Loady : UIButton {
      */
     private func copyBeforeAnyChanges(){
         _cacheButtonBeforeAnimation = UIButton();
-
+        
         if #available(iOS 11.0, *) {
             guard  let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false),  let btn = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archivedData) as? UIButton else {
                 return
@@ -99,9 +122,9 @@ class Loady : UIButton {
             
             _cacheButtonBeforeAnimation = btn
         }
-       
+        
         _cacheButtonBeforeAnimation?.layer.cornerRadius = self.layer.cornerRadius
-
+        
     }
     
     
@@ -145,6 +168,8 @@ class Loady : UIButton {
             //filling animation
             self.createFillingLoading()
             break;
+        case .fourPhases:
+            self.createFourPhaseButton()
         default:
             break;
         }
@@ -298,7 +323,6 @@ class Loady : UIButton {
         
     }
     
-    
     /**
      create the filling layer
      
@@ -393,7 +417,7 @@ class Loady : UIButton {
             })
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-             self.createAppstoreLoadingLayer()
+            self.createAppstoreLoadingLayer()
         }
     }
     
@@ -460,33 +484,37 @@ class Loady : UIButton {
     private func clearTempLayers(){
         
         self.layer.sublayers?.forEach({ (layer) in
-                    if let temp = layer.accessibilityHint,temp == _tempsLayerKey {
-                        layer.removeFromSuperlayer()
-                    }
+            if let temp = layer.accessibilityHint,temp == LayerTempKeys.tempLayer {
+                layer.removeFromSuperlayer()
+            }
         })
     }
     
     private func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
-        self._circleStrokeLoadingLayer = CAShapeLayer()
-        let path = UIBezierPath()
-        self._percentFilled = 0
-        self._circleStrokeLoadingLayer!.bounds = CGRect(x:0,y: 0,width: self.frame.width + 5,height: self.frame.height + 5);
-        self._circleStrokeLoadingLayer!.strokeColor = self.loadingColor.cgColor;
-        self._circleStrokeLoadingLayer!.lineWidth = 3;
-        self._circleStrokeLoadingLayer!.fillColor = UIColor.clear.cgColor;
-        self._circleStrokeLoadingLayer!.lineCap = CAShapeLayerLineCap(rawValue: "round");
-        self._circleStrokeLoadingLayer!.strokeStart = 0.0;
-        self._circleStrokeLoadingLayer!.strokeEnd = 0.0;
-        let center = CGPoint(x: centerX ?? self._circleStrokeLoadingLayer!.bounds.midX,y: centerY ?? self._circleStrokeLoadingLayer!.bounds.midY);
-        self._circleStrokeLoadingLayer!.position = CGPoint(x:self.bounds.midX,y: self.bounds.midY) ;
-        self._circleStrokeLoadingLayer!.anchorPoint = CGPoint(x:0.5,y: 0.5);
-        path.addArc(withCenter: center, radius: radius ?? self.frame.width / 2 + 4, startAngle: (-.pi / 2), endAngle: (-.pi / 2) + (-2.0 * .pi), clockwise: false)
-        
-        self._circleStrokeLoadingLayer?.path = path.cgPath
+        self._circleStrokeLoadingLayer = createACircleInsideButton(radius: radius ,centerX: centerX ,centerY: centerY)
         self._circleStrokeLoadingLayer?.accessibilityHint = "button_circle_loading_stroke_parent"
         
         self.layer.addSublayer(self._circleStrokeLoadingLayer!)
         
+    }
+    private func createACircleInsideButton(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil)-> CAShapeLayer{
+        let circle = CAShapeLayer()
+        let path = UIBezierPath()
+        let radius = radius ?? self.frame.width / 2 + 4
+        circle.bounds = CGRect(x:0,y: 0,width: radius + 5,height: radius + 5);
+        circle.strokeColor = self.loadingColor.cgColor;
+        circle.lineWidth = 3;
+        circle.fillColor = UIColor.clear.cgColor;
+        circle.lineCap = CAShapeLayerLineCap(rawValue: "round");
+        circle.strokeStart = 0.0;
+        circle.strokeEnd = 0.0;
+        let center = CGPoint(x: centerX ?? circle.bounds.midX,y: centerY ?? circle.bounds.midY);
+        circle.position = CGPoint(x:self.bounds.midX,y: self.bounds.midY) ;
+        circle.anchorPoint = CGPoint(x:0.5,y: 0.5);
+        path.addArc(withCenter: center, radius: radius , startAngle: (-.pi / 2), endAngle: (-.pi / 2) + (-2.0 * .pi), clockwise: false)
+        
+        circle.path = path.cgPath
+        return circle
     }
     private func createAppstoreLoadingLayer(){
         // creates the circle loading
@@ -497,7 +525,7 @@ class Loady : UIButton {
         circleContainer.strokeStart = 0
         circleContainer.strokeEnd = 1
         circleContainer.opacity = 1
-        circleContainer.accessibilityHint = _tempsLayerKey
+        circleContainer.accessibilityHint = LayerTempKeys.tempLayer
         
         // check if user specifies an image for pause
         if let image = pauseImage {
@@ -597,5 +625,216 @@ extension Loady {
         
         return newImage!
     }
+    
+}
 
+extension Loady {
+    private func createFourPhaseButton(){
+        guard let nextPhase = _fourPhasesNextPhase, let fourPhase = fourPhases  else {
+            return
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0);
+            self.layoutIfNeeded()
+        }
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        let animation = CATransition()
+        animation.isRemovedOnCompletion = true
+        animation.duration = 0.2
+        animation.type = CATransitionType.push
+        animation.subtype = CATransitionSubtype.fromTop
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        self.titleLabel!.layer.add(animation, forKey:"changeTextTransition")
+        
+        switch nextPhase {
+        case .normal(let name, let image , let background):
+            self.setTitle(name , for: .normal)
+            self.backgroundColor = background
+            self._fourPhasesNextPhase  = fourPhase.loading
+            setupImagesInFourPhases(image)
+            
+            break
+        case .loading(let name, let image, let background):
+            self.setTitle(name , for: .normal)
+            self.backgroundColor = background
+            self._fourPhasesNextPhase  = nil
+            let circle = setupImagesInFourPhases(image,shrinkContainerLayer: true)
+            createCircularLoading(bounds: circle.bounds, center : circle.position)
+            break
+        case .success(let name, let image, let background):
+            self.setTitle(name , for: .normal)
+            self.backgroundColor = background
+            self._fourPhasesNextPhase  = fourPhase.normal
+            setupImagesInFourPhases(image)
+            cleanCircularLoading()
+            break
+        case .error(let name, let image, let background):
+            self.setTitle(name , for: .normal)
+            self.backgroundColor = background
+            self._fourPhasesNextPhase  = fourPhase.normal
+            setupImagesInFourPhases(image)
+            cleanCircularLoading()
+            break
+        }
+        UIView.commitAnimations()
+        
+    }
+    
+    func successPhase(){
+        guard let fourPhase = fourPhases  else {
+            return
+        }
+        self._fourPhasesNextPhase = fourPhase.success
+        createFourPhaseButton()
+    }
+    func errorPhase(){
+        guard let fourPhase = fourPhases  else {
+            return
+        }
+        self._fourPhasesNextPhase = fourPhase.error
+        createFourPhaseButton()
+    }
+    @discardableResult private func setupImagesInFourPhases(_ image : UIImage? , shrinkContainerLayer : Bool = false)->CAShapeLayer{
+        if let imageLayer = self.layer.sublayers?.first(where: { $0.accessibilityHint == LayerTempKeys.tempLayer}) {
+            let animation = CATransition()
+            animation.isRemovedOnCompletion = true
+            animation.duration = 0.2
+            animation.type = CATransitionType.push
+            animation.subtype = CATransitionSubtype.fromTop
+            animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+            imageLayer.sublayers?[0].add(animation, forKey:"changeImageTransition")
+            imageLayer.sublayers?[0].contents = image?.cgImage
+            imageLayer.sublayers?[0].contentsScale = UIScreen.main.scale
+            if shrinkContainerLayer {
+                imageLayer.transform =  CATransform3DMakeScale(0.7, 0.7, 1);
+            }else{
+                imageLayer.transform =  CATransform3DMakeScale(1, 1, 1);
+            }
+            return imageLayer as! CAShapeLayer
+        }else{
+            let radius = self.bounds.height / 3
+            let circleContainer = createACircleInsideButton(radius: radius)
+            circleContainer.fillColor = UIColor.white.cgColor
+            circleContainer.position.x = radius * 2
+            let imageLayer = CAShapeLayer()
+            imageLayer.bounds = CGRect(x:0,y: 0,width: radius,height: radius);
+            imageLayer.position = CGPoint(x:circleContainer.bounds.midY,y: circleContainer.bounds.midY);
+            imageLayer.anchorPoint = CGPoint(x:0.5,y: 0.5);
+            imageLayer.contents = image?.cgImage
+            imageLayer.contentsGravity = CALayerContentsGravity.resizeAspectFill
+            circleContainer.accessibilityHint = LayerTempKeys.tempLayer
+            circleContainer.addSublayer(imageLayer)
+            
+            self.layer.addSublayer(circleContainer)
+            
+            return circleContainer
+        }
+    }
+    
+    private func cleanCircularLoading(){
+        if let loading = self.layer.sublayers?.first(where: { $0.accessibilityHint == LayerTempKeys.circularLoading}) {
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = 1.0
+            animation.toValue = 0.0
+            animation.duration = 0.5
+            animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            loading.add(animation, forKey: "fade")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                loading.removeFromSuperlayer()
+            }
+        }
+    }
+    private func createCircularLoading(bounds : CGRect, center : CGPoint){
+        cleanCircularLoading()
+        let circularLoadingLayer = CAShapeLayer()
+        circularLoadingLayer.fillColor = UIColor.clear.cgColor
+        circularLoadingLayer.strokeColor = UIColor.black.cgColor
+        circularLoadingLayer.lineWidth = 3
+        circularLoadingLayer.bounds = bounds.insetBy(dx: -5, dy: -5)
+        //circularLoadingLayer.bounds.size = CGSize(width: 30, height: 30)
+        circularLoadingLayer.path = UIBezierPath(ovalIn: circularLoadingLayer.bounds).cgPath
+        circularLoadingLayer.position = center
+        circularLoadingLayer.anchorPoint = CGPoint(x:0.5,y: 0.5);
+        circularLoadingLayer.accessibilityHint = LayerTempKeys.circularLoading
+        self.layer.addSublayer(circularLoadingLayer)
+        startCircluarLoadingAnimation(circularLoadingLayer)
+    }
+    
+    private struct Pose {
+        let secondsSincePriorPose: CFTimeInterval
+        let start: CGFloat
+        let length: CGFloat
+        init(_ secondsSincePriorPose: CFTimeInterval, _ start: CGFloat, _ length: CGFloat) {
+            self.secondsSincePriorPose = secondsSincePriorPose
+            self.start = start
+            self.length = length
+        }
+    }
+    
+    private class var poses: [Pose] {
+        get {
+            return [
+                Pose(0.0, 0.000, 0.7),
+                Pose(0.6, 0.500, 0.5),
+                Pose(0.6, 1.000, 0.3),
+                Pose(0.6, 1.500, 0.1),
+                Pose(0.2, 1.875, 0.1),
+                Pose(0.2, 2.250, 0.3),
+                Pose(0.2, 2.625, 0.5),
+                Pose(0.2, 3.000, 0.7),
+            ]
+        }
+    }
+    
+    private func startCircluarLoadingAnimation(_ layer : CAShapeLayer) {
+        var time: CFTimeInterval = 0
+        var times = [CFTimeInterval]()
+        var start: CGFloat = 0
+        var rotations = [CGFloat]()
+        var strokeEnds = [CGFloat]()
+        
+        let poses = type(of: self).poses
+        let totalSeconds = poses.reduce(0) { $0 + $1.secondsSincePriorPose }
+        
+        for pose in poses {
+            time += pose.secondsSincePriorPose
+            times.append(time / totalSeconds)
+            start = pose.start
+            rotations.append(start * 2 * .pi)
+            strokeEnds.append(pose.length)
+        }
+        
+        times.append(times.last!)
+        rotations.append(rotations[0])
+        strokeEnds.append(strokeEnds[0])
+        
+        animateKeyPath(layer,keyPath: "strokeEnd", duration: totalSeconds, times: times, values: strokeEnds)
+        animateKeyPath(layer,keyPath: "transform.rotation", duration: totalSeconds, times: times, values: rotations)
+        
+        animateStrokeHueWithDuration(layer ,duration: totalSeconds * 5)
+    }
+    
+    private func animateKeyPath(_ layer  : CAShapeLayer,keyPath: String, duration: CFTimeInterval, times: [CFTimeInterval], values: [CGFloat]) {
+        let animation = CAKeyframeAnimation(keyPath: keyPath)
+        animation.keyTimes = times as [NSNumber]?
+        animation.values = values
+        animation.calculationMode = .linear
+        animation.duration = duration
+        animation.repeatCount = Float.infinity
+        layer.add(animation, forKey: animation.keyPath)
+    }
+    
+    private func animateStrokeHueWithDuration(_ layer  : CAShapeLayer, duration: CFTimeInterval) {
+        let count = 36
+        let animation = CAKeyframeAnimation(keyPath: "strokeColor")
+        animation.keyTimes = (0 ... count).map { NSNumber(value: CFTimeInterval($0) / CFTimeInterval(count)) }
+        let loadingColor = self.loadingColor
+        animation.values = (0 ... count).map {_ in
+            loadingColor.cgColor
+        }
+        animation.duration = duration
+        animation.calculationMode = .linear
+        animation.repeatCount = Float.infinity
+        layer.add(animation, forKey: animation.keyPath)
+    }
 }
