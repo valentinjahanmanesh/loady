@@ -25,12 +25,22 @@ extension IndicatorViewStyle {
 
 class Loady : UIButton {
     // public settings
-    @IBInspectable var animationType = 0
+
+    @IBInspectable var animationType = 0 {
+        didSet{
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
+        }
+    } 
     @IBInspectable var loadingColor : UIColor = UIColor.black
     @IBInspectable var backgroundFillColor : UIColor = UIColor.black
     @IBInspectable var indicatorViewStyle: IndicatorViewStyle = .light
     open var pauseImage : UIImage? 
-    var _animationType = LoadingType.none
+    @IBInspectable var animationType = 0 {
+        didSet{
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
+        }
+    }
+    private var _animationType = LoadingType.none
     
     // private settings
     private let _tempsLayerKey = "temps"
@@ -101,12 +111,16 @@ class Loady : UIButton {
      
      @param loadingType the loading style
      */
-    func startLoading(loadingType:LoadingType){
+    func startLoading(loadingType:LoadingType? = nil){
+        let loading = loadingType ?? self.animationType
+        if let loadingType = loadingType {
+            self.setAnimationType = loadingType.rawValue
+        }
         if self.loadingIsShowing(){
             self.endAndDeleteLoading()
             return;
         }
-        switch (loadingType) {
+        switch (loading) {
         case .topLine:
             self.createTopLineLoading()
             break;
