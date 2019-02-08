@@ -38,7 +38,7 @@ or simply copy the source codes into your project, take a look at the example pr
         self.allInOneviewButton?.setFilledBackgroundColor = .purple
         
         // sets the indicator color above the button
-        self.allInOneviewButton?.setLoadingColor = .yellow
+        self.allInOneviewButton?.setLoadingColor = .yellowpercent
 
         // sets the indictore view color (dark or light) inside the button
         self.allInOneviewButton?.setIndicatorViewDarkStyle = false
@@ -53,7 +53,7 @@ or simply copy the source codes into your project, take a look at the example pr
         self.allInOneviewButton?.fillTheButton(with: 10)
         
         // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
-        self.allInOneviewButton?.fillTheCircleStrokeLoadingWith(percent: percent)
+        self.allInOneviewButton?.fillTheCircleStrokeLoadingWith(percent: 25 )
 ```
 ## Set class and change attributes
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="50%" style="text-align:center">
