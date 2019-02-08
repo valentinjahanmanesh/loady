@@ -32,28 +32,28 @@ or simply copy the source codes into your project, take a look at the example pr
 ```swift
 
        // sets animation type
-        self.allInOneviewButton?.setAnimationType = LoadingType.all.rawValue
+        self.allInOneview?.animationType = LoadingType.all.rawValue
         
         // sets the color that fills the button after percent value changed
-        self.allInOneviewButton?.setFilledBackgroundColor = .purple
+        self.allInOneview?.backgroundFillColor = .purple
         
         // sets the indicator color above the button
-        self.allInOneviewButton?.setLoadingColor = .yellowpercent
+        self.allInOneview?.loadingColor = .yellow
 
         // sets the indictore view color (dark or light) inside the button
-        self.allInOneviewButton?.setIndicatorViewDarkStyle = false
+        self.allInOneview?.indicatorViewStyle = .light
         
         // some animations have image inside (e.g appstore pause image), this line sets that image
-        self.allInOneviewButton?.pauseImage = UIImage(named: "pause.png")
+        self.allInOneview?.pauseImage = UIImage(named: "pause.png")
         
         // starts loading animation
-        self.allInOneviewButton?.startLoading()
+        self.allInOneview?.startLoading()
         
         // some animations have filling background, this sets the filling percent, number is something between 0 to 100
-        self.allInOneviewButton?.fillTheButton(with: 10)
+        self.allInOneview?.fillTheButton(with: 10)
         
         // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
-        self.allInOneviewButton?.fillTheCircleStrokeLoadingWith(percent: 25 )
+        self.allInOneview?.fillTheCircleStrokeLoadingWith(percent: 25)
 ```
 ## Set class and change attributes
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="50%" style="text-align:center">
