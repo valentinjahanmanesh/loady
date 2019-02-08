@@ -76,10 +76,9 @@ or simply copy the source codes into your project, take a look at the example pr
             LoadyAnimationOptions.FourPhase.Phases.error(title: "Error", image: UIImage(named: "unlocked"), background: UIColor(red:0.64, green:0.00, blue:0.15, alpha:1.0))
         )
         
-        
         // then later in your code after user click on the button just call, this line take the button to loading phase, 
         self.fourPhases?.startLoading()
-        
+
         // in loading phase three different stage is available, you can cancel the loading by calling
         self.fourPhases?.normalPhase()
         
@@ -90,7 +89,14 @@ or simply copy the source codes into your project, take a look at the example pr
         self.fourPhases?.errorPhase()
         
 ```
+| Loading To Normal | Loading To Success | Loading To Error |
+| ------------- | ------------- | ------------- |
+| <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_cancelPhase.gif" height="200px" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_successPhase.gif" height="200px" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_errorPhase.gif" height="200px" style="text-align:center"> |
 
-## Set class and change attributes
-<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="50%" style="text-align:center">
-<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png" width="50%" style="text-align:center">
+
+## Setup in interface builder
+| Set class | change attributes |
+| ------------- | ------------- |
+| <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="100%" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png" width="100%" style="text-align:center"> |
+
+
