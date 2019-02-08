@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         self.allInOneview?.backgroundFillColor = .purple
         
         // sets the indicator color above the button
-        self.allInOneview?.loadingColor = .yellow
+        self.allInOneview?.loadingColor = UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)
         
         // sets the indictore view color (dark or light) inside the button
         self.allInOneview?.indicatorViewStyle = .light
@@ -52,7 +52,7 @@ class ViewController: UIViewController {
         self.allInOneview?.pauseImage = UIImage(named: "pause")
         
         // starts loading animation
-        self.allInOneview?.startLoading()
+        // self.allInOneview?.startLoading()
         
         // some animations have filling background, this sets the filling percent, number is something between 0 to 100
         self.allInOneview?.fillTheButton(with: 10)
@@ -123,11 +123,13 @@ class ViewController: UIViewController {
             self.fourPhaseTempTimer?.invalidate()
             self.fourPhaseTempTimer = nil
             self.fourPhaseTempTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){(t) in
-                guard let nextPhase = self.fourPhases?._fourPhasesNextPhase else {
-                    if Int.random(in: Range.init(0...1)) == 0 {
+                guard let _ = self.fourPhases?._fourPhasesNextPhase else {
+                    if self.fourPhases?.tag  == 0 {
                         self.fourPhases?.errorPhase()
+                        self.fourPhases?.tag = 1
                     }else{
                         self.fourPhases?.successPhase()
+                        self.fourPhases?.tag = 0
                     }
                     return
                 }
