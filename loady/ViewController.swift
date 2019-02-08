@@ -32,16 +32,16 @@ class ViewController: UIViewController {
         self.appstore?.pauseImage = #imageLiteral(resourceName: "pause-button")
         
         // sets animation type
-        self.allInOneview?.setAnimationType = LoadingType.all.rawValue
+        self.allInOneview?.animationType = LoadingType.all.rawValue
         
         // sets the color that fills the button after percent value changed
-        self.allInOneview?.setFilledBackgroundColor = .purple
+        self.allInOneview?.backgroundFillColor = .purple
         
         // sets the indicator color above the button
-        self.allInOneview?.setLoadingColor = .yellow
+        self.allInOneview?.loadingColor = .yellow
 
         // sets the indictore view color (dark or light) inside the button
-        self.allInOneview?.setIndicatorViewDarkStyle = false
+        self.allInOneview?.indicatorViewStyle = .light
         
         // some animations have image inside (e.g appstore pause image), this line sets that image
         self.allInOneview?.pauseImage = UIImage(named: "pause.png")
@@ -65,7 +65,7 @@ class ViewController: UIViewController {
         // start animating based on button animation style type
         button.startLoading(loadingType: LoadingType(rawValue: button.animationType) ?? .none)
         var percent : CGFloat = 0
-        switch button.animationType {
+        switch button._animationType {
         case .backgroundHighlighter:
             self.tempTimer1?.invalidate()
             self.tempTimer1 = nil
