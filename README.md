@@ -60,7 +60,7 @@ or simply copy the source codes into your project, take a look at the example pr
 
 ### 4 Phases Animation :
 ```swift
-        // setup colors and title and images
+        // setup colors, titles and images
         self.fourPhases?.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
         self.fourPhases?.fourPhases = (
             // normal phase
