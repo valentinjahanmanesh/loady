@@ -73,6 +73,8 @@ class ViewController: UIViewController {
             // error phase
             LoadyAnimationOptions.FourPhase.Phases.error(title: "Error", image: UIImage(named: "unlocked"), background: UIColor(red:0.64, green:0.00, blue:0.15, alpha:1.0))
         )
+        
+        
     }
     
     @IBAction func animateView(_ sender : UIButton){
@@ -127,8 +129,11 @@ class ViewController: UIViewController {
                     if self.fourPhases?.tag  == 0 {
                         self.fourPhases?.errorPhase()
                         self.fourPhases?.tag = 1
-                    }else{
+                    }else if self.fourPhases?.tag  == 1{
                         self.fourPhases?.successPhase()
+                        self.fourPhases?.tag = 2
+                    } else{
+                        self.fourPhases?.normalPhase()
                         self.fourPhases?.tag = 0
                     }
                     return

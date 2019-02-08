@@ -679,7 +679,14 @@ extension Loady {
         UIView.commitAnimations()
         
     }
-    
+    func normalPhase(){
+        guard let fourPhase = fourPhases  else {
+            return
+        }
+        self._fourPhasesNextPhase = fourPhase.normal
+        createFourPhaseButton()
+        cleanCircularLoading()
+    }
     func successPhase(){
         guard let fourPhase = fourPhases  else {
             return

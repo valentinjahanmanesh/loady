@@ -32,6 +32,9 @@
 		8EFA19D62209BD8C00DF2F58 /* _specs.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = _specs.jpeg; sourceTree = "<group>"; };
 		F86C2C51220CC56F003243B2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F86C2C53220CC791003243B2 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		F8E5A199220DA1BD00BA6DE7 /* _errorPhase.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = _errorPhase.gif; sourceTree = "<group>"; };
+		F8E5A19A220DA1BD00BA6DE7 /* _cancelPhase.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = _cancelPhase.gif; sourceTree = "<group>"; };
+		F8E5A19B220DA1FC00BA6DE7 /* _successPhase.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = _successPhase.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,9 @@
 		8EEBA8A02208301B006D0957 /* examples */ = {
 			isa = PBXGroup;
 			children = (
+				F8E5A19B220DA1FC00BA6DE7 /* _successPhase.gif */,
+				F8E5A19A220DA1BD00BA6DE7 /* _cancelPhase.gif */,
+				F8E5A199220DA1BD00BA6DE7 /* _errorPhase.gif */,
 				F86C2C53220CC791003243B2 /* logo.png */,
 				8EEBA8A222083044006D0957 /* _properties.png */,
 				8EEBA8A422083044006D0957 /* _setClass.png */,
