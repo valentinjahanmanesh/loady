@@ -20,12 +20,16 @@ enum LoadingType : Int{
 }
 class Loady : UIButton {
     // public settings
-    @IBInspectable var setAnimationType = 0
+    @IBInspectable var setAnimationType = 0 {
+        didSet{
+            self.animationType = LoadingType(rawValue: self.setAnimationType) ?? .none
+        }
+    }
     @IBInspectable var setLoadingColor : UIColor = UIColor.black
     @IBInspectable var setFilledBackgroundColor : UIColor = UIColor.black
     @IBInspectable var setIndicatorViewDarkStyle = false
     open var pauseImage : UIImage? 
-    var animationType = LoadingType.none
+    private(set) var animationType = LoadingType.none
     
     // private settings
     private let _tempsLayerKey = "temps"
@@ -96,12 +100,16 @@ class Loady : UIButton {
      
      @param loadingType the loading style
      */
-    func startLoading(loadingType:LoadingType){
+    func startLoading(loadingType:LoadingType? = nil){
+        let loading = loadingType ?? self.animationType
+        if let loadingType = loadingType {
+            self.setAnimationType = loadingType.rawValue
+        }
         if self.loadingIsShowing(){
             self.endAndDeleteLoading()
             return;
         }
-        switch (loadingType) {
+        switch (loading) {
         case .topLine:
             self.createTopLineLoading()
             break;
