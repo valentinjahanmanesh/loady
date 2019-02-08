@@ -35,14 +35,18 @@ class Loady : UIButton {
     @IBInspectable var backgroundFillColor : UIColor = UIColor.black
     @IBInspectable var indicatorViewStyle: IndicatorViewStyle = .light
     open var pauseImage : UIImage? 
-    private(set) var _animationType = LoadingType.none
     
     // private settings
+    private(set) var _animationType = LoadingType.none
+    
+    // this key is used to mark some layers as temps layer and we will remove them after animation is done
     private let _tempsLayerKey = "temps"
     fileprivate var _percentFilled : CGFloat = 0
     fileprivate var _isloadingShowing = false
     fileprivate var _filledLoadingLayer : CAShapeLayer?
     fileprivate var _circleStrokeLoadingLayer : CAShapeLayer?
+    
+    // we keep a copy of before animation button properties and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
     
     override func layoutSubviews() {
