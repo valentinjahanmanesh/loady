@@ -63,7 +63,7 @@ class ViewController: UIViewController {
         }
         
         // start animating based on button animation style type
-        button.startLoading(loadingType: LoadingType(rawValue: button.setAnimationType) ?? .none)
+        button.startLoading(loadingType: LoadingType(rawValue: button.animationType) ?? .none)
         var percent : CGFloat = 0
         switch button.animationType {
         case .backgroundHighlighter:

@@ -6,10 +6,9 @@
 //  Copyright © 2019 farshadJahanmanesh. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-enum LoadingType : Int{
+enum LoadingType: Int {
     case none
     case topLine
     case indicator
@@ -18,18 +17,30 @@ enum LoadingType : Int{
     case all
     case appstore
 }
+typealias IndicatorViewStyle = Bool
+extension IndicatorViewStyle {
+    static let light = false
+    static let black = true
+}
+
 class Loady : UIButton {
     // public settings
-    @IBInspectable var setAnimationType = 0 {
+
+    @IBInspectable var animationType = 0 {
         didSet{
-            self.animationType = LoadingType(rawValue: self.setAnimationType) ?? .none
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
+        }
+    } 
+    @IBInspectable var loadingColor : UIColor = UIColor.black
+    @IBInspectable var backgroundFillColor : UIColor = UIColor.black
+    @IBInspectable var indicatorViewStyle: IndicatorViewStyle = .light
+    open var pauseImage : UIImage? 
+    @IBInspectable var animationType = 0 {
+        didSet{
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
-    @IBInspectable var setLoadingColor : UIColor = UIColor.black
-    @IBInspectable var setFilledBackgroundColor : UIColor = UIColor.black
-    @IBInspectable var setIndicatorViewDarkStyle = false
-    open var pauseImage : UIImage? 
-    private(set) var animationType = LoadingType.none
+    private var _animationType = LoadingType.none
     
     // private settings
     private let _tempsLayerKey = "temps"
@@ -42,17 +53,17 @@ class Loady : UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if self.setAnimationType != 0 {
-            self.animationType = LoadingType(rawValue: self.setAnimationType) ?? .none
+        if self.animationType != 0 {
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.animationType = .none;
+        self._animationType = .none;
         _percentFilled = 0;
-        if self.setAnimationType != 0 {
-            self.animationType = LoadingType(rawValue: self.setAnimationType) ?? .none
+        if self.animationType != 0 {
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
     
@@ -60,11 +71,11 @@ class Loady : UIButton {
         super.init(coder: aDecoder)
         
         _percentFilled = 0;
-        self.animationType = .none;
-        self.setFilledBackgroundColor = .black;
-        self.setLoadingColor = .black
-        if(self.setAnimationType != 0){
-            self.animationType = LoadingType(rawValue: self.setAnimationType) ?? .none
+        self._animationType = .none;
+        self.backgroundFillColor = .black;
+        self.loadingColor = .black
+        if(self.animationType != 0){
+            self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
     
@@ -160,7 +171,7 @@ class Loady : UIButton {
      */
     private func createIndicatorView(){
         let indicator = UIActivityIndicatorView();
-        indicator.style = self.setIndicatorViewDarkStyle ? .gray : .white;
+        indicator.style = self.indicatorViewStyle ? .gray : .white;
         indicator.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         if let frame = self.titleLabel?.frame {
             indicator.center = CGPoint(x: frame.maxX + 15,y: self.bounds.size.height / 2)
@@ -203,7 +214,7 @@ class Loady : UIButton {
         
         //set the path layer, and costumizing it
         loadingLayer.path = path.cgPath;
-        loadingLayer.strokeColor = self.setLoadingColor.cgColor;
+        loadingLayer.strokeColor = self.loadingColor.cgColor;
         loadingLayer.strokeEnd = 1;
         loadingLayer.lineWidth = lineHeight;
         loadingLayer.lineCap = CAShapeLayerLineCap(rawValue: "round");
@@ -317,7 +328,7 @@ class Loady : UIButton {
         _percentFilled = 0;
         //a shape for filling the button
         let layer = CAShapeLayer();
-        layer.backgroundColor = self.setFilledBackgroundColor.cgColor
+        layer.backgroundColor = self.backgroundFillColor.cgColor
         layer.bounds = CGRect(x:0,y:0, width: 0,height: self.frame.size.height);
         layer.anchorPoint = CGPoint(x:0,y:0.5);
         layer.position = CGPoint(x:0,y: self.frame.size.height / 2);
@@ -350,7 +361,7 @@ class Loady : UIButton {
                 self.bounds = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
                 self.layer.cornerRadius = radius / 2;
                 self.transform = CGAffineTransform(scaleX: -1,y: 1);
-                self.backgroundColor = self.setFilledBackgroundColor;
+                self.backgroundColor = self.backgroundFillColor;
                 self.layoutIfNeeded()
             }, completion: { (finished) in
                 if(finished){
@@ -374,7 +385,7 @@ class Loady : UIButton {
                 self.layer.cornerRadius = radius / 2;
                 self.alpha = 0.2
                 //self.transform = CGAffineTransform(scaleX: -1,y: 1);
-                self.backgroundColor = self.setFilledBackgroundColor;
+                self.backgroundColor = self.backgroundFillColor;
                 self.layoutIfNeeded()
             }, completion: { (finished) in
                 if(finished){
@@ -388,7 +399,7 @@ class Loady : UIButton {
     }
     
     private func removeAppstoreLayer(){
-        if animationType != .appstore{
+        if _animationType != .appstore{
             return
         }
         self.clearTempLayers()
@@ -418,7 +429,7 @@ class Loady : UIButton {
     }
     
     private func removeCircleLoadingLayer(){
-        if  animationType != .circleAndTick{
+        if  _animationType != .circleAndTick{
             return
         }
         self.clearTempLayers()
@@ -461,7 +472,7 @@ class Loady : UIButton {
         let path = UIBezierPath()
         self._percentFilled = 0
         self._circleStrokeLoadingLayer!.bounds = CGRect(x:0,y: 0,width: self.frame.width + 5,height: self.frame.height + 5);
-        self._circleStrokeLoadingLayer!.strokeColor = self.setLoadingColor.cgColor;
+        self._circleStrokeLoadingLayer!.strokeColor = self.loadingColor.cgColor;
         self._circleStrokeLoadingLayer!.lineWidth = 3;
         self._circleStrokeLoadingLayer!.fillColor = UIColor.clear.cgColor;
         self._circleStrokeLoadingLayer!.lineCap = CAShapeLayerLineCap(rawValue: "round");
