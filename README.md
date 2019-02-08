@@ -12,6 +12,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 
 ## Todo
 - [x] animation style : like appstore download button
+- [x] animation style : 4 phases Animation(normal, loading, success, error)
 - [ ] animation style : like telegram sharing
 - [ ] animation style : like android
 
@@ -55,6 +56,41 @@ or simply copy the source codes into your project, take a look at the example pr
         // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
         self.allInOneview?.fillTheCircleStrokeLoadingWith(percent: 25)
 ```
+
+
+### 4 Phases Animation :
+```swift
+        // setup colors and title and images
+        self.fourPhases?.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
+        self.fourPhases?.fourPhases = (
+            // normal phase
+            LoadyAnimationOptions.FourPhase.Phases.normal(title: "Lock", image: UIImage(named: "unlocked"), background: UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)),
+            
+            // loading phase
+            LoadyAnimationOptions.FourPhase.Phases.loading(title: "Waiting...", image: UIImage(named: ""), background: UIColor(red:0.17, green:0.24, blue:0.31, alpha:1.0)),
+            
+            // success phase
+            LoadyAnimationOptions.FourPhase.Phases.success(title: "Activated", image: UIImage(named: "locked"), background: UIColor(red:0.15, green:0.68, blue:0.38, alpha:1.0)),
+            
+            // error phase
+            LoadyAnimationOptions.FourPhase.Phases.error(title: "Error", image: UIImage(named: "unlocked"), background: UIColor(red:0.64, green:0.00, blue:0.15, alpha:1.0))
+        )
+        
+        
+        // then later in your code after user click on the button just call, this line take the button to loading phase, 
+        self.fourPhases?.startLoading()
+        
+        // in loading phase three different stage is available, you can cancel the loading by calling
+        self.fourPhases?.normalPhase()
+        
+        // you can take the button to success phase by calling
+        self.fourPhases?.successPhase()
+        
+        // you can take the button to error phase by calling
+        self.fourPhases?.errorPhase()
+        
+```
+
 ## Set class and change attributes
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="50%" style="text-align:center">
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png" width="50%" style="text-align:center">
