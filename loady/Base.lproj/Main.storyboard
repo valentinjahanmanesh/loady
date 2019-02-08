@@ -41,7 +41,7 @@
                                                     <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="setAnimationType">
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="animationType">
                                                         <integer key="value" value="1"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -74,7 +74,7 @@
                                                     <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="setAnimationType">
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="animationType">
                                                         <integer key="value" value="2"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -107,16 +107,15 @@
                                                     <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="setAnimationType">
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="animationType">
                                                         <integer key="value" value="3"/>
                                                     </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="setLoadingColor">
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="loadingColor">
                                                         <color key="value" red="1" green="0.0" blue="0.2339373911" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="setFilledBackgroundColor">
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundFillColor">
                                                         <color key="value" red="0.45155987139999998" green="0.1689747274" blue="0.52950280900000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="setIndicatorViewDarkStyle" value="NO"/>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                         <integer key="value" value="10"/>
                                                     </userDefinedRuntimeAttribute>
@@ -127,44 +126,88 @@
                                             <constraint firstItem="5KV-Po-YmJ" firstAttribute="width" secondItem="5qh-Y9-Vl3" secondAttribute="width" id="iYe-hC-tNj"/>
                                         </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aq1-X0-Evm">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="pmu-3a-dMm">
                                         <rect key="frame" x="0.0" y="384" width="343" height="103"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All In One" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Co-BR-omE">
-                                                <rect key="frame" x="0.0" y="0.0" width="76" height="45"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pmh-LP-J2E" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="53" width="343" height="50"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="m9t-WT-W1q">
+                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="103"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All In One" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFb-Dz-yDb">
+                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="45"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVP-fB-uYe" customClass="Loady" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="50" id="tN8-27-ipN"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                        <state key="normal" title="Please Wait">
+                                                            <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="animationType">
+                                                                <integer key="value" value="5"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="loadingColor">
+                                                                <color key="value" red="0.94369518760000004" green="0.64403396840000005" blue="0.2272653878" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundFillColor">
+                                                                <color key="value" red="0.45291835070000003" green="0.76776754859999996" blue="0.8078563809" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <integer key="value" value="10"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="L74-sB-jaB"/>
+                                                    <constraint firstItem="aVP-fB-uYe" firstAttribute="width" secondItem="m9t-WT-W1q" secondAttribute="width" id="owG-KQ-9pY"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                                <state key="normal" title="Please Wait">
-                                                    <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="setAnimationType">
-                                                        <integer key="value" value="5"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="setLoadingColor">
-                                                        <color key="value" red="0.94369518760000004" green="0.64403396840000005" blue="0.2272653878" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="setFilledBackgroundColor">
-                                                        <color key="value" red="0.45291835070000003" green="0.76776754859999996" blue="0.8078563809" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="10"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                            </button>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aq1-X0-Evm">
+                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4 Phases" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Co-BR-omE">
+                                                        <rect key="frame" x="0.0" y="0.0" width="73.5" height="45"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pmh-LP-J2E" customClass="Loady" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="50" id="L74-sB-jaB"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                        <state key="normal" title="Please Wait">
+                                                            <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="loadingColor">
+                                                                <color key="value" red="0.94369518760000004" green="0.64403396840000005" blue="0.2272653878" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundFillColor">
+                                                                <color key="value" red="0.45291835070000003" green="0.76776754859999996" blue="0.8078563809" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <integer key="value" value="10"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="animationType">
+                                                                <integer key="value" value="7"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="Pmh-LP-J2E" firstAttribute="width" secondItem="aq1-X0-Evm" secondAttribute="width" id="Uif-cb-i4d"/>
+                                                </constraints>
+                                            </stackView>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="Pmh-LP-J2E" firstAttribute="width" secondItem="aq1-X0-Evm" secondAttribute="width" id="Uif-cb-i4d"/>
-                                        </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="rGW-bi-hEM">
                                         <rect key="frame" x="0.0" y="512" width="343" height="103"/>
@@ -189,16 +232,16 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="setAnimationType">
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="animationType">
                                                                 <integer key="value" value="4"/>
                                                             </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="setCircleBackgroundColor">
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="circleBackgroundColor">
                                                                 <color key="value" red="0.75935850540000005" green="0.0" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="setFilledBackgroundColor">
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundFillColor">
                                                                 <color key="value" red="0.45291835070000003" green="0.76776754859999996" blue="0.8078563809" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="setLoadingColor">
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="loadingColor">
                                                                 <color key="value" red="0.94369518760000004" green="0.64403396840000005" blue="0.2272653878" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -232,16 +275,16 @@
                                                             <color key="titleColor" red="0.17621115070000001" green="0.48836829370000001" blue="0.94369518760000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="setAnimationType">
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="animationType">
                                                                 <integer key="value" value="6"/>
                                                             </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="setCircleBackgroundColor">
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="circleBackgroundColor">
                                                                 <color key="value" red="0.75935850540000005" green="0.0" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="setFilledBackgroundColor">
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundFillColor">
                                                                 <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </userDefinedRuntimeAttribute>
-                                                            <userDefinedRuntimeAttribute type="color" keyPath="setLoadingColor">
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="loadingColor">
                                                                 <color key="value" red="0.17621115070985002" green="0.48836829374812046" blue="0.94369518760000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -269,10 +312,11 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="allInOneview" destination="Pmh-LP-J2E" id="zpl-29-nhl"/>
+                        <outlet property="allInOneview" destination="aVP-fB-uYe" id="1cI-QB-zLj"/>
                         <outlet property="appstore" destination="Duk-Yo-0ql" id="apN-Ey-pb0"/>
                         <outlet property="circleView" destination="SfM-fM-OXK" id="saj-3O-30H"/>
                         <outlet property="fillingView" destination="5KV-Po-YmJ" id="L5X-DY-6n6"/>
+                        <outlet property="fourPhases" destination="Pmh-LP-J2E" id="0nA-no-fIJ"/>
                         <outlet property="indicatorViewLike" destination="dNG-Yx-Lw4" id="kfq-bk-Pcp"/>
                         <outlet property="uberLikeView" destination="qk1-Nf-WBp" id="k6r-Uh-v4n"/>
                     </connections>
