@@ -26,6 +26,7 @@ enum LoadingType: Int {
     case all
     case appstore
     case fourPhases
+    case android
 }
 typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
@@ -101,7 +102,6 @@ class Loady : UIButton {
         }
     }
     
-    
     /**
      cache the button before any animation,we keep a reference to data so we can restore everything to the first place
      */
@@ -154,6 +154,9 @@ class Loady : UIButton {
             break;
         case .circleAndTick :
             self.createCircleAndTick()
+            break;
+        case .android :
+            self.createCircleAndTick(withAndroidAnimation: true)
             break;
         case .appstore :
             self.createAppstore()
@@ -373,23 +376,28 @@ class Loady : UIButton {
         _filledLoadingLayer = nil;
     }
     
-    private func createCircleAndTick(){
+    private func createCircleAndTick(withAndroidAnimation : Bool = false){
         let center = self.center
         self.copyBeforeAnyChanges()
         let radius = min(self.frame.size.width, self.frame.size.height)
         self.setTitle("", for: .normal);
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: withAndroidAnimation ? 0.15 : 0.5, animations: {
                 self.center = center;
                 self.bounds = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
                 self.layer.cornerRadius = radius / 2;
-                self.transform = CGAffineTransform(scaleX: -1,y: 1);
+                if !withAndroidAnimation {
+                    self.transform = CGAffineTransform(scaleX: -1,y: 1);
+                }
                 self.backgroundColor = self.backgroundFillColor;
                 self.layoutIfNeeded()
             }, completion: { (finished) in
                 if(finished){
                     self.titleLabel?.text  = ""
                     self.createCircleLoadingLayer()
+                    if withAndroidAnimation {
+                        self.startCircluarLoadingAnimation(self._circleStrokeLoadingLayer!)
+                    }
                 }
             })
         }
@@ -452,7 +460,7 @@ class Loady : UIButton {
     }
     
     private func removeCircleLoadingLayer(){
-        if  _animationType != .circleAndTick{
+        if  _animationType != .circleAndTick && _animationType != .android{
             return
         }
         self.clearTempLayers()
@@ -495,8 +503,9 @@ class Loady : UIButton {
         self._circleStrokeLoadingLayer?.accessibilityHint = "button_circle_loading_stroke_parent"
         
         self.layer.addSublayer(self._circleStrokeLoadingLayer!)
-        
     }
+    
+
     private func createACircleInsideButton(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil)-> CAShapeLayer{
         let circle = CAShapeLayer()
         let path = UIBezierPath()
@@ -625,7 +634,6 @@ extension Loady {
         
         return newImage!
     }
-    
 }
 
 extension Loady {
@@ -832,15 +840,21 @@ extension Loady {
     }
     
     private func animateStrokeHueWithDuration(_ layer  : CAShapeLayer, duration: CFTimeInterval) {
-        let count = 36
+        let count = 200
         let animation = CAKeyframeAnimation(keyPath: "strokeColor")
         animation.keyTimes = (0 ... count).map { NSNumber(value: CFTimeInterval($0) / CFTimeInterval(count)) }
         let loadingColor = self.loadingColor
-        animation.values = (0 ... count).map {_ in
-            loadingColor.cgColor
+        animation.values = (0 ... count).map {num in
+            if num <= 3  && animation.accessibilityHint == nil{
+               return loadingColor.withAlphaComponent(CGFloat(num) / 3.0).cgColor
+            }else{
+              return  loadingColor.cgColor
+          }
         }
         animation.duration = duration
         animation.calculationMode = .linear
+        animation.autoreverses = true
+        
         animation.repeatCount = Float.infinity
         layer.add(animation, forKey: animation.keyPath)
     }

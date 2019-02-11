@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var indicatorViewLike : Loady?
     @IBOutlet weak var appstore : Loady?
     @IBOutlet weak var fourPhases : Loady?
+    @IBOutlet weak var androidLoading : Loady?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,8 @@ class ViewController: UIViewController {
         self.indicatorViewLike?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.appstore?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.fourPhases?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        
+        self.androidLoading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+
         self.appstore?.pauseImage =  UIImage(named: "pause")
         
         // sets animation type
