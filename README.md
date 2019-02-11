@@ -14,7 +14,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 - [x] animation style : like appstore download button
 - [x] animation style : 4 phases Animation(normal, loading, success, error)
 - [ ] animation style : like telegram sharing
-- [ ] animation style : like android
+- [x] animation style : like android
 
 ![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
 
