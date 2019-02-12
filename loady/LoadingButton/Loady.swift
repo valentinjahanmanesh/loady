@@ -270,6 +270,7 @@ open class Loady : UIButton {
         let animation = createBasicAnimation(keypath: "path", from: path.cgPath, to: animatedPath.cgPath)
         animation.autoreverses = true;
         animation.repeatCount = 100;
+        animation.isRemovedOnCompletion = false
         loadingLayer.add(animation,forKey:nil);
         loadingLayer.add(animateOpacity,forKey:nil);
     }
@@ -608,11 +609,7 @@ open class Loady : UIButton {
             return;
         }
         
-        let animation = CABasicAnimation()
-        animation.fromValue = NSNumber(floatLiteral: Double(self._percentFilled / 100))
-        animation.toValue = NSNumber(floatLiteral: Double( percent / 100))
-        animation.duration = 0.2;
-        animation.keyPath = "strokeEnd";
+        let animation = createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(self._percentFilled / 100)), to: NSNumber(floatLiteral: Double( percent / 100)),duration : 0.2)
         animation.isRemovedOnCompletion = false;
         animation.fillMode = .forwards;
         self._circleStrokeLoadingLayer?.add(animation, forKey: nil)
@@ -770,10 +767,7 @@ extension Loady {
     
     private func cleanCircularLoading(){
         if let loading = self.layer.sublayers?.first(where: { $0.accessibilityHint == LayerTempKeys.circularLoading}) {
-            let animation = CABasicAnimation(keyPath: "opacity")
-            animation.fromValue = 1.0
-            animation.toValue = 0.0
-            animation.duration = 0.5
+            let animation = createBasicAnimation(keypath: "opacity", from: 1.0, to: 0.0,duration: 0.5)
             animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             loading.add(animation, forKey: "fade")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -858,6 +852,7 @@ extension Loady {
         animation.calculationMode = .linear
         animation.duration = duration
         animation.repeatCount = Float.infinity
+        animation.isRemovedOnCompletion = false
         layer.add(animation, forKey: animation.keyPath)
     }
     
