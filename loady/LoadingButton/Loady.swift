@@ -128,6 +128,13 @@ open class Loady : UIButton {
     }
     
     
+    /// stop loading and remove all animations and temporary layers
+    open func stopLoading(){
+        if self.loadingIsShowing(){
+            self.endAndDeleteLoading()
+        }
+    }
+    
     /**
      start loading,this is our public api to start loading
      
@@ -139,7 +146,7 @@ open class Loady : UIButton {
             self.animationType = loadingType.rawValue
         }
         if self.loadingIsShowing(){
-            self.endAndDeleteLoading()
+            self.stopLoading()
             return;
         }
         switch (loading) {
