@@ -86,6 +86,10 @@ class ViewController: UIViewController {
         }
         
         // start animating based on button animation style type
+        if button.loadingIsShowing() {
+            button.stopLoading()
+            return
+        }
         button.startLoading(loadingType: LoadingType(rawValue: button.animationType) ?? .none)
         var percent : CGFloat = 0
         switch button._animationType {

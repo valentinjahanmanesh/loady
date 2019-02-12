@@ -146,7 +146,7 @@ open class Loady : UIButton {
             self.animationType = loadingType.rawValue
         }
         if self.loadingIsShowing(){
-            self.stopLoading()
+            //self.stopLoading()
             return;
         }
         switch (loading) {
@@ -254,6 +254,7 @@ open class Loady : UIButton {
         loadingLayer.lineCap = CAShapeLayerLineCap(rawValue: "round");
         loadingLayer.contentsScale = UIScreen.main.scale;
         loadingLayer.accessibilityHint = "button_topline_loading";
+        loadingLayer.opacity = 0
         //add the new layer
         self.layer.addSublayer(loadingLayer);
         
@@ -261,25 +262,39 @@ open class Loady : UIButton {
         let animatedPath = UIBezierPath()
         animatedPath.move(to: CGPoint(x:loadingLayer.bounds.size.width / 1.2,y: -1))
         animatedPath.addLine(to: CGPoint(x:loadingLayer.bounds.size.width,y: -1))
+        let animateOpacity = createBasicAnimation(keypath: "opacity", from: 0, to: 1,duration : 0.6)
+        animateOpacity.isRemovedOnCompletion = false
+        animateOpacity.fillMode  = .forwards
         
-        //create our animation and add it to the layer
-        let animation = CABasicAnimation()
-        animation.keyPath = "path";
-        animation.fromValue = path.cgPath;
-        animation.toValue = animatedPath.cgPath;
-        animation.duration = 1;
+        //create our animation and add it to the layer, animate indictor from left to right
+        let animation = createBasicAnimation(keypath: "path", from: path.cgPath, to: animatedPath.cgPath)
         animation.autoreverses = true;
         animation.repeatCount = 100;
         loadingLayer.add(animation,forKey:nil);
+        loadingLayer.add(animateOpacity,forKey:nil);
     }
     
+    private func createBasicAnimation(keypath : String, from : Any,to:Any,duration : Double = 1) -> CABasicAnimation{
+        let animation = CABasicAnimation()
+        animation.keyPath = keypath
+        animation.fromValue = from
+        animation.toValue = to
+        animation.duration = duration;
+        
+        return animation
+    }
     
     private func removeTopLineLayer(){
+        
         //Reset button
         self.layer.sublayers?.forEach({layer in
             if layer.accessibilityHint == "button_topline_loading" {
-                layer.removeAllAnimations()
-                layer.removeFromSuperlayer()
+                let animateOpacity = createBasicAnimation(keypath: "opacity", from: 1, to: 0,duration : 0.2)
+                layer.add(animateOpacity, forKey: nil)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15 , execute: {
+                    layer.removeAllAnimations()
+                    layer.removeFromSuperlayer()
+                })
             }
         })
         
