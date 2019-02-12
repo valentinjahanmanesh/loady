@@ -7,9 +7,9 @@
 //
 
 import UIKit
-struct LoadyAnimationOptions {
-    struct FourPhase {
-        enum Phases {
+public struct LoadyAnimationOptions {
+    public struct FourPhase {
+        public enum Phases {
             case normal(title:String,image : UIImage?,background:UIColor)
             case loading(title:String,image : UIImage?,background:UIColor)
             case success(title:String,image : UIImage?,background:UIColor)
@@ -17,7 +17,7 @@ struct LoadyAnimationOptions {
         }
     }
 }
-enum LoadingType: Int {
+public enum LoadingType: Int {
     case none
     case topLine
     case indicator
@@ -28,24 +28,24 @@ enum LoadingType: Int {
     case fourPhases
     case android
 }
-typealias IndicatorViewStyle = Bool
+public typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
     static let light = false
     static let black = true
 }
 
-class Loady : UIButton {
+open class Loady : UIButton {
     // public settings
-    @IBInspectable var animationType : Int = 0 {
+    @IBInspectable open  var animationType : Int = 0 {
         didSet{
             self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
-    @IBInspectable var loadingColor : UIColor = UIColor.black
-    @IBInspectable var backgroundFillColor : UIColor = UIColor.black
-    @IBInspectable var indicatorViewStyle: IndicatorViewStyle = .light
+    @IBInspectable open  var loadingColor : UIColor = UIColor.black
+    @IBInspectable open var backgroundFillColor : UIColor = UIColor.black
+    @IBInspectable open var indicatorViewStyle: IndicatorViewStyle = .light
     open var pauseImage : UIImage?
-    var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
+    open var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
         didSet{
             guard let normal =  fourPhases?.normal else {
                 return
@@ -73,7 +73,7 @@ class Loady : UIButton {
     // we keep a copy of before animation button properties and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
     
-    override func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         if self.animationType != 0 {
@@ -81,7 +81,7 @@ class Loady : UIButton {
         }
     }
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         self._animationType = .none;
         _percentFilled = 0;
@@ -90,7 +90,7 @@ class Loady : UIButton {
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         _percentFilled = 0;
@@ -133,7 +133,7 @@ class Loady : UIButton {
      
      @param loadingType the loading style
      */
-    func startLoading(loadingType:LoadingType? = nil){
+    open func startLoading(loadingType:LoadingType? = nil){
         let loading = loadingType ?? self._animationType
         if let loadingType = loadingType {
             self.animationType = loadingType.rawValue
@@ -288,7 +288,7 @@ class Loady : UIButton {
      @return is loading showing?
      */
     
-    func loadingIsShowing() -> Bool{
+    open func loadingIsShowing() -> Bool{
         if self.viewWithTag(-11111111) != nil{
             return true;
         }
@@ -331,7 +331,7 @@ class Loady : UIButton {
      
      @param percent of the completion something like 10,12,15...100
      */
-    func fillTheButton(with percent : CGFloat){
+    open func fillTheButton(with percent : CGFloat){
         _percentFilled = percent;
         if (percent > 100){
             return
@@ -505,7 +505,7 @@ class Loady : UIButton {
         self.layer.addSublayer(self._circleStrokeLoadingLayer!)
     }
     
-
+    
     private func createACircleInsideButton(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil)-> CAShapeLayer{
         let circle = CAShapeLayer()
         let path = UIBezierPath()
@@ -573,7 +573,7 @@ class Loady : UIButton {
      
      @param percent of the completion something like 10,12,15...100
      */
-    func fillTheCircleStrokeLoadingWith(percent:CGFloat){
+    open func fillTheCircleStrokeLoadingWith(percent:CGFloat){
         
         if (percent > 100){
             //[self.tempTimer invalidate];
@@ -687,7 +687,7 @@ extension Loady {
         UIView.commitAnimations()
         
     }
-    func normalPhase(){
+    open func normalPhase(){
         guard let fourPhase = fourPhases  else {
             return
         }
@@ -695,14 +695,14 @@ extension Loady {
         createFourPhaseButton()
         cleanCircularLoading()
     }
-    func successPhase(){
+    open func successPhase(){
         guard let fourPhase = fourPhases  else {
             return
         }
         self._fourPhasesNextPhase = fourPhase.success
         createFourPhaseButton()
     }
-    func errorPhase(){
+    open func errorPhase(){
         guard let fourPhase = fourPhases  else {
             return
         }
@@ -846,10 +846,10 @@ extension Loady {
         let loadingColor = self.loadingColor
         animation.values = (0 ... count).map {num in
             if num <= 3  && animation.accessibilityHint == nil{
-               return loadingColor.withAlphaComponent(CGFloat(num) / 3.0).cgColor
+                return loadingColor.withAlphaComponent(CGFloat(num) / 3.0).cgColor
             }else{
-              return  loadingColor.cgColor
-          }
+                return  loadingColor.cgColor
+            }
         }
         animation.duration = duration
         animation.calculationMode = .linear
