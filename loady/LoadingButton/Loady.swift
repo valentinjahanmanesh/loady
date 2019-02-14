@@ -95,22 +95,29 @@ open class Loady : UIButton {
     private struct LayerTempKeys {
         static let tempLayer = "temps"
         static let circularLoading = "circularLoading"
+        static let downloading_percentLabel = "downloading_percentLabel"
+        static let downloading_downloadLabel = "downloading_downloadLabel"
     }
     
     fileprivate var _percentFilled : CGFloat = 0 {
+        willSet{
+            percentageChanged(newValue,_percentFilled)
+        }
         didSet {
-            self.templayers.forEach({ (layer) in
-                if let textlayer = layer as? CATextLayer {
-                    textlayer.string = String(format:"%.2f%%", self._percentFilled)
-                }
-            })
+            if let textlayer = self.templayers[LayerTempKeys.downloading_percentLabel] as? CATextLayer {
+                textlayer.string = String(format:"%.2f%%", self._percentFilled)
+            }
+            
+            if _percentFilled == 100 {
+                percentageCompleted()
+            }
         }
     }
     fileprivate var _isloadingShowing = false
     fileprivate var _filledLoadingLayer : CAShapeLayer?
     fileprivate var _circleStrokeLoadingLayer : CAShapeLayer?
     private(set) var _fourPhasesNextPhase : LoadyAnimationOptions.FourPhase.Phases?
-    private var templayers : [CALayer] = []
+    private var templayers : Dictionary<String,CALayer>  = [:]
     // we keep a copy of button properties before animation is begin and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
     
@@ -275,6 +282,33 @@ open class Loady : UIButton {
         self.viewWithTag(-11111111)?.removeFromSuperview();
     }
     
+    open func fillTheButton(with percent : CGFloat){
+        if ( percent > 100){
+            if _percentFilled != 100 {
+                _percentFilled = 100
+            }else{
+                return
+            }
+        }else{
+            _percentFilled = percent;
+        }
+    }
+    
+    
+    /// notifies other functions about percent changes
+    ///
+    /// - Parameters:
+    ///   - new: new value
+    ///   - old: current value
+    private func percentageChanged(_ new: CGFloat,_ old: CGFloat){
+        fillTheCircleStrokeLoadingWith(new: new, old: old)
+        fillTheButtonBackground(new: new, old: old)
+    }
+    
+    /// notifies all animations about 100%, some animations need to preform some actions
+    private func percentageCompleted(){
+        finishDownloading()
+    }
     
     ///line loading
     private func createTopLineLoading(){
@@ -396,30 +430,19 @@ open class Loady : UIButton {
         
     }
     
+    
+    
     /**
      create the filling layer
      
      @param percent of the completion something like 10,12,15...100
      */
-    open func fillTheButton(with percent : CGFloat){
-        if self._filledLoadingLayer == nil{
-            return
-        }
-        
-        if (percent > 100){
-            if _percentFilled != 100 {
-                _percentFilled = 100
-            }else{
-                return
-            }
-        }else{
-            _percentFilled = percent;
-        }
-        if !_isloadingShowing{
+    private func fillTheButtonBackground(new : CGFloat,old : CGFloat){
+        if self._filledLoadingLayer == nil || !_isloadingShowing{
             return
         }
         //_percentFilled = 0;
-        self._filledLoadingLayer?.sublayers?[0].bounds =  CGRect(x : 0,y: (self.frame.size.height / 2),width: (self.frame.size.width * (percent  / 100)),height: self.frame.size.height)
+        self._filledLoadingLayer?.sublayers?[0].bounds =  CGRect(x : 0,y: (self.frame.size.height / 2),width: (self.frame.size.width * (new  / 100)),height: self.frame.size.height)
         
     }
     
@@ -522,31 +545,16 @@ open class Loady : UIButton {
      
      @param percent of the completion something like 10,12,15...100
      */
-    open func fillTheCircleStrokeLoadingWith(percent:CGFloat){
-        if self._circleStrokeLoadingLayer == nil{
+    private func fillTheCircleStrokeLoadingWith(new :CGFloat, old : CGFloat){
+        
+        if self._circleStrokeLoadingLayer == nil || !_isloadingShowing{
             return;
         }
         
-        if ( percent > 100){
-            if _percentFilled != 100 {
-                _percentFilled = 100
-            }else{
-                return
-            }
-            //[self.tempTimer invalidate];
-        }else{
-            _percentFilled = percent;
-        }
-        
-        if !_isloadingShowing{
-            return;
-        }
-        
-        let animation = createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(self._percentFilled / 100)), to: NSNumber(floatLiteral: Double( percent / 100)),duration : 0.2)
+        let animation = createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(old / 100)), to: NSNumber(floatLiteral: Double( new / 100)),duration : 0.2)
         animation.isRemovedOnCompletion = false;
         animation.fillMode = .forwards;
         self._circleStrokeLoadingLayer?.add(animation, forKey: nil)
-        
     }
 }
 
@@ -886,47 +894,66 @@ extension Loady {
     
     private func createDownloadingLabelLayer(labelOption : LoadyAnimationOptions.Downloading){
         // create a temp layer to hide animation behide it
-        let layer = CAShapeLayer()
+        let containerLayer = CAShapeLayer()
         let size = CGSize(width: self.bounds.width, height: 30)
-        layer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
-        layer.position.x = layer.bounds.midX
-        layer.position.y = size.height / -2
+        containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+        containerLayer.position.x = containerLayer.bounds.midX
+        containerLayer.position.y = size.height / -2
         //layer.backgroundColor = UIColor.green.cgColor
-        let text = createTextLayers(layer:layer,string: labelOption.downloadingLabel!.title, font: labelOption.downloadingLabel!.font)
+        let text = createTextLayers(layer:containerLayer,string: labelOption.downloadingLabel!.title, font: labelOption.downloadingLabel!.font)
         text.foregroundColor = labelOption.downloadingLabel!.textColor.cgColor
-        layer.addSublayer(text)
-        layer.accessibilityHint = LayerTempKeys.tempLayer
+        containerLayer.addSublayer(text)
+        containerLayer.accessibilityHint = LayerTempKeys.tempLayer
         
+        // keep a reference to change this text after animation finished
+        templayers.updateValue(text, forKey: LayerTempKeys.downloading_downloadLabel)
+
         // add animation
         UIView.beginAnimations("changeTextTransition", context: nil)
         let animation = createTextPushAnimation(type: .fromTop, duration: 0.3)
         text.add(animation, forKey:"changeTextTransition")
-        layer.masksToBounds = true
-        self.layer.insertSublayer(layer, at: 0)
+        containerLayer.masksToBounds = true
+        self.layer.insertSublayer(containerLayer, at: 0)
         UIView.commitAnimations()
     }
+    
+    private func finishDownloading(){
+        guard let downloadLabel = templayers[LayerTempKeys.downloading_downloadLabel] as? CATextLayer, let downloadedOption = self.animationsOptions.downloading?.downloadedLabel else {
+            return
+        }
+        // add animation
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        downloadLabel.string = downloadedOption.title
+        downloadLabel.foregroundColor = downloadedOption.textColor.cgColor
+        downloadLabel.font = downloadedOption.font
+        downloadLabel.fontSize = downloadedOption.font.pointSize
+        let animation = createTextPushAnimation(type: .fromTop, duration: 0.3)
+        downloadLabel.add(animation, forKey:"changeTextTransition")
+        UIView.commitAnimations()
+    }
+    
     private func createPercentageLabelLayer(labelOption : LoadyAnimationOptions.Downloading){
         // create a temp layer to hide animation behide it
-        let layer = CAShapeLayer()
+        let containerLayer = CAShapeLayer()
         let size = CGSize(width: self.bounds.width, height: 30)
-        layer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
-        layer.position.x = layer.bounds.midX
-        layer.position.y = self.bounds.height + size.height / 2
+        containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+        containerLayer.position.x = containerLayer.bounds.midX
+        containerLayer.position.y = self.bounds.height + size.height / 2
         //layer.backgroundColor = UIColor.green.cgColor
-        let text = createTextLayers(layer:layer,string: "\(_percentFilled)%", font: labelOption.percentageLabel!.font)
+        let text = createTextLayers(layer:containerLayer,string: "\(_percentFilled)%", font: labelOption.percentageLabel!.font)
         text.foregroundColor = labelOption.percentageLabel!.textColor.cgColor
-        layer.addSublayer(text)
-        layer.accessibilityHint = LayerTempKeys.tempLayer
+        containerLayer.addSublayer(text)
+        containerLayer.accessibilityHint = LayerTempKeys.tempLayer
         
         // keep a reference to change its percentage text
-        templayers.append(text)
+        templayers.updateValue(text, forKey: LayerTempKeys.downloading_percentLabel)
         
         // add animation
         UIView.beginAnimations("changeTextTransition", context: nil)
         let animation = createTextPushAnimation(type: .fromBottom, duration: 0.3)
         text.add(animation, forKey:"changeTextTransitionPercent")
-        layer.masksToBounds = true
-        self.layer.insertSublayer(layer, at: 0)
+        containerLayer.masksToBounds = true
+        self.layer.insertSublayer(containerLayer, at: 1)
         UIView.commitAnimations()
     }
 }

@@ -135,7 +135,7 @@
                                                 <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="aUv-VZ-3Sk">
-                                                        <rect key="frame" x="0.0" y="0.0" width="93.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="63.5" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Android" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J8W-eM-CnR">
                                                                 <rect key="frame" x="0.0" y="12.5" width="63.5" height="20.5"/>
@@ -152,6 +152,11 @@
                                                                 </constraints>
                                                             </imageView>
                                                         </subviews>
+                                                        <variation key="default">
+                                                            <mask key="subviews">
+                                                                <exclude reference="vbc-zh-YH5"/>
+                                                            </mask>
+                                                        </variation>
                                                     </stackView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvP-BF-ppk" customClass="Loady" customModule="loady" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
@@ -204,13 +209,12 @@
                                                     </imageView>
                                                 </subviews>
                                             </stackView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5KV-Po-YmJ" customClass="Loady" customModule="loady" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5KV-Po-YmJ" customClass="Loady" customModule="loady" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="53" width="343" height="50"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="aUX-Xi-ClS"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                 <state key="normal" title="Please Wait">
                                                     <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 </state>
@@ -280,7 +284,7 @@
                                                 <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pIO-yT-5Kl">
-                                                        <rect key="frame" x="0.0" y="0.0" width="103.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="73.5" height="45"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4 Phases" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Co-BR-omE">
                                                                 <rect key="frame" x="0.0" y="12.5" width="73.5" height="20.5"/>
@@ -297,6 +301,11 @@
                                                                 </constraints>
                                                             </imageView>
                                                         </subviews>
+                                                        <variation key="default">
+                                                            <mask key="subviews">
+                                                                <exclude reference="U0T-KE-bqF"/>
+                                                            </mask>
+                                                        </variation>
                                                     </stackView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pmh-LP-J2E" customClass="Loady" customModule="loady" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>

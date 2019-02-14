@@ -41,7 +41,7 @@ class ViewController: UIViewController {
 
         // setup details
         self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
-            downloadingLabel: (title: "Copying Data", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+            downloadingLabel: (title: "Copying Data", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
             percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
             downloadedLabel: (title: "Completed ^_^", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
         )
@@ -66,11 +66,9 @@ class ViewController: UIViewController {
         // starts loading animation
         // self.allInOneview?.startLoading()
         
-        // some animations have filling background, this sets the filling percent, number is something between 0 to 100
+        // some animations have filling background, or change the circle stroke, this sets the filling percent, number is something between 0 to 100
         self.allInOneview?.fillTheButton(with: 10)
         
-        // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
-        self.allInOneview?.fillTheCircleStrokeLoadingWith(percent: 25)
         self.fourPhases?.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
         self.fourPhases?.fourPhases = (
             // normal phase
@@ -109,7 +107,6 @@ class ViewController: UIViewController {
             self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
                 percent += CGFloat.random(in: 0...10)
                 button.fillTheButton(with: percent)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer1?.invalidate()
@@ -121,7 +118,7 @@ class ViewController: UIViewController {
             self.tempTimer2 = nil
             self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
                 percent += CGFloat.random(in: 0...10)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
+                button.fillTheButton(with: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer2?.invalidate()
@@ -133,8 +130,8 @@ class ViewController: UIViewController {
             self.tempTimer3 = nil
             self.tempTimer3 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
                 percent += CGFloat.random(in: 0...10)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
-                
+                button.fillTheButton(with: percent)
+
                 if percent > 105 {
                     percent = 100
                     self.tempTimer3?.invalidate()
@@ -148,7 +145,6 @@ class ViewController: UIViewController {
             self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
                 percent += CGFloat.random(in: 0...10)
                 button.fillTheButton(with: percent)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer?.invalidate()
@@ -162,7 +158,6 @@ class ViewController: UIViewController {
                 percent += CGFloat.random(in: 0...5)
                 
                 button.fillTheButton(with: percent)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer4?.invalidate()
