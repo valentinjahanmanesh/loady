@@ -15,7 +15,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 - [x] animation style : 4 phases Animation(normal, loading, success, error)
 - [ ] animation style : like telegram sharing
 - [x] animation style : like android
-- [ ] **next** Downloading <img src="https://cdn.dribbble.com/users/2328147/screenshots/4917629/download_button_interaction_1.gif" width="2o0%" style="text-align:center">
+- [ ] **next** Downloading <img src="https://cdn.dribbble.com/users/2328147/screenshots/4917629/download_button_interaction_1.gif" width="20%" style="text-align:center">
 
 
 ![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
