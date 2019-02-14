@@ -5,6 +5,7 @@
 //  Created by farshad jahanmanesh on 2/2/19.
 //  Copyright © 2019 farshadJahanmanesh. All rights reserved.
 //
+// NOTE : we have to make this better, there can be many imporvements like maganging options and handle them in one place, new animations and ...
 
 import UIKit
 
@@ -19,20 +20,32 @@ public struct LoadyAnimationOptions {
             case error(title:String,image : UIImage?,background:UIColor)
         }
     }
+    public struct Downloading {
+        var downloadingLabel : (title:String,font : UIFont, textColor : UIColor)?
+        var percentageLabel: (font : UIFont, textColor : UIColor)?
+        var downloadedLabel : (title:String,font : UIFont, textColor : UIColor)?
+        init(downloadingLabel : (title:String,font : UIFont, textColor : UIColor)?,percentageLabel: (font : UIFont, textColor : UIColor)?,downloadedLabel : (title:String,font : UIFont, textColor : UIColor)?) {
+            self.downloadingLabel = downloadingLabel
+            self.percentageLabel = percentageLabel
+            self.downloadedLabel = downloadedLabel
+        }
+    }
+    
+    var downloading : Downloading?
 }
 
-
+// yes i know i can emit that number, i've specfied them to find the number quickly.
 public enum LoadingType: Int {
-    case none
-    case topLine
-    case indicator
-    case backgroundHighlighter
-    case circleAndTick
-    case all
-    case appstore
-    case fourPhases
-    case android
-    case downloading
+    case none = 0
+    case topLine = 1
+    case indicator = 2
+    case backgroundHighlighter = 3
+    case circleAndTick = 4
+    case all = 5
+    case appstore = 6
+    case fourPhases = 7
+    case android = 8
+    case downloading = 9
 }
 public typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
@@ -60,6 +73,10 @@ open class Loady : UIButton {
     /// some animations shows an image inside of the button, this is that image
     open var pauseImage : UIImage?
     
+    // MARK: Animation Options
+    /// animations options, along with default that we can set from other properties, eeach animation has its own options that can set from here
+    open var animationsOptions = LoadyAnimationOptions()
+    
     /// keeps fourPhases button states
     open var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
         didSet{
@@ -70,21 +87,30 @@ open class Loady : UIButton {
             self.createFourPhaseButton()
         }
     }
+    
     // private settings
     private(set) var _animationType = LoadingType.none
     
-    // this key is used to mark some layers as temps layer and we will remove them after animation is done
+    // these keys are used to mark some layers as temps layer and we will remove them after animation is done
     private struct LayerTempKeys {
         static let tempLayer = "temps"
         static let circularLoading = "circularLoading"
     }
     
-    fileprivate var _percentFilled : CGFloat = 0
+    fileprivate var _percentFilled : CGFloat = 0 {
+        didSet {
+            self.templayers.forEach({ (layer) in
+                if let textlayer = layer as? CATextLayer {
+                    textlayer.string = String(format:"%.2f%%", self._percentFilled)
+                }
+            })
+        }
+    }
     fileprivate var _isloadingShowing = false
     fileprivate var _filledLoadingLayer : CAShapeLayer?
     fileprivate var _circleStrokeLoadingLayer : CAShapeLayer?
     private(set) var _fourPhasesNextPhase : LoadyAnimationOptions.FourPhase.Phases?
-    
+    private var templayers : [CALayer] = []
     // we keep a copy of button properties before animation is begin and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
     
@@ -150,7 +176,7 @@ open class Loady : UIButton {
         }
     }
     
-    // MARK: - Starting Point ()
+    // MARK: - Starting Point (everything starts here)
     /**
      start loading,this is our public api to start loading
      
@@ -199,9 +225,7 @@ open class Loady : UIButton {
             
             break;
         case .downloading :
-            
             self.createDownloadingLayer()
-            
             break
         case .none:
             break
@@ -354,7 +378,7 @@ open class Loady : UIButton {
     }
     
     
-   
+    
     /**
      remove itemes that related to views
      */
@@ -378,17 +402,23 @@ open class Loady : UIButton {
      @param percent of the completion something like 10,12,15...100
      */
     open func fillTheButton(with percent : CGFloat){
-        _percentFilled = percent;
-        if (percent > 100){
+        if self._filledLoadingLayer == nil{
             return
+        }
+        
+        if (percent > 100){
+            if _percentFilled != 100 {
+                _percentFilled = 100
+            }else{
+                return
+            }
+        }else{
+            _percentFilled = percent;
         }
         if !_isloadingShowing{
             return
         }
-        if self._filledLoadingLayer == nil{
-            return
-        }
-        _percentFilled = 0;
+        //_percentFilled = 0;
         self._filledLoadingLayer?.sublayers?[0].bounds =  CGRect(x : 0,y: (self.frame.size.height / 2),width: (self.frame.size.width * (percent  / 100)),height: self.frame.size.height)
         
     }
@@ -444,7 +474,7 @@ open class Loady : UIButton {
     ///   - radius: radius of the circle
     ///   - centerX: x position, (nil) default is the center of the button
     ///   - centerY: y position, (nil) default is the ceenter of the button
-    /// - Returns: <#return value description#>
+    /// - Returns: a circle
     private func createACircleInsideButton(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil)-> CAShapeLayer{
         let circle = CAShapeLayer()
         let path = UIBezierPath()
@@ -493,15 +523,22 @@ open class Loady : UIButton {
      @param percent of the completion something like 10,12,15...100
      */
     open func fillTheCircleStrokeLoadingWith(percent:CGFloat){
-        
-        if (percent > 100){
-            //[self.tempTimer invalidate];
-            return;
-        }
-        if !_isloadingShowing{
-            return;
-        }
         if self._circleStrokeLoadingLayer == nil{
+            return;
+        }
+        
+        if ( percent > 100){
+            if _percentFilled != 100 {
+                _percentFilled = 100
+            }else{
+                return
+            }
+            //[self.tempTimer invalidate];
+        }else{
+            _percentFilled = percent;
+        }
+        
+        if !_isloadingShowing{
             return;
         }
         
@@ -510,11 +547,25 @@ open class Loady : UIButton {
         animation.fillMode = .forwards;
         self._circleStrokeLoadingLayer?.add(animation, forKey: nil)
         
-        _percentFilled = percent;
     }
 }
 
+// MARK: - Some Handy functions
 extension Loady {
+    private func calculateTextHeight(string : String,withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = string.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        
+        return ceil(boundingBox.height)
+    }
+    
+    private  func calculateTextWidth(string : String,withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = string.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        
+        return ceil(boundingBox.width)
+    }
+    
     /// convert degree to radian
     ///
     /// - Parameter degree: degree
@@ -790,26 +841,93 @@ extension Loady {
                 self.center = center;
                 self.bounds.size.height = 5 // = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
                 self.layer.cornerRadius = 5 / 2;
-                //self.backgroundColor = self.backgroundFillColor;
                 self.layoutIfNeeded()
             }, completion: { (finished) in
                 if(finished){
                     self.titleLabel?.text  = ""
                     //filling animation
                     self.createFillingLoading()
-                    self.createDownloadingLabelLayer()
+                    guard let options = self.animationsOptions.downloading else {
+                        return
+                    }
+                    if let _ = options.downloadingLabel {
+                        self.createDownloadingLabelLayer(labelOption: options)
+                    }
+                    if let _ = options.percentageLabel {
+                        self.createPercentageLabelLayer(labelOption: options)
+                    }
                 }
             })
         }
     }
     
-    private func createDownloadingLabelLayer(){
+    private func createTextLayers(layer:CAShapeLayer,string : String,font : UIFont)->CATextLayer{
+        let text = CATextLayer()
+        text.string = string
+        text.bounds = layer.bounds
+        text.position = CGPoint(x:text.bounds.midX,y:text.bounds.midY)
+        text.alignmentMode = .center
+        text.font = font
+        text.fontSize = font.pointSize
+        text.foregroundColor = UIColor.black.cgColor
+        text.contentsScale = UIScreen.main.scale
+        return text
+    }
+    
+    private func createTextPushAnimation(type : CATransitionSubtype,duration : Double)->CAAnimation{
+        let animation = CATransition()
+        animation.isRemovedOnCompletion = true
+        animation.duration = duration
+        animation.type = CATransitionType.push
+        animation.subtype = type
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        return animation
+    }
+    
+    private func createDownloadingLabelLayer(labelOption : LoadyAnimationOptions.Downloading){
+        // create a temp layer to hide animation behide it
         let layer = CAShapeLayer()
-        layer.bounds = CGRect(x: 0, y:  0, width: self.bounds.width - 50, height: 10)
-        layer.position.x = self.bounds.midX
-        layer.position.y = self.bounds.midY
-        layer.backgroundColor = UIColor.green.cgColor
-        self.layer.addSublayer(layer)
+        let size = CGSize(width: self.bounds.width, height: 30)
+        layer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+        layer.position.x = layer.bounds.midX
+        layer.position.y = size.height / -2
+        //layer.backgroundColor = UIColor.green.cgColor
+        let text = createTextLayers(layer:layer,string: labelOption.downloadingLabel!.title, font: labelOption.downloadingLabel!.font)
+        text.foregroundColor = labelOption.downloadingLabel!.textColor.cgColor
+        layer.addSublayer(text)
+        layer.accessibilityHint = LayerTempKeys.tempLayer
+        
+        // add animation
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        let animation = createTextPushAnimation(type: .fromTop, duration: 0.3)
+        text.add(animation, forKey:"changeTextTransition")
+        layer.masksToBounds = true
+        self.layer.insertSublayer(layer, at: 0)
+        UIView.commitAnimations()
+    }
+    private func createPercentageLabelLayer(labelOption : LoadyAnimationOptions.Downloading){
+        // create a temp layer to hide animation behide it
+        let layer = CAShapeLayer()
+        let size = CGSize(width: self.bounds.width, height: 30)
+        layer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+        layer.position.x = layer.bounds.midX
+        layer.position.y = self.bounds.height + size.height / 2
+        //layer.backgroundColor = UIColor.green.cgColor
+        let text = createTextLayers(layer:layer,string: "\(_percentFilled)%", font: labelOption.percentageLabel!.font)
+        text.foregroundColor = labelOption.percentageLabel!.textColor.cgColor
+        layer.addSublayer(text)
+        layer.accessibilityHint = LayerTempKeys.tempLayer
+        
+        // keep a reference to change its percentage text
+        templayers.append(text)
+        
+        // add animation
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        let animation = createTextPushAnimation(type: .fromBottom, duration: 0.3)
+        text.add(animation, forKey:"changeTextTransitionPercent")
+        layer.masksToBounds = true
+        self.layer.insertSublayer(layer, at: 0)
+        UIView.commitAnimations()
     }
 }
 
