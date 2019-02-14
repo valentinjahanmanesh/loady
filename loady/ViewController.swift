@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var tempTimer1 : Timer?
     var tempTimer2 : Timer?
     var tempTimer3 : Timer?
+    var tempTimer4 : Timer?
     var tempTimer : Timer?
     var fourPhaseTempTimer : Timer?
     @IBOutlet weak var circleView : Loady?
@@ -22,7 +23,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var appstore : Loady?
     @IBOutlet weak var fourPhases : Loady?
     @IBOutlet weak var androidLoading : Loady?
-    
+    @IBOutlet weak var downloading : Loady?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,14 +37,22 @@ class ViewController: UIViewController {
         self.appstore?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.fourPhases?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.androidLoading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.downloading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
 
-        self.appstore?.pauseImage =  UIImage(named: "pause")
+        // setup details
+        self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
+            downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+            percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+            downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
+        )
+
+        self.appstore?.pauseImage =  UIImage(named: "pause-button")
         
         // sets animation type
         self.allInOneview?.animationType = LoadingType.all.rawValue
-        
+
         // sets the color that fills the button after percent value changed
-        self.allInOneview?.backgroundFillColor = .purple
+        self.allInOneview?.backgroundFillColor = UIColor(red:0.118, green:0.509, blue:0.299, alpha:1)
         
         // sets the indicator color above the button
         self.allInOneview?.loadingColor = UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)
@@ -51,16 +61,14 @@ class ViewController: UIViewController {
         self.allInOneview?.indicatorViewStyle = .light
         
         // some animations have image inside (e.g appstore pause image), this line sets that image
-        self.allInOneview?.pauseImage = UIImage(named: "pause")
+        self.allInOneview?.pauseImage = UIImage(named: "pause-button")
         
         // starts loading animation
         // self.allInOneview?.startLoading()
         
-        // some animations have filling background, this sets the filling percent, number is something between 0 to 100
+        // some animations have filling background, or change the circle stroke, this sets the filling percent, number is something between 0 to 100
         self.allInOneview?.fillTheButton(with: 10)
         
-        // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
-        self.allInOneview?.fillTheCircleStrokeLoadingWith(percent: 25)
         self.fourPhases?.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
         self.fourPhases?.fourPhases = (
             // normal phase
@@ -97,36 +105,65 @@ class ViewController: UIViewController {
             self.tempTimer1?.invalidate()
             self.tempTimer1 = nil
             self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
-                percent += 10;
+                percent += CGFloat.random(in: 0...10)
                 button.fillTheButton(with: percent)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
+                if percent > 105 {
+                    percent = 100
+                    self.tempTimer1?.invalidate()
+                }
             }
             self.tempTimer1?.fire()
         case .circleAndTick:
             self.tempTimer2?.invalidate()
             self.tempTimer2 = nil
             self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
-                percent += 10;
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
+                percent += CGFloat.random(in: 0...10)
+                button.fillTheButton(with: percent)
+                if percent > 105 {
+                    percent = 100
+                    self.tempTimer2?.invalidate()
+                }
             }
             self.tempTimer2?.fire()
         case .appstore:
             self.tempTimer3?.invalidate()
             self.tempTimer3 = nil
             self.tempTimer3 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
-                percent += 10;
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
+                percent += CGFloat.random(in: 0...10)
+                button.fillTheButton(with: percent)
+
+                if percent > 105 {
+                    percent = 100
+                    self.tempTimer3?.invalidate()
+                }
+
             }
             self.tempTimer3?.fire()
         case .all:
             self.tempTimer?.invalidate()
             self.tempTimer = nil
             self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
-                percent += 10;
+                percent += CGFloat.random(in: 0...10)
                 button.fillTheButton(with: percent)
-                button.fillTheCircleStrokeLoadingWith(percent: percent)
+                if percent > 105 {
+                    percent = 100
+                    self.tempTimer?.invalidate()
+                }
             }
             self.tempTimer?.fire()
+        case .downloading:
+            self.tempTimer4?.invalidate()
+            self.tempTimer4 = nil
+            self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in
+                percent += CGFloat.random(in: 5...10)
+                
+                button.fillTheButton(with: percent)
+                if percent > 105 {
+                    percent = 100
+                    self.tempTimer4?.invalidate()
+                }
+            }
+            self.tempTimer4?.fire()
         case .fourPhases:
             self.fourPhaseTempTimer?.invalidate()
             self.fourPhaseTempTimer = nil

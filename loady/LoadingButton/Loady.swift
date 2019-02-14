@@ -5,8 +5,12 @@
 //  Created by farshad jahanmanesh on 2/2/19.
 //  Copyright © 2019 farshadJahanmanesh. All rights reserved.
 //
+// NOTE : we have to make this better, there can be many imporvements like maganging options and handle them in one place, new animations and ...
 
 import UIKit
+
+
+/// a structure for creating four phases button
 public struct LoadyAnimationOptions {
     public struct FourPhase {
         public enum Phases {
@@ -16,17 +20,32 @@ public struct LoadyAnimationOptions {
             case error(title:String,image : UIImage?,background:UIColor)
         }
     }
+    public struct Downloading {
+        var downloadingLabel : (title:String,font : UIFont, textColor : UIColor)?
+        var percentageLabel: (font : UIFont, textColor : UIColor)?
+        var downloadedLabel : (title:String,font : UIFont, textColor : UIColor)?
+        init(downloadingLabel : (title:String,font : UIFont, textColor : UIColor)?,percentageLabel: (font : UIFont, textColor : UIColor)?,downloadedLabel : (title:String,font : UIFont, textColor : UIColor)?) {
+            self.downloadingLabel = downloadingLabel
+            self.percentageLabel = percentageLabel
+            self.downloadedLabel = downloadedLabel
+        }
+    }
+    
+    var downloading : Downloading?
 }
+
+// yes i know i can emit that number, i've specfied them to find the number quickly.
 public enum LoadingType: Int {
-    case none
-    case topLine
-    case indicator
-    case backgroundHighlighter
-    case circleAndTick
-    case all
-    case appstore
-    case fourPhases
-    case android
+    case none = 0
+    case topLine = 1
+    case indicator = 2
+    case backgroundHighlighter = 3
+    case circleAndTick = 4
+    case all = 5
+    case appstore = 6
+    case fourPhases = 7
+    case android = 8
+    case downloading = 9
 }
 public typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
@@ -41,10 +60,24 @@ open class Loady : UIButton {
             self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
+    
+    /// some animations has a indicator like a line, this is that line color
     @IBInspectable open  var loadingColor : UIColor = UIColor.black
+    
+    /// some animations fills the button with a color, this is that color
     @IBInspectable open var backgroundFillColor : UIColor = UIColor.black
+    
+    /// some animations shows a indiccatorView, this is the style of that indicator view
     @IBInspectable open var indicatorViewStyle: IndicatorViewStyle = .light
+    
+    /// some animations shows an image inside of the button, this is that image
     open var pauseImage : UIImage?
+    
+    // MARK: Animation Options
+    /// animations options, along with default that we can set from other properties, eeach animation has its own options that can set from here
+    open var animationsOptions = LoadyAnimationOptions()
+    
+    /// keeps fourPhases button states
     open var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
         didSet{
             guard let normal =  fourPhases?.normal else {
@@ -54,23 +87,38 @@ open class Loady : UIButton {
             self.createFourPhaseButton()
         }
     }
+    
     // private settings
     private(set) var _animationType = LoadingType.none
     
-    // this key is used to mark some layers as temps layer and we will remove them after animation is done
+    // these keys are used to mark some layers as temps layer and we will remove them after animation is done
     private struct LayerTempKeys {
         static let tempLayer = "temps"
         static let circularLoading = "circularLoading"
+        static let downloading_percentLabel = "downloading_percentLabel"
+        static let downloading_downloadLabel = "downloading_downloadLabel"
     }
     
-    fileprivate var _percentFilled : CGFloat = 0
+    fileprivate var _percentFilled : CGFloat = 0 {
+        willSet{
+            percentageChanged(newValue,_percentFilled)
+        }
+        didSet {
+            if let textlayer = self.templayers[LayerTempKeys.downloading_percentLabel] as? CATextLayer {
+                textlayer.string = String(format:"%.2f%%", self._percentFilled)
+            }
+            
+            if _percentFilled == 100 {
+                percentageCompleted()
+            }
+        }
+    }
     fileprivate var _isloadingShowing = false
     fileprivate var _filledLoadingLayer : CAShapeLayer?
     fileprivate var _circleStrokeLoadingLayer : CAShapeLayer?
-    
     private(set) var _fourPhasesNextPhase : LoadyAnimationOptions.FourPhase.Phases?
-    
-    // we keep a copy of before animation button properties and will restore them after animation is finished
+    private var templayers : Dictionary<String,CALayer>  = [:]
+    // we keep a copy of button properties before animation is begin and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
     
     override open func layoutSubviews() {
@@ -135,6 +183,7 @@ open class Loady : UIButton {
         }
     }
     
+    // MARK: - Starting Point (everything starts here)
     /**
      start loading,this is our public api to start loading
      
@@ -180,8 +229,13 @@ open class Loady : UIButton {
             break;
         case .fourPhases:
             self.createFourPhaseButton()
-        default:
+            
             break;
+        case .downloading :
+            self.createDownloadingLayer()
+            break
+        case .none:
+            break
         }
         
         //indicates that loading is showing
@@ -228,6 +282,33 @@ open class Loady : UIButton {
         self.viewWithTag(-11111111)?.removeFromSuperview();
     }
     
+    open func fillTheButton(with percent : CGFloat){
+        if ( percent > 100){
+            if _percentFilled != 100 {
+                _percentFilled = 100
+            }else{
+                return
+            }
+        }else{
+            _percentFilled = percent;
+        }
+    }
+    
+    
+    /// notifies other functions about percent changes
+    ///
+    /// - Parameters:
+    ///   - new: new value
+    ///   - old: current value
+    private func percentageChanged(_ new: CGFloat,_ old: CGFloat){
+        fillTheCircleStrokeLoadingWith(new: new, old: old)
+        fillTheButtonBackground(new: new, old: old)
+    }
+    
+    /// notifies all animations about 100%, some animations need to preform some actions
+    private func percentageCompleted(){
+        finishDownloading()
+    }
     
     ///line loading
     private func createTopLineLoading(){
@@ -342,148 +423,32 @@ open class Loady : UIButton {
         //[self.tempTimer invalidate];
         
         self.removeIndicatorView();
-        self.removeCircleLoadingLayer();
+        self.removeScalesAndResizes();
         self.removeAppstoreLayer();
         self.removeFillingLayer();
         self.removeTopLineLayer();
         
     }
     
+    
+    
     /**
      create the filling layer
      
      @param percent of the completion something like 10,12,15...100
      */
-    open func fillTheButton(with percent : CGFloat){
-        _percentFilled = percent;
-        if (percent > 100){
+    private func fillTheButtonBackground(new : CGFloat,old : CGFloat){
+        if self._filledLoadingLayer == nil || !_isloadingShowing{
             return
         }
-        if !_isloadingShowing{
-            return
-        }
-        if self._filledLoadingLayer == nil{
-            return
-        }
-        _percentFilled = 0;
-        self._filledLoadingLayer?.sublayers?[0].bounds =  CGRect(x : 0,y: (self.frame.size.height / 2),width: (self.frame.size.width * (percent  / 100)),height: self.frame.size.height)
+        //_percentFilled = 0;
+        self._filledLoadingLayer?.sublayers?[0].bounds =  CGRect(x : 0,y: (self.frame.size.height / 2),width: (self.frame.size.width * (new  / 100)),height: self.frame.size.height)
         
     }
     
-    /**
-     create loading animation and layer
-     */
-    private func createFillingLoading(){
-        _percentFilled = 0;
-        //a shape for filling the button
-        let layer = CAShapeLayer();
-        layer.backgroundColor = self.backgroundFillColor.cgColor
-        layer.bounds = CGRect(x:0,y:0, width: 0,height: self.frame.size.height);
-        layer.anchorPoint = CGPoint(x:0,y:0.5);
-        layer.position = CGPoint(x:0,y: self.frame.size.height / 2);
-        layer.accessibilityHint = "button_filled_loading";
-        layer.masksToBounds = true
-        
-        //create aniamtion
-        _filledLoadingLayer = CAShapeLayer()
-        self._filledLoadingLayer?.bounds = CGRect(x:0,y:0,width: self.frame.size.width,height: self.frame.size.height)
-        self._filledLoadingLayer?.position = CGPoint(x:self.frame.size.width / 2,y: self.frame.size.height / 2)
-        self._filledLoadingLayer?.accessibilityHint = "button_filled_loading_parent"
-        self._filledLoadingLayer?.masksToBounds = true
-        self._filledLoadingLayer?.cornerRadius = self.layer.cornerRadius
-        self._filledLoadingLayer?.insertSublayer(layer,at:0)
-        self.layer.insertSublayer(self._filledLoadingLayer!,at:0);
-    }
-    private func removeFillingLayer(){
-        self._filledLoadingLayer?.removeFromSuperlayer();
-        _filledLoadingLayer = nil;
-    }
-    
-    private func createCircleAndTick(withAndroidAnimation : Bool = false){
-        let center = self.center
-        self.copyBeforeAnyChanges()
-        let radius = min(self.frame.size.width, self.frame.size.height)
-        self.setTitle("", for: .normal);
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIView.animate(withDuration: withAndroidAnimation ? 0.15 : 0.5, animations: {
-                self.center = center;
-                self.bounds = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
-                self.layer.cornerRadius = radius / 2;
-                if !withAndroidAnimation {
-                    self.transform = CGAffineTransform(scaleX: -1,y: 1);
-                }
-                self.backgroundColor = self.backgroundFillColor;
-                self.layoutIfNeeded()
-            }, completion: { (finished) in
-                if(finished){
-                    self.titleLabel?.text  = ""
-                    self.createCircleLoadingLayer()
-                    if withAndroidAnimation {
-                        self.startCircluarLoadingAnimation(self._circleStrokeLoadingLayer!)
-                    }
-                }
-            })
-        }
-    }
-    
-    private func createAppstore(){
-        //        let center = self.center
-        self.copyBeforeAnyChanges()
-        let radius = min(self.frame.size.width, self.frame.size.height)
-        self.setTitle("", for: .normal);
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIView.animate(withDuration: 0.25, animations: {
-                //self.center = center;
-                self.bounds = CGRect(x:0,y: self.center.y,width: radius,height: radius);
-                self.frame.origin.x = 0
-                self.layer.cornerRadius = radius / 2;
-                self.alpha = 0.2
-                //self.transform = CGAffineTransform(scaleX: -1,y: 1);
-                self.backgroundColor = self.backgroundFillColor;
-                self.layoutIfNeeded()
-            }, completion: { (finished) in
-                if(finished){
-                    self.titleLabel?.text  = ""
-                }
-            })
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.createAppstoreLoadingLayer()
-        }
-    }
-    
-    private func removeAppstoreLayer(){
-        if _animationType != .appstore{
-            return
-        }
-        self.clearTempLayers()
-        self._circleStrokeLoadingLayer?.removeAllAnimations()
-        UIView.animate(withDuration: 0.5, animations: {[weak self] in
-            guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
-                return
-            }
-            
-            weakSelf.bounds = CGRect(x:0,y: 0,width: cached.frame.size.width,height: cached.frame.size.height);
-            weakSelf.layer.cornerRadius = cached.layer.cornerRadius;
-            weakSelf.frame.origin.x = 0
-            //weakSelf.transform = .identity;
-            weakSelf.backgroundColor = cached.backgroundColor;
-            weakSelf.layoutIfNeeded();
-        }) {[weak self] (finished) in
-            if (finished){
-                guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
-                    return
-                }
-                weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
-                
-                weakSelf._circleStrokeLoadingLayer?.removeFromSuperlayer()
-                weakSelf._circleStrokeLoadingLayer = nil;
-            }
-        }
-    }
-    
-    private func removeCircleLoadingLayer(){
-        if  _animationType != .circleAndTick && _animationType != .android{
+    /// some animations like circleAndTick, android, downloading and ... change the size of the button, scale it or some how resize it, this function will scale the button to identity and also brings it back to the original sizes
+    private func removeScalesAndResizes(){
+        if  _animationType != .circleAndTick && _animationType != .android && _animationType != .downloading{
             return
         }
         self.clearTempLayers()
@@ -512,6 +477,9 @@ open class Loady : UIButton {
             }
         }
     }
+    
+    
+    /// removes all layers which decorated by TempLayer key, some animations adds a temp layer to show animations, we will clear all of them after finishing our work
     private func clearTempLayers(){
         
         self.layer.sublayers?.forEach({ (layer) in
@@ -521,14 +489,15 @@ open class Loady : UIButton {
         })
     }
     
-    private func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
-        self._circleStrokeLoadingLayer = createACircleInsideButton(radius: radius ,centerX: centerX ,centerY: centerY)
-        self._circleStrokeLoadingLayer?.accessibilityHint = "button_circle_loading_stroke_parent"
-        
-        self.layer.addSublayer(self._circleStrokeLoadingLayer!)
-    }
     
     
+    /// creates a circle inside or button, some animations like appstore, circleAndTick and ... needs to show a circle
+    ///
+    /// - Parameters:
+    ///   - radius: radius of the circle
+    ///   - centerX: x position, (nil) default is the center of the button
+    ///   - centerY: y position, (nil) default is the ceenter of the button
+    /// - Returns: a circle
     private func createACircleInsideButton(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil)-> CAShapeLayer{
         let circle = CAShapeLayer()
         let path = UIBezierPath()
@@ -548,32 +517,12 @@ open class Loady : UIButton {
         circle.path = path.cgPath
         return circle
     }
-    private func createAppstoreLoadingLayer(){
-        // creates the circle loading
-        createCircleLoadingLayer(radius: self.frame.midX ,centerX: self.frame.maxX - self.frame.midX)
-        
-        let circleContainer = copyLayer(of: self._circleStrokeLoadingLayer!)
-        circleContainer.strokeColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
-        circleContainer.strokeStart = 0
-        circleContainer.strokeEnd = 1
-        circleContainer.opacity = 1
-        circleContainer.accessibilityHint = LayerTempKeys.tempLayer
-        
-        // check if user specifies an image for pause
-        if let image = pauseImage {
-            let imageLayer = CAShapeLayer()
-            imageLayer.bounds = CGRect(x:0,y: 0,width: 20,height: 20);
-            imageLayer.position = CGPoint(x:self.frame.midX,y: circleContainer.bounds.midY);
-            imageLayer.anchorPoint = CGPoint(x:0.5,y: 0.5);
-            imageLayer.contents = image.cgImage
-            circleContainer.addSublayer(imageLayer)
-        }
-        self.layer.addSublayer(circleContainer)
-        UIView.animate(withDuration: 0.5) {
-            self.alpha = 1
-        }
-    }
     
+    
+    /// creates a copy of specific properties of the layer and makes a new layer with those
+    ///
+    /// - Parameter copy: layer to create a copy of
+    /// - Returns: new layer
     private func copyLayer(of copy : CAShapeLayer)-> CAShapeLayer{
         let newLayer = CAShapeLayer()
         newLayer.bounds = copy.bounds
@@ -596,27 +545,34 @@ open class Loady : UIButton {
      
      @param percent of the completion something like 10,12,15...100
      */
-    open func fillTheCircleStrokeLoadingWith(percent:CGFloat){
+    private func fillTheCircleStrokeLoadingWith(new :CGFloat, old : CGFloat){
         
-        if (percent > 100){
-            //[self.tempTimer invalidate];
-            return;
-        }
-        if !_isloadingShowing{
-            return;
-        }
-        if self._circleStrokeLoadingLayer == nil{
+        if self._circleStrokeLoadingLayer == nil || !_isloadingShowing{
             return;
         }
         
-        let animation = createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(self._percentFilled / 100)), to: NSNumber(floatLiteral: Double( percent / 100)),duration : 0.2)
+        let animation = createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(old / 100)), to: NSNumber(floatLiteral: Double( new / 100)),duration : 0.2)
         animation.isRemovedOnCompletion = false;
         animation.fillMode = .forwards;
         self._circleStrokeLoadingLayer?.add(animation, forKey: nil)
+    }
+}
+
+// MARK: - Some Handy functions
+extension Loady {
+    private func calculateTextHeight(string : String,withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = string.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
         
-        _percentFilled = percent;
+        return ceil(boundingBox.height)
     }
     
+    private  func calculateTextWidth(string : String,withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = string.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        
+        return ceil(boundingBox.width)
+    }
     
     /// convert degree to radian
     ///
@@ -625,9 +581,13 @@ open class Loady : UIButton {
     private func degreeToRadian(degree : CGFloat)->CGFloat{
         return degree * .pi / 180;
     }
-}
-
-extension Loady {
+    
+    /// Resizes Images to idle size
+    ///
+    /// - Parameters:
+    ///   - image: the UIImage to resize
+    ///   - targetSize: target size
+    /// - Returns: the image with new size
     private func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
         
@@ -655,6 +615,7 @@ extension Loady {
     }
 }
 
+// MARK: - Creates the Four Phases
 extension Loady {
     private func createFourPhaseButton(){
         guard let nextPhase = _fourPhasesNextPhase, let fourPhase = fourPhases  else {
@@ -874,5 +835,286 @@ extension Loady {
         
         animation.repeatCount = Float.infinity
         layer.add(animation, forKey: animation.keyPath)
+    }
+}
+
+// MARK: - Creates the Downloading Layer
+extension Loady {
+    private func createDownloadingLayer(){
+        let center = self.center
+        self.copyBeforeAnyChanges()
+        self.setTitle("", for: .normal);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.center = center;
+                self.bounds.size.height = 5 // = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
+                self.layer.cornerRadius = 5 / 2;
+                self.layoutIfNeeded()
+            }, completion: { (finished) in
+                if(finished){
+                    self.titleLabel?.text  = ""
+                    //filling animation
+                    self.createFillingLoading()
+                    guard let options = self.animationsOptions.downloading else {
+                        return
+                    }
+                    if let _ = options.downloadingLabel {
+                        self.createDownloadingLabelLayer(labelOption: options)
+                    }
+                    if let _ = options.percentageLabel {
+                        self.createPercentageLabelLayer(labelOption: options)
+                    }
+                }
+            })
+        }
+    }
+    
+    private func createTextLayers(layer:CAShapeLayer,string : String,font : UIFont)->CATextLayer{
+        let text = CATextLayer()
+        text.string = string
+        text.bounds = layer.bounds
+        text.position = CGPoint(x:text.bounds.midX,y:text.bounds.midY)
+        text.alignmentMode = .center
+        text.font = font
+        text.fontSize = font.pointSize
+        text.foregroundColor = UIColor.black.cgColor
+        text.contentsScale = UIScreen.main.scale
+        return text
+    }
+    
+    private func createTextPushAnimation(type : CATransitionSubtype,duration : Double)->CAAnimation{
+        let animation = CATransition()
+        animation.isRemovedOnCompletion = true
+        animation.duration = duration
+        animation.type = CATransitionType.push
+        animation.subtype = type
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        return animation
+    }
+    
+    private func createDownloadingLabelLayer(labelOption : LoadyAnimationOptions.Downloading){
+        // create a temp layer to hide animation behide it
+        let containerLayer = CAShapeLayer()
+        let size = CGSize(width: self.bounds.width, height: 30)
+        containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+        containerLayer.position.x = containerLayer.bounds.midX
+        containerLayer.position.y = size.height / -2
+        //layer.backgroundColor = UIColor.green.cgColor
+        let text = createTextLayers(layer:containerLayer,string: labelOption.downloadingLabel!.title, font: labelOption.downloadingLabel!.font)
+        text.foregroundColor = labelOption.downloadingLabel!.textColor.cgColor
+        containerLayer.addSublayer(text)
+        containerLayer.accessibilityHint = LayerTempKeys.tempLayer
+        
+        // keep a reference to change this text after animation finished
+        templayers.updateValue(text, forKey: LayerTempKeys.downloading_downloadLabel)
+
+        // add animation
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        let animation = createTextPushAnimation(type: .fromTop, duration: 0.3)
+        text.add(animation, forKey:"changeTextTransition")
+        containerLayer.masksToBounds = true
+        self.layer.insertSublayer(containerLayer, at: 0)
+        UIView.commitAnimations()
+    }
+    
+    private func finishDownloading(){
+        guard let downloadLabel = templayers[LayerTempKeys.downloading_downloadLabel] as? CATextLayer, let downloadedOption = self.animationsOptions.downloading?.downloadedLabel else {
+            return
+        }
+        // add animation
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        downloadLabel.string = downloadedOption.title
+        downloadLabel.foregroundColor = downloadedOption.textColor.cgColor
+        downloadLabel.font = downloadedOption.font
+        downloadLabel.position.x = self.layer.position.x
+        downloadLabel.fontSize = downloadedOption.font.pointSize
+        let animation = createTextPushAnimation(type: .fromTop, duration: 0.3)
+        downloadLabel.add(animation, forKey:"changeTextTransition")
+        UIView.commitAnimations()
+    }
+    
+    private func createPercentageLabelLayer(labelOption : LoadyAnimationOptions.Downloading){
+        // create a temp layer to hide animation behide it
+        let containerLayer = CAShapeLayer()
+        let size = CGSize(width: self.bounds.width, height: 30)
+        containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+        containerLayer.position.x = containerLayer.bounds.midX
+        containerLayer.position.y = (self.bounds.height + size.height / 2) + 8
+        //layer.backgroundColor = UIColor.green.cgColor
+        let text = createTextLayers(layer:containerLayer,string: "\(_percentFilled)%", font: labelOption.percentageLabel!.font)
+        text.foregroundColor = labelOption.percentageLabel!.textColor.cgColor
+        containerLayer.addSublayer(text)
+        containerLayer.accessibilityHint = LayerTempKeys.tempLayer
+        
+        // keep a reference to change its percentage text
+        templayers.updateValue(text, forKey: LayerTempKeys.downloading_percentLabel)
+        
+        // add animation
+        UIView.beginAnimations("changeTextTransition", context: nil)
+        let animation = createTextPushAnimation(type: .fromBottom, duration: 0.3)
+        text.add(animation, forKey:"changeTextTransitionPercent")
+        containerLayer.masksToBounds = true
+        self.layer.insertSublayer(containerLayer, at: 1)
+        UIView.commitAnimations()
+    }
+}
+
+
+// MARK: - Creates the AppStore
+extension Loady {
+    private func createAppstoreLoadingLayer(){
+        // creates the circle loading
+        createCircleLoadingLayer(radius: self.frame.midX ,centerX: self.frame.maxX - self.frame.midX)
+        
+        let circleContainer = copyLayer(of: self._circleStrokeLoadingLayer!)
+        circleContainer.strokeColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        circleContainer.strokeStart = 0
+        circleContainer.strokeEnd = 1
+        circleContainer.opacity = 1
+        circleContainer.accessibilityHint = LayerTempKeys.tempLayer
+        
+        // check if user specifies an image for pause
+        if let image = pauseImage {
+            let imageLayer = CAShapeLayer()
+            imageLayer.bounds = CGRect(x:0,y: 0,width: 20,height: 20);
+            imageLayer.position = CGPoint(x:self.frame.midX,y: circleContainer.bounds.midY);
+            imageLayer.anchorPoint = CGPoint(x:0.5,y: 0.5);
+            imageLayer.contents = image.cgImage
+            circleContainer.addSublayer(imageLayer)
+        }
+        self.layer.addSublayer(circleContainer)
+        UIView.animate(withDuration: 0.5) {
+            self.alpha = 1
+        }
+    }
+    
+    private func createAppstore(){
+        //        let center = self.center
+        self.copyBeforeAnyChanges()
+        let radius = min(self.frame.size.width, self.frame.size.height)
+        self.setTitle("", for: .normal);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.animate(withDuration: 0.25, animations: {
+                //self.center = center;
+                self.bounds = CGRect(x:0,y: self.center.y,width: radius,height: radius);
+                self.frame.origin.x = 0
+                self.layer.cornerRadius = radius / 2;
+                self.alpha = 0.2
+                self.backgroundColor = self.backgroundFillColor;
+                self.layoutIfNeeded()
+            }, completion: { (finished) in
+                if(finished){
+                    self.titleLabel?.text  = ""
+                }
+            })
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.createAppstoreLoadingLayer()
+        }
+    }
+    
+    private func removeAppstoreLayer(){
+        if _animationType != .appstore{
+            return
+        }
+        self.clearTempLayers()
+        self._circleStrokeLoadingLayer?.removeAllAnimations()
+        UIView.animate(withDuration: 0.5, animations: {[weak self] in
+            guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
+                return
+            }
+            
+            weakSelf.bounds = CGRect(x:0,y: 0,width: cached.frame.size.width,height: cached.frame.size.height);
+            weakSelf.layer.cornerRadius = cached.layer.cornerRadius;
+            weakSelf.frame.origin.x = 0
+            weakSelf.backgroundColor = cached.backgroundColor;
+            weakSelf.layoutIfNeeded();
+        }) {[weak self] (finished) in
+            if (finished){
+                guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
+                    return
+                }
+                weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
+                
+                weakSelf._circleStrokeLoadingLayer?.removeFromSuperlayer()
+                weakSelf._circleStrokeLoadingLayer = nil;
+            }
+        }
+    }
+}
+
+
+// MARK: - Creates the Filling Loading
+extension Loady {
+    /**
+     create loading animation and layer
+     */
+    private func createFillingLoading(){
+        _percentFilled = 0;
+        //a shape for filling the button
+        let layer = CAShapeLayer();
+        layer.backgroundColor = self.backgroundFillColor.cgColor
+        layer.bounds = CGRect(x:0,y:0, width: 0,height: self.frame.size.height);
+        layer.anchorPoint = CGPoint(x:0,y:0.5);
+        layer.position = CGPoint(x:0,y: self.frame.size.height / 2);
+        layer.accessibilityHint = "button_filled_loading";
+        layer.masksToBounds = true
+        
+        //create aniamtion
+        _filledLoadingLayer = CAShapeLayer()
+        self._filledLoadingLayer?.bounds = CGRect(x:0,y:0,width: self.frame.size.width,height: self.frame.size.height)
+        self._filledLoadingLayer?.position = CGPoint(x:self.frame.size.width / 2,y: self.frame.size.height / 2)
+        self._filledLoadingLayer?.accessibilityHint = "button_filled_loading_parent"
+        self._filledLoadingLayer?.masksToBounds = true
+        self._filledLoadingLayer?.cornerRadius = self.layer.cornerRadius
+        self._filledLoadingLayer?.insertSublayer(layer,at:0)
+        self.layer.insertSublayer(self._filledLoadingLayer!,at:0);
+    }
+    
+    private func removeFillingLayer(){
+        self._filledLoadingLayer?.removeFromSuperlayer();
+        _filledLoadingLayer = nil;
+    }
+}
+
+
+// MARK: - Creates the Circle Loading
+extension Loady {
+    private func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
+        self._circleStrokeLoadingLayer = createACircleInsideButton(radius: radius ,centerX: centerX ,centerY: centerY)
+        self._circleStrokeLoadingLayer?.accessibilityHint = "button_circle_loading_stroke_parent"
+        
+        self.layer.addSublayer(self._circleStrokeLoadingLayer!)
+    }
+}
+
+
+// MARK: - Creates the Circle And Tick
+extension Loady {
+    private func createCircleAndTick(withAndroidAnimation : Bool = false){
+        let center = self.center
+        self.copyBeforeAnyChanges()
+        let radius = min(self.frame.size.width, self.frame.size.height)
+        self.setTitle("", for: .normal);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.animate(withDuration: withAndroidAnimation ? 0.15 : 0.5, animations: {
+                self.center = center;
+                self.bounds = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
+                self.layer.cornerRadius = radius / 2;
+                if !withAndroidAnimation {
+                    self.transform = CGAffineTransform(scaleX: -1,y: 1);
+                }
+                self.backgroundColor = self.backgroundFillColor;
+                self.layoutIfNeeded()
+            }, completion: { (finished) in
+                if(finished){
+                    self.titleLabel?.text  = ""
+                    self.createCircleLoadingLayer()
+                    if withAndroidAnimation {
+                        self.startCircluarLoadingAnimation(self._circleStrokeLoadingLayer!)
+                    }
+                }
+            })
+        }
     }
 }
