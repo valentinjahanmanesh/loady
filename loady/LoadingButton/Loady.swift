@@ -7,6 +7,9 @@
 //
 
 import UIKit
+
+
+/// a structure for creating four phases button
 public struct LoadyAnimationOptions {
     public struct FourPhase {
         public enum Phases {
@@ -17,6 +20,8 @@ public struct LoadyAnimationOptions {
         }
     }
 }
+
+
 public enum LoadingType: Int {
     case none
     case topLine
@@ -27,6 +32,7 @@ public enum LoadingType: Int {
     case appstore
     case fourPhases
     case android
+    case downloading
 }
 public typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
@@ -41,10 +47,20 @@ open class Loady : UIButton {
             self._animationType = LoadingType(rawValue: self.animationType) ?? .none
         }
     }
+    
+    /// some animations has a indicator like a line, this is that line color
     @IBInspectable open  var loadingColor : UIColor = UIColor.black
+    
+    /// some animations fills the button with a color, this is that color
     @IBInspectable open var backgroundFillColor : UIColor = UIColor.black
+    
+    /// some animations shows a indiccatorView, this is the style of that indicator view
     @IBInspectable open var indicatorViewStyle: IndicatorViewStyle = .light
+    
+    /// some animations shows an image inside of the button, this is that image
     open var pauseImage : UIImage?
+    
+    /// keeps fourPhases button states
     open var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
         didSet{
             guard let normal =  fourPhases?.normal else {
@@ -67,10 +83,9 @@ open class Loady : UIButton {
     fileprivate var _isloadingShowing = false
     fileprivate var _filledLoadingLayer : CAShapeLayer?
     fileprivate var _circleStrokeLoadingLayer : CAShapeLayer?
-    
     private(set) var _fourPhasesNextPhase : LoadyAnimationOptions.FourPhase.Phases?
     
-    // we keep a copy of before animation button properties and will restore them after animation is finished
+    // we keep a copy of button properties before animation is begin and will restore them after animation is finished
     fileprivate var _cacheButtonBeforeAnimation : UIButton?
     
     override open func layoutSubviews() {
@@ -135,6 +150,7 @@ open class Loady : UIButton {
         }
     }
     
+    // MARK: - Starting Point ()
     /**
      start loading,this is our public api to start loading
      
@@ -180,8 +196,15 @@ open class Loady : UIButton {
             break;
         case .fourPhases:
             self.createFourPhaseButton()
-        default:
+            
             break;
+        case .downloading :
+            
+            self.createDownloadingLayer()
+            
+            break
+        case .none:
+            break
         }
         
         //indicates that loading is showing
@@ -331,7 +354,7 @@ open class Loady : UIButton {
     }
     
     
-    
+   
     /**
      remove itemes that related to views
      */
@@ -342,7 +365,7 @@ open class Loady : UIButton {
         //[self.tempTimer invalidate];
         
         self.removeIndicatorView();
-        self.removeCircleLoadingLayer();
+        self.removeScalesAndResizes();
         self.removeAppstoreLayer();
         self.removeFillingLayer();
         self.removeTopLineLayer();
@@ -370,120 +393,9 @@ open class Loady : UIButton {
         
     }
     
-    /**
-     create loading animation and layer
-     */
-    private func createFillingLoading(){
-        _percentFilled = 0;
-        //a shape for filling the button
-        let layer = CAShapeLayer();
-        layer.backgroundColor = self.backgroundFillColor.cgColor
-        layer.bounds = CGRect(x:0,y:0, width: 0,height: self.frame.size.height);
-        layer.anchorPoint = CGPoint(x:0,y:0.5);
-        layer.position = CGPoint(x:0,y: self.frame.size.height / 2);
-        layer.accessibilityHint = "button_filled_loading";
-        layer.masksToBounds = true
-        
-        //create aniamtion
-        _filledLoadingLayer = CAShapeLayer()
-        self._filledLoadingLayer?.bounds = CGRect(x:0,y:0,width: self.frame.size.width,height: self.frame.size.height)
-        self._filledLoadingLayer?.position = CGPoint(x:self.frame.size.width / 2,y: self.frame.size.height / 2)
-        self._filledLoadingLayer?.accessibilityHint = "button_filled_loading_parent"
-        self._filledLoadingLayer?.masksToBounds = true
-        self._filledLoadingLayer?.cornerRadius = self.layer.cornerRadius
-        self._filledLoadingLayer?.insertSublayer(layer,at:0)
-        self.layer.insertSublayer(self._filledLoadingLayer!,at:0);
-    }
-    private func removeFillingLayer(){
-        self._filledLoadingLayer?.removeFromSuperlayer();
-        _filledLoadingLayer = nil;
-    }
-    
-    private func createCircleAndTick(withAndroidAnimation : Bool = false){
-        let center = self.center
-        self.copyBeforeAnyChanges()
-        let radius = min(self.frame.size.width, self.frame.size.height)
-        self.setTitle("", for: .normal);
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIView.animate(withDuration: withAndroidAnimation ? 0.15 : 0.5, animations: {
-                self.center = center;
-                self.bounds = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
-                self.layer.cornerRadius = radius / 2;
-                if !withAndroidAnimation {
-                    self.transform = CGAffineTransform(scaleX: -1,y: 1);
-                }
-                self.backgroundColor = self.backgroundFillColor;
-                self.layoutIfNeeded()
-            }, completion: { (finished) in
-                if(finished){
-                    self.titleLabel?.text  = ""
-                    self.createCircleLoadingLayer()
-                    if withAndroidAnimation {
-                        self.startCircluarLoadingAnimation(self._circleStrokeLoadingLayer!)
-                    }
-                }
-            })
-        }
-    }
-    
-    private func createAppstore(){
-        //        let center = self.center
-        self.copyBeforeAnyChanges()
-        let radius = min(self.frame.size.width, self.frame.size.height)
-        self.setTitle("", for: .normal);
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIView.animate(withDuration: 0.25, animations: {
-                //self.center = center;
-                self.bounds = CGRect(x:0,y: self.center.y,width: radius,height: radius);
-                self.frame.origin.x = 0
-                self.layer.cornerRadius = radius / 2;
-                self.alpha = 0.2
-                //self.transform = CGAffineTransform(scaleX: -1,y: 1);
-                self.backgroundColor = self.backgroundFillColor;
-                self.layoutIfNeeded()
-            }, completion: { (finished) in
-                if(finished){
-                    self.titleLabel?.text  = ""
-                }
-            })
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.createAppstoreLoadingLayer()
-        }
-    }
-    
-    private func removeAppstoreLayer(){
-        if _animationType != .appstore{
-            return
-        }
-        self.clearTempLayers()
-        self._circleStrokeLoadingLayer?.removeAllAnimations()
-        UIView.animate(withDuration: 0.5, animations: {[weak self] in
-            guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
-                return
-            }
-            
-            weakSelf.bounds = CGRect(x:0,y: 0,width: cached.frame.size.width,height: cached.frame.size.height);
-            weakSelf.layer.cornerRadius = cached.layer.cornerRadius;
-            weakSelf.frame.origin.x = 0
-            //weakSelf.transform = .identity;
-            weakSelf.backgroundColor = cached.backgroundColor;
-            weakSelf.layoutIfNeeded();
-        }) {[weak self] (finished) in
-            if (finished){
-                guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
-                    return
-                }
-                weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
-                
-                weakSelf._circleStrokeLoadingLayer?.removeFromSuperlayer()
-                weakSelf._circleStrokeLoadingLayer = nil;
-            }
-        }
-    }
-    
-    private func removeCircleLoadingLayer(){
-        if  _animationType != .circleAndTick && _animationType != .android{
+    /// some animations like circleAndTick, android, downloading and ... change the size of the button, scale it or some how resize it, this function will scale the button to identity and also brings it back to the original sizes
+    private func removeScalesAndResizes(){
+        if  _animationType != .circleAndTick && _animationType != .android && _animationType != .downloading{
             return
         }
         self.clearTempLayers()
@@ -512,6 +424,9 @@ open class Loady : UIButton {
             }
         }
     }
+    
+    
+    /// removes all layers which decorated by TempLayer key, some animations adds a temp layer to show animations, we will clear all of them after finishing our work
     private func clearTempLayers(){
         
         self.layer.sublayers?.forEach({ (layer) in
@@ -521,14 +436,15 @@ open class Loady : UIButton {
         })
     }
     
-    private func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
-        self._circleStrokeLoadingLayer = createACircleInsideButton(radius: radius ,centerX: centerX ,centerY: centerY)
-        self._circleStrokeLoadingLayer?.accessibilityHint = "button_circle_loading_stroke_parent"
-        
-        self.layer.addSublayer(self._circleStrokeLoadingLayer!)
-    }
     
     
+    /// creates a circle inside or button, some animations like appstore, circleAndTick and ... needs to show a circle
+    ///
+    /// - Parameters:
+    ///   - radius: radius of the circle
+    ///   - centerX: x position, (nil) default is the center of the button
+    ///   - centerY: y position, (nil) default is the ceenter of the button
+    /// - Returns: <#return value description#>
     private func createACircleInsideButton(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil)-> CAShapeLayer{
         let circle = CAShapeLayer()
         let path = UIBezierPath()
@@ -548,32 +464,12 @@ open class Loady : UIButton {
         circle.path = path.cgPath
         return circle
     }
-    private func createAppstoreLoadingLayer(){
-        // creates the circle loading
-        createCircleLoadingLayer(radius: self.frame.midX ,centerX: self.frame.maxX - self.frame.midX)
-        
-        let circleContainer = copyLayer(of: self._circleStrokeLoadingLayer!)
-        circleContainer.strokeColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
-        circleContainer.strokeStart = 0
-        circleContainer.strokeEnd = 1
-        circleContainer.opacity = 1
-        circleContainer.accessibilityHint = LayerTempKeys.tempLayer
-        
-        // check if user specifies an image for pause
-        if let image = pauseImage {
-            let imageLayer = CAShapeLayer()
-            imageLayer.bounds = CGRect(x:0,y: 0,width: 20,height: 20);
-            imageLayer.position = CGPoint(x:self.frame.midX,y: circleContainer.bounds.midY);
-            imageLayer.anchorPoint = CGPoint(x:0.5,y: 0.5);
-            imageLayer.contents = image.cgImage
-            circleContainer.addSublayer(imageLayer)
-        }
-        self.layer.addSublayer(circleContainer)
-        UIView.animate(withDuration: 0.5) {
-            self.alpha = 1
-        }
-    }
     
+    
+    /// creates a copy of specific properties of the layer and makes a new layer with those
+    ///
+    /// - Parameter copy: layer to create a copy of
+    /// - Returns: new layer
     private func copyLayer(of copy : CAShapeLayer)-> CAShapeLayer{
         let newLayer = CAShapeLayer()
         newLayer.bounds = copy.bounds
@@ -616,8 +512,9 @@ open class Loady : UIButton {
         
         _percentFilled = percent;
     }
-    
-    
+}
+
+extension Loady {
     /// convert degree to radian
     ///
     /// - Parameter degree: degree
@@ -625,9 +522,13 @@ open class Loady : UIButton {
     private func degreeToRadian(degree : CGFloat)->CGFloat{
         return degree * .pi / 180;
     }
-}
-
-extension Loady {
+    
+    /// Resizes Images to idle size
+    ///
+    /// - Parameters:
+    ///   - image: the UIImage to resize
+    ///   - targetSize: target size
+    /// - Returns: the image with new size
     private func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
         
@@ -655,6 +556,7 @@ extension Loady {
     }
 }
 
+// MARK: - Creates the Four Phases
 extension Loady {
     private func createFourPhaseButton(){
         guard let nextPhase = _fourPhasesNextPhase, let fourPhase = fourPhases  else {
@@ -874,5 +776,193 @@ extension Loady {
         
         animation.repeatCount = Float.infinity
         layer.add(animation, forKey: animation.keyPath)
+    }
+}
+
+// MARK: - Creates the Downloading Layer
+extension Loady {
+    private func createDownloadingLayer(){
+        let center = self.center
+        self.copyBeforeAnyChanges()
+        self.setTitle("", for: .normal);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.center = center;
+                self.bounds.size.height = 5 // = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
+                self.layer.cornerRadius = 5 / 2;
+                //self.backgroundColor = self.backgroundFillColor;
+                self.layoutIfNeeded()
+            }, completion: { (finished) in
+                if(finished){
+                    self.titleLabel?.text  = ""
+                    //filling animation
+                    self.createFillingLoading()
+                }
+            })
+        }
+    }
+    
+    private func createDownloadingLabelLayer(){
+        
+    }
+}
+
+
+// MARK: - Creates the AppStore
+extension Loady {
+    private func createAppstoreLoadingLayer(){
+        // creates the circle loading
+        createCircleLoadingLayer(radius: self.frame.midX ,centerX: self.frame.maxX - self.frame.midX)
+        
+        let circleContainer = copyLayer(of: self._circleStrokeLoadingLayer!)
+        circleContainer.strokeColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        circleContainer.strokeStart = 0
+        circleContainer.strokeEnd = 1
+        circleContainer.opacity = 1
+        circleContainer.accessibilityHint = LayerTempKeys.tempLayer
+        
+        // check if user specifies an image for pause
+        if let image = pauseImage {
+            let imageLayer = CAShapeLayer()
+            imageLayer.bounds = CGRect(x:0,y: 0,width: 20,height: 20);
+            imageLayer.position = CGPoint(x:self.frame.midX,y: circleContainer.bounds.midY);
+            imageLayer.anchorPoint = CGPoint(x:0.5,y: 0.5);
+            imageLayer.contents = image.cgImage
+            circleContainer.addSublayer(imageLayer)
+        }
+        self.layer.addSublayer(circleContainer)
+        UIView.animate(withDuration: 0.5) {
+            self.alpha = 1
+        }
+    }
+    
+    private func createAppstore(){
+        //        let center = self.center
+        self.copyBeforeAnyChanges()
+        let radius = min(self.frame.size.width, self.frame.size.height)
+        self.setTitle("", for: .normal);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.animate(withDuration: 0.25, animations: {
+                //self.center = center;
+                self.bounds = CGRect(x:0,y: self.center.y,width: radius,height: radius);
+                self.frame.origin.x = 0
+                self.layer.cornerRadius = radius / 2;
+                self.alpha = 0.2
+                self.backgroundColor = self.backgroundFillColor;
+                self.layoutIfNeeded()
+            }, completion: { (finished) in
+                if(finished){
+                    self.titleLabel?.text  = ""
+                }
+            })
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.createAppstoreLoadingLayer()
+        }
+    }
+    
+    private func removeAppstoreLayer(){
+        if _animationType != .appstore{
+            return
+        }
+        self.clearTempLayers()
+        self._circleStrokeLoadingLayer?.removeAllAnimations()
+        UIView.animate(withDuration: 0.5, animations: {[weak self] in
+            guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
+                return
+            }
+            
+            weakSelf.bounds = CGRect(x:0,y: 0,width: cached.frame.size.width,height: cached.frame.size.height);
+            weakSelf.layer.cornerRadius = cached.layer.cornerRadius;
+            weakSelf.frame.origin.x = 0
+            weakSelf.backgroundColor = cached.backgroundColor;
+            weakSelf.layoutIfNeeded();
+        }) {[weak self] (finished) in
+            if (finished){
+                guard let weakSelf = self , let cached = weakSelf._cacheButtonBeforeAnimation else{
+                    return
+                }
+                weakSelf.setTitle(cached.titleLabel?.text, for: .normal)
+                
+                weakSelf._circleStrokeLoadingLayer?.removeFromSuperlayer()
+                weakSelf._circleStrokeLoadingLayer = nil;
+            }
+        }
+    }
+}
+
+
+// MARK: - Creates the Filling Loading
+extension Loady {
+    /**
+     create loading animation and layer
+     */
+    private func createFillingLoading(){
+        _percentFilled = 0;
+        //a shape for filling the button
+        let layer = CAShapeLayer();
+        layer.backgroundColor = self.backgroundFillColor.cgColor
+        layer.bounds = CGRect(x:0,y:0, width: 0,height: self.frame.size.height);
+        layer.anchorPoint = CGPoint(x:0,y:0.5);
+        layer.position = CGPoint(x:0,y: self.frame.size.height / 2);
+        layer.accessibilityHint = "button_filled_loading";
+        layer.masksToBounds = true
+        
+        //create aniamtion
+        _filledLoadingLayer = CAShapeLayer()
+        self._filledLoadingLayer?.bounds = CGRect(x:0,y:0,width: self.frame.size.width,height: self.frame.size.height)
+        self._filledLoadingLayer?.position = CGPoint(x:self.frame.size.width / 2,y: self.frame.size.height / 2)
+        self._filledLoadingLayer?.accessibilityHint = "button_filled_loading_parent"
+        self._filledLoadingLayer?.masksToBounds = true
+        self._filledLoadingLayer?.cornerRadius = self.layer.cornerRadius
+        self._filledLoadingLayer?.insertSublayer(layer,at:0)
+        self.layer.insertSublayer(self._filledLoadingLayer!,at:0);
+    }
+    
+    private func removeFillingLayer(){
+        self._filledLoadingLayer?.removeFromSuperlayer();
+        _filledLoadingLayer = nil;
+    }
+}
+
+
+// MARK: - Creates the Circle Loading
+extension Loady {
+    private func createCircleLoadingLayer(radius : CGFloat? = nil,centerX : CGFloat? = nil,centerY : CGFloat? = nil){
+        self._circleStrokeLoadingLayer = createACircleInsideButton(radius: radius ,centerX: centerX ,centerY: centerY)
+        self._circleStrokeLoadingLayer?.accessibilityHint = "button_circle_loading_stroke_parent"
+        
+        self.layer.addSublayer(self._circleStrokeLoadingLayer!)
+    }
+}
+
+
+// MARK: - Creates the Circle And Tick
+extension Loady {
+    private func createCircleAndTick(withAndroidAnimation : Bool = false){
+        let center = self.center
+        self.copyBeforeAnyChanges()
+        let radius = min(self.frame.size.width, self.frame.size.height)
+        self.setTitle("", for: .normal);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIView.animate(withDuration: withAndroidAnimation ? 0.15 : 0.5, animations: {
+                self.center = center;
+                self.bounds = CGRect(x:self.center.x,y: self.center.y,width: radius,height: radius);
+                self.layer.cornerRadius = radius / 2;
+                if !withAndroidAnimation {
+                    self.transform = CGAffineTransform(scaleX: -1,y: 1);
+                }
+                self.backgroundColor = self.backgroundFillColor;
+                self.layoutIfNeeded()
+            }, completion: { (finished) in
+                if(finished){
+                    self.titleLabel?.text  = ""
+                    self.createCircleLoadingLayer()
+                    if withAndroidAnimation {
+                        self.startCircluarLoadingAnimation(self._circleStrokeLoadingLayer!)
+                    }
+                }
+            })
+        }
     }
 }
