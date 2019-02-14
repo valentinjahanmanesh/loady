@@ -15,7 +15,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 - [x] animation style : 4 phases Animation(normal, loading, success, error)
 - [ ] animation style : like telegram sharing
 - [x] animation style : like android
-- [ ] **next** Downloading <img src="https://cdn.dribbble.com/users/2328147/screenshots/4917629/download_button_interaction_1.gif" width="20%" style="text-align:center">
+- [x] animation style : downloading
 
 
 ![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
@@ -54,13 +54,14 @@ or simply copy the source codes into your project, take a look at the example pr
         // starts loading animation
         self.allInOneview?.startLoading()
         
-        // some animations have filling background, this sets the filling percent, number is something between 0 to 100
+        // some animations have filling background, or change the circle stroke, this sets the filling percent, number is something between 0 to 100
         self.allInOneview?.fillTheButton(with: 10)
         
         // some animations have circular loading , this sets the percents of circle that are completed, number is something between 0 to 100
         self.allInOneview?.fillTheCircleStrokeLoadingWith(percent: 25)
 ```
 
+___
 
 ### 4 Phases Animation :
 ```swift
@@ -93,9 +94,24 @@ or simply copy the source codes into your project, take a look at the example pr
         self.fourPhases?.errorPhase()
         
 ```
+
 | Loading To Normal | Loading To Success | Loading To Error |
 | ------------- | ------------- | ------------- |
 | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_cancelPhase.gif" height="200px" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_successPhase.gif" height="200px" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_errorPhasee.gif" height="200px" style="text-align:center"> |
+
+___
+### Downloading Animation :
+```swift
+// setup download button details
+        self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
+            downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+            percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+            downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
+        )
+```
+<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_download.gif" width="50%" style="text-align:center"> 
+
+___
 
 
 ## Setup in interface builder
