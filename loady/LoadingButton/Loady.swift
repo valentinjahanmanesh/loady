@@ -926,6 +926,7 @@ extension Loady {
         downloadLabel.string = downloadedOption.title
         downloadLabel.foregroundColor = downloadedOption.textColor.cgColor
         downloadLabel.font = downloadedOption.font
+        downloadLabel.position.x = self.layer.position.x
         downloadLabel.fontSize = downloadedOption.font.pointSize
         let animation = createTextPushAnimation(type: .fromTop, duration: 0.3)
         downloadLabel.add(animation, forKey:"changeTextTransition")
@@ -938,7 +939,7 @@ extension Loady {
         let size = CGSize(width: self.bounds.width, height: 30)
         containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
         containerLayer.position.x = containerLayer.bounds.midX
-        containerLayer.position.y = self.bounds.height + size.height / 2
+        containerLayer.position.y = (self.bounds.height + size.height / 2) + 8
         //layer.backgroundColor = UIColor.green.cgColor
         let text = createTextLayers(layer:containerLayer,string: "\(_percentFilled)%", font: labelOption.percentageLabel!.font)
         text.foregroundColor = labelOption.percentageLabel!.textColor.cgColor

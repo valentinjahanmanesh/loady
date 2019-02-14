@@ -41,9 +41,9 @@ class ViewController: UIViewController {
 
         // setup details
         self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
-            downloadingLabel: (title: "Copying Data", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+            downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
             percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
-            downloadedLabel: (title: "Completed ^_^", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
+            downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
         )
 
         self.appstore?.pauseImage =  UIImage(named: "pause-button")
@@ -155,7 +155,7 @@ class ViewController: UIViewController {
             self.tempTimer4?.invalidate()
             self.tempTimer4 = nil
             self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in
-                percent += CGFloat.random(in: 0...5)
+                percent += CGFloat.random(in: 5...10)
                 
                 button.fillTheButton(with: percent)
                 if percent > 105 {
