@@ -797,13 +797,19 @@ extension Loady {
                     self.titleLabel?.text  = ""
                     //filling animation
                     self.createFillingLoading()
+                    self.createDownloadingLabelLayer()
                 }
             })
         }
     }
     
     private func createDownloadingLabelLayer(){
-        
+        let layer = CAShapeLayer()
+        layer.bounds = CGRect(x: 0, y:  0, width: self.bounds.width - 50, height: 10)
+        layer.position.x = self.bounds.midX
+        layer.position.y = self.bounds.midY
+        layer.backgroundColor = UIColor.green.cgColor
+        self.layer.addSublayer(layer)
     }
 }
 

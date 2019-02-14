@@ -39,10 +39,10 @@ class ViewController: UIViewController {
         self.appstore?.pauseImage =  UIImage(named: "pause")
         
         // sets animation type
-        self.allInOneview?.animationType = LoadingType.all.rawValue
+        self.allInOneview?.animationType = LoadingType.downloading.rawValue
         
         // sets the color that fills the button after percent value changed
-        self.allInOneview?.backgroundFillColor = .purple
+        self.allInOneview?.backgroundFillColor = .red
         
         // sets the indicator color above the button
         self.allInOneview?.loadingColor = UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)
@@ -118,7 +118,7 @@ class ViewController: UIViewController {
                 button.fillTheCircleStrokeLoadingWith(percent: percent)
             }
             self.tempTimer3?.fire()
-        case .all:
+        case .downloading:
             self.tempTimer?.invalidate()
             self.tempTimer = nil
             self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
