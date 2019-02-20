@@ -77,6 +77,8 @@ open class Loady : UIButton {
     /// animations options, along with default that we can set from other properties, eeach animation has its own options that can set from here
     open var animationsOptions = LoadyAnimationOptions()
     
+    lazy var activiyIndicator : LoadyActivityIndicator? = { UIActivityIndicatorView() }()
+    
     /// keeps fourPhases button states
     open var fourPhases : (normal:LoadyAnimationOptions.FourPhase.Phases,loading:LoadyAnimationOptions.FourPhase.Phases,success:LoadyAnimationOptions.FourPhase.Phases,error:LoadyAnimationOptions.FourPhase.Phases)? {
         didSet{
@@ -258,20 +260,25 @@ open class Loady : UIButton {
      create indicator view
      */
     private func createIndicatorView(){
-        let indicator = UIActivityIndicatorView();
-        indicator.style = self.indicatorViewStyle ? .gray : .white;
+        guard let indicator = activiyIndicator as? UIView else {
+            return
+        }
+        
         indicator.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         if let frame = self.titleLabel?.frame {
             indicator.center = CGPoint(x: frame.maxX + 15,y: self.bounds.size.height / 2)
         }
         indicator.transform = CGAffineTransform(scaleX: 0, y: 0);
-        indicator.startAnimating()
         //i use some random id to find this view whenever needed
         indicator.tag = -11111111;
         indicator.isUserInteractionEnabled = false;
+        if let activiyIndicator = activiyIndicator as? UIActivityIndicatorView{
+            activiyIndicator.style = self.indicatorViewStyle ? .gray : .white
+        }
+    
+        activiyIndicator?.startAnimating()
+
         self.insertSubview(indicator, at: 0)
-        
-        
         UIView.animate(withDuration: 0.05, delay: 0.3, options: .curveLinear, animations: {
             indicator.transform  = .identity
             self.layoutIfNeeded()

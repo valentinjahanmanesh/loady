@@ -39,7 +39,7 @@ class ViewController: UIViewController {
         self.androidLoading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.downloading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
 
-        // setup details
+        // setup download button details
         self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
             downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
             percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),

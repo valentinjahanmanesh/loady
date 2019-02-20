@@ -15,6 +15,7 @@
 		8E3350D52205BA680040321D /* Loady.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3350D42205BA680040321D /* Loady.swift */; };
 		8EFA19D52209B1BA00DF2F58 /* _gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8EFA19D42209B1BA00DF2F58 /* _gif.gif */; };
 		8EFA19D72209BD8C00DF2F58 /* _specs.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8EFA19D62209BD8C00DF2F58 /* _specs.jpeg */; };
+		F858D27F221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D27E221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift */; };
 		F86C2C54220CC791003243B2 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F86C2C53220CC791003243B2 /* logo.png */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		8EEBA8A422083044006D0957 /* _setClass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _setClass.png; sourceTree = "<group>"; };
 		8EFA19D42209B1BA00DF2F58 /* _gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = _gif.gif; sourceTree = "<group>"; };
 		8EFA19D62209BD8C00DF2F58 /* _specs.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = _specs.jpeg; sourceTree = "<group>"; };
+		F858D27E221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Loady+NVActivityIndicatorView.swift"; sourceTree = "<group>"; };
 		F86C2C51220CC56F003243B2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F86C2C53220CC791003243B2 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		F8E5A199220DA1BD00BA6DE7 /* _errorPhasee.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = _errorPhasee.gif; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				8E3350D42205BA680040321D /* Loady.swift */,
+				F858D27E221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift */,
 			);
 			path = LoadingButton;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E3350C42205BA2E0040321D /* ViewController.swift in Sources */,
+				F858D27F221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift in Sources */,
 				8E3350C22205BA2E0040321D /* AppDelegate.swift in Sources */,
 				8E3350D52205BA680040321D /* Loady.swift in Sources */,
 			);
