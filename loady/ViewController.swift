@@ -38,7 +38,8 @@ class ViewController: UIViewController {
         self.fourPhases?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.androidLoading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.downloading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-
+     
+        
         // setup download button details
         self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
             downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
@@ -195,3 +196,15 @@ class ViewController: UIViewController {
     
 }
 
+
+// YOU CAN USE NVActivityIndicatorView VERY EASY LIKE THIS
+//
+// extension NVActivityIndicatorView : LoadyActivityIndicator {
+//
+// }
+//
+// let av2 = NVActivityIndicatorView(frame: .zero)
+// av2.type = .orbit
+// av2.color = UIColor(red:0, green:0.71, blue:0.8, alpha:1)
+// av2.padding = 12
+// self.allInOneview?.activiyIndicator = av2
