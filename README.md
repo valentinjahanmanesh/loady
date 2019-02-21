@@ -119,6 +119,27 @@ ___
 | ------------- | ------------- |
 | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="100%" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png" width="100%" style="text-align:center"> |
 
+___ 
+
+## BONUS - [NVActivityIndicatorView](https://github.com/ninjaprox/NVActivityIndicatorView)
+
+if you are a fan of NVActivityIndicatorView, its very easy to integrate it with loady, you can replace our default iOS indicatorView with NVActivityIndicatorView <3
+now we have a new property which accepts LoadyActivityIndicator Protocol, just set it with your favorite activity indicator view like below
+```(swift)
+// first conform to the LoadyActivityIndicator protocol like this
+extension NVActivityIndicatorView : LoadyActivityIndicator {
+    
+}
+
+// then replace loady default activity indicator with yours
+let nv = NVActivityIndicatorView(frame: .zero)
+nv.type = .circleStrokeSpin
+nv.color = .red
+nv.padding = 12
+self.loadyButton?.activiyIndicator = nv
+```
+| <img src="https://raw.githubusercontent.com/ninjaprox/NVActivityIndicatorView/master/Demo.gif" width="20%" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_nvacctivityindicator1.gif"  style="text-align:center"> <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_nvacctivityindicator2.gif"  style="text-align:center">|
+
 
 ## troubleshoot 
 1. Unable to find a specification for `loady`
