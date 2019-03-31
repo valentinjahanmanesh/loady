@@ -13,12 +13,7 @@
 		8E3350C92205BA2F0040321D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E3350C82205BA2F0040321D /* Assets.xcassets */; };
 		8E3350CC2205BA2F0040321D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E3350CA2205BA2F0040321D /* LaunchScreen.storyboard */; };
 		8E3350D52205BA680040321D /* Loady.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3350D42205BA680040321D /* Loady.swift */; };
-		8EFA19D52209B1BA00DF2F58 /* _gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8EFA19D42209B1BA00DF2F58 /* _gif.gif */; };
-		8EFA19D72209BD8C00DF2F58 /* _specs.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8EFA19D62209BD8C00DF2F58 /* _specs.jpeg */; };
 		F858D27F221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F858D27E221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift */; };
-		F858D2D6221E21FB002AD9C9 /* _nvacctivityindicator2.gif in Resources */ = {isa = PBXBuildFile; fileRef = F858D2D4221E21FB002AD9C9 /* _nvacctivityindicator2.gif */; };
-		F858D2D7221E21FB002AD9C9 /* _nvacctivityindicator1.gif in Resources */ = {isa = PBXBuildFile; fileRef = F858D2D5221E21FB002AD9C9 /* _nvacctivityindicator1.gif */; };
-		F86C2C54220CC791003243B2 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F86C2C53220CC791003243B2 /* logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -169,14 +164,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F858D2D6221E21FB002AD9C9 /* _nvacctivityindicator2.gif in Resources */,
-				F86C2C54220CC791003243B2 /* logo.png in Resources */,
 				8E3350CC2205BA2F0040321D /* LaunchScreen.storyboard in Resources */,
 				8E3350C92205BA2F0040321D /* Assets.xcassets in Resources */,
 				8E3350C72205BA2E0040321D /* Main.storyboard in Resources */,
-				F858D2D7221E21FB002AD9C9 /* _nvacctivityindicator1.gif in Resources */,
-				8EFA19D52209B1BA00DF2F58 /* _gif.gif in Resources */,
-				8EFA19D72209BD8C00DF2F58 /* _specs.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +243,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = "/examples/*";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -314,6 +305,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = "/examples/*";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
