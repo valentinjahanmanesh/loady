@@ -1,5 +1,5 @@
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/logo.png" width="100%" style="text-align:center">
-
+ 
 [![Version](https://img.shields.io/cocoapods/v/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
 [![License](https://img.shields.io/cocoapods/l/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
 [![Platform](https://img.shields.io/cocoapods/p/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
@@ -16,6 +16,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 - [ ] animation style : like telegram sharing
 - [x] animation style : like android
 - [x] animation style : downloading
+- [ ] Carthage Support
 
 
 ![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
@@ -28,7 +29,7 @@ just add this line into your podfile
 ```swift
   pod 'loady'
 ```
-or simply copy the source codes into your project, take a look at the example project for more info
+or for **manual installation** simply copy the [Source Code](https://github.com/farshadjahanmanesh/loady/tree/master/loady/LoadingButton) into your project, take a look at the example project for more info
 
 ## Configs
 <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_specs.jpeg" width="50%" style="text-align:center">
