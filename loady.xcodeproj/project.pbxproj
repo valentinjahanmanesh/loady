@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87A376712371E3930077E89D /* LoadyAnimationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A376702371E3930077E89D /* LoadyAnimationOptions.swift */; };
+		87A376732371E3FE0077E89D /* LoadyCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A376722371E3FE0077E89D /* LoadyCore.swift */; };
+		87A376752371EA050077E89D /* LoadyAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A376742371EA050077E89D /* LoadyAnimation.swift */; };
+		87A376782371EA6D0077E89D /* LoadyIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A376772371EA6D0077E89D /* LoadyIndicatorAnimation.swift */; };
+		87C747692371F143006CA7A7 /* LoadyAppStoreAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C747682371F143006CA7A7 /* LoadyAppStoreAnimation.swift */; };
+		87C7476B23720A06006CA7A7 /* LoadyCircleAndThickAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C7476A23720A06006CA7A7 /* LoadyCircleAndThickAnimation.swift */; };
+		87C7476D23722150006CA7A7 /* LoadyFourPhaseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C7476C23722150006CA7A7 /* LoadyFourPhaseAnimation.swift */; };
+		87C74770237233EF006CA7A7 /* LoadyFourPhaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C7476F237233EF006CA7A7 /* LoadyFourPhaseButton.swift */; };
+		87C747742372E95E006CA7A7 /* LoadyAndroidAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C747732372E95E006CA7A7 /* LoadyAndroidAnimation.swift */; };
+		87C747762372EC11006CA7A7 /* LoadyTopLineAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C747752372EC11006CA7A7 /* LoadyTopLineAnimation.swift */; };
+		87C747782372ED8C006CA7A7 /* LoadyBackgroundHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C747772372ED8C006CA7A7 /* LoadyBackgroundHighlighter.swift */; };
+		87C7477A2372F59B006CA7A7 /* LoadyDownloadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C747792372F59B006CA7A7 /* LoadyDownloadingAnimation.swift */; };
+		87C7477C237330ED006CA7A7 /* LoadyAnimationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C7477B237330ED006CA7A7 /* LoadyAnimationType.swift */; };
+		87C7477E23733132006CA7A7 /* Loadible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C7477D23733132006CA7A7 /* Loadible.swift */; };
 		8E3350C22205BA2E0040321D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3350C12205BA2E0040321D /* AppDelegate.swift */; };
 		8E3350C42205BA2E0040321D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3350C32205BA2E0040321D /* ViewController.swift */; };
 		8E3350C72205BA2E0040321D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E3350C52205BA2E0040321D /* Main.storyboard */; };
@@ -17,6 +31,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		87A376702371E3930077E89D /* LoadyAnimationOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyAnimationOptions.swift; sourceTree = "<group>"; };
+		87A376722371E3FE0077E89D /* LoadyCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyCore.swift; sourceTree = "<group>"; };
+		87A376742371EA050077E89D /* LoadyAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyAnimation.swift; sourceTree = "<group>"; };
+		87A376772371EA6D0077E89D /* LoadyIndicatorAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyIndicatorAnimation.swift; sourceTree = "<group>"; };
+		87C747682371F143006CA7A7 /* LoadyAppStoreAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyAppStoreAnimation.swift; sourceTree = "<group>"; };
+		87C7476A23720A06006CA7A7 /* LoadyCircleAndThickAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyCircleAndThickAnimation.swift; sourceTree = "<group>"; };
+		87C7476C23722150006CA7A7 /* LoadyFourPhaseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyFourPhaseAnimation.swift; sourceTree = "<group>"; };
+		87C7476F237233EF006CA7A7 /* LoadyFourPhaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyFourPhaseButton.swift; sourceTree = "<group>"; };
+		87C747732372E95E006CA7A7 /* LoadyAndroidAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyAndroidAnimation.swift; sourceTree = "<group>"; };
+		87C747752372EC11006CA7A7 /* LoadyTopLineAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyTopLineAnimation.swift; sourceTree = "<group>"; };
+		87C747772372ED8C006CA7A7 /* LoadyBackgroundHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyBackgroundHighlighter.swift; sourceTree = "<group>"; };
+		87C747792372F59B006CA7A7 /* LoadyDownloadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyDownloadingAnimation.swift; sourceTree = "<group>"; };
+		87C7477B237330ED006CA7A7 /* LoadyAnimationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadyAnimationType.swift; sourceTree = "<group>"; };
+		87C7477D23733132006CA7A7 /* Loadible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadible.swift; sourceTree = "<group>"; };
 		8E3350BE2205BA2E0040321D /* loady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = loady.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E3350C12205BA2E0040321D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E3350C32205BA2E0040321D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +77,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		87A376762371EA5B0077E89D /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				87A376772371EA6D0077E89D /* LoadyIndicatorAnimation.swift */,
+				87C747682371F143006CA7A7 /* LoadyAppStoreAnimation.swift */,
+				87C7476A23720A06006CA7A7 /* LoadyCircleAndThickAnimation.swift */,
+				87C7476C23722150006CA7A7 /* LoadyFourPhaseAnimation.swift */,
+				87C747732372E95E006CA7A7 /* LoadyAndroidAnimation.swift */,
+				87C747752372EC11006CA7A7 /* LoadyTopLineAnimation.swift */,
+				87C747772372ED8C006CA7A7 /* LoadyBackgroundHighlighter.swift */,
+				87C747792372F59B006CA7A7 /* LoadyDownloadingAnimation.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		87C7476E237233B3006CA7A7 /* LoadyButton */ = {
+			isa = PBXGroup;
+			children = (
+				87C7476F237233EF006CA7A7 /* LoadyFourPhaseButton.swift */,
+				8E3350D42205BA680040321D /* Loady.swift */,
+			);
+			path = LoadyButton;
+			sourceTree = "<group>";
+		};
 		8E3350B52205BA2E0040321D = {
 			isa = PBXGroup;
 			children = (
@@ -83,8 +135,14 @@
 		8E3350D32205BA470040321D /* LoadingButton */ = {
 			isa = PBXGroup;
 			children = (
-				8E3350D42205BA680040321D /* Loady.swift */,
+				87C7476E237233B3006CA7A7 /* LoadyButton */,
+				87A376762371EA5B0077E89D /* Animations */,
 				F858D27E221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift */,
+				87A376702371E3930077E89D /* LoadyAnimationOptions.swift */,
+				87A376722371E3FE0077E89D /* LoadyCore.swift */,
+				87A376742371EA050077E89D /* LoadyAnimation.swift */,
+				87C7477B237330ED006CA7A7 /* LoadyAnimationType.swift */,
+				87C7477D23733132006CA7A7 /* Loadible.swift */,
 			);
 			path = LoadingButton;
 			sourceTree = "<group>";
@@ -138,6 +196,7 @@
 				TargetAttributes = {
 					8E3350BD2205BA2E0040321D = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1110;
 					};
 				};
 			};
@@ -177,10 +236,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87A376782371EA6D0077E89D /* LoadyIndicatorAnimation.swift in Sources */,
+				87A376752371EA050077E89D /* LoadyAnimation.swift in Sources */,
+				87A376732371E3FE0077E89D /* LoadyCore.swift in Sources */,
+				87C7477E23733132006CA7A7 /* Loadible.swift in Sources */,
+				87C747742372E95E006CA7A7 /* LoadyAndroidAnimation.swift in Sources */,
 				8E3350C42205BA2E0040321D /* ViewController.swift in Sources */,
+				87C747782372ED8C006CA7A7 /* LoadyBackgroundHighlighter.swift in Sources */,
+				87C7477C237330ED006CA7A7 /* LoadyAnimationType.swift in Sources */,
+				87C7477A2372F59B006CA7A7 /* LoadyDownloadingAnimation.swift in Sources */,
 				F858D27F221E08F7002AD9C9 /* Loady+NVActivityIndicatorView.swift in Sources */,
+				87C747692371F143006CA7A7 /* LoadyAppStoreAnimation.swift in Sources */,
+				87C7476B23720A06006CA7A7 /* LoadyCircleAndThickAnimation.swift in Sources */,
+				87C74770237233EF006CA7A7 /* LoadyFourPhaseButton.swift in Sources */,
 				8E3350C22205BA2E0040321D /* AppDelegate.swift in Sources */,
 				8E3350D52205BA680040321D /* Loady.swift in Sources */,
+				87C747762372EC11006CA7A7 /* LoadyTopLineAnimation.swift in Sources */,
+				87C7476D23722150006CA7A7 /* LoadyFourPhaseAnimation.swift in Sources */,
+				87A376712371E3930077E89D /* LoadyAnimationOptions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,13 +331,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -314,12 +388,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -328,16 +403,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QGFPA9QY4R;
+				DEVELOPMENT_TEAM = 6Q4W97Z9XN;
 				INFOPLIST_FILE = "$(SRCROOT)/loady/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = www.farshadjahanmanesh.loady;
+				PRODUCT_BUNDLE_IDENTIFIER = www.farshadjahanmanesh.loadys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -347,15 +424,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QGFPA9QY4R;
+				DEVELOPMENT_TEAM = 6Q4W97Z9XN;
 				INFOPLIST_FILE = "$(SRCROOT)/loady/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = www.farshadjahanmanesh.loady;
+				PRODUCT_BUNDLE_IDENTIFIER = www.farshadjahanmanesh.loadys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

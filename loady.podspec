@@ -2,13 +2,13 @@ Pod::Spec.new do |s|
 
 # 1
 s.platform = :ios
-s.ios.deployment_target = '10.0'
+s.ios.deployment_target = '9.0'
 s.name = "loady"
 s.summary = "fully customizable loading button with 8 different styles."
 s.requires_arc = true
 
 # 2
-s.version = "0.2.3"
+s.version = "1.0.0"
 
 # 3
 s.license = { :type => "MIT", :file => "LICENSE" }
@@ -33,6 +33,6 @@ s.source_files = "loady/LoadingButton/**/*.{swift}"
 #s.resources = "RWPickFlavor/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
 
 # 10
-s.swift_version = "4.2"
+s.swift_version = "5.0"
 
 end

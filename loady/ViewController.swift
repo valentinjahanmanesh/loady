@@ -74,18 +74,20 @@ class ViewController: UIViewController {
 			self.fourPhaseTempTimer?.invalidate()
             self.fourPhaseTempTimer = nil
 			self.fourPhases.loadingPhase()
-            self.fourPhaseTempTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){(t) in
-                    if self.fourPhases.tag  == 0 {
-                        self.fourPhases.errorPhase()
-                        self.fourPhases.tag = 1
-                    }else if self.fourPhases?.tag  == 1{
-                        self.fourPhases.successPhase()
-                        self.fourPhases.tag = 2
-                    } else{
-                        self.fourPhases.normalPhase()
-                        self.fourPhases.tag = 0
-                    }
-            }
+			if #available(iOS 10.0, *) {
+				self.fourPhaseTempTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){(t) in
+					if self.fourPhases.tag  == 0 {
+						self.fourPhases.errorPhase()
+						self.fourPhases.tag = 1
+					}else if self.fourPhases?.tag  == 1{
+						self.fourPhases.successPhase()
+						self.fourPhases.tag = 2
+					} else{
+						self.fourPhases.normalPhase()
+						self.fourPhases.tag = 0
+					}
+				}
+			}
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 self.fourPhaseTempTimer?.fire()
             }
@@ -105,53 +107,61 @@ class ViewController: UIViewController {
         case LoadyBackgroundHighlighterAnimation.animationTypeKey:
             self.tempTimer1?.invalidate()
             self.tempTimer1 = nil
-            self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
-                percent += CGFloat.random(in: 0...10)
-                button.update(percent: percent)
-                if percent > 105 {
-                    percent = 100
-                    self.tempTimer1?.invalidate()
-                }
-            }
+			if #available(iOS 10.0, *) {
+				self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
+					percent += CGFloat.random(in: 0...10)
+					button.update(percent: percent)
+					if percent > 105 {
+						percent = 100
+						self.tempTimer1?.invalidate()
+					}
+				}
+			}
             self.tempTimer1?.fire()
         case LoadyCircleAndTickAnimation.animationTypeKey:
             self.tempTimer2?.invalidate()
             self.tempTimer2 = nil
-            self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
-                percent += CGFloat.random(in: 0...10)
-                button.update(percent: percent)
-                if percent > 105 {
-                    percent = 100
-                    self.tempTimer2?.invalidate()
-                }
-            }
+			if #available(iOS 10.0, *) {
+				self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
+					percent += CGFloat.random(in: 0...10)
+					button.update(percent: percent)
+					if percent > 105 {
+						percent = 100
+						self.tempTimer2?.invalidate()
+					}
+				}
+			}
             self.tempTimer2?.fire()
 		case LoadyAppStoreAnimation.animationTypeKey:
             self.tempTimer3?.invalidate()
             self.tempTimer3 = nil
-            self.tempTimer3 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
-                percent += CGFloat.random(in: 0...10)
-                button.update(percent: percent)
-
-                if percent > 105 {
-                    percent = 100
-                    self.tempTimer3?.invalidate()
-                }
-
-            }
+			if #available(iOS 10.0, *) {
+				self.tempTimer3 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
+					percent += CGFloat.random(in: 0...10)
+					button.update(percent: percent)
+					
+					if percent > 105 {
+						percent = 100
+						self.tempTimer3?.invalidate()
+					}
+					
+				}
+			}
             self.tempTimer3?.fire()
         case LoadyDownloadingAnimation.animationTypeKey:
             self.tempTimer4?.invalidate()
             self.tempTimer4 = nil
-            self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in
-                percent += CGFloat.random(in: 5...10)
-                
-                button.update(percent: percent)
-                if percent > 105 {
-                    percent = 100
-                    self.tempTimer4?.invalidate()
-                }
-            }
+			if #available(iOS 10.0, *) {
+				self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in
+					percent += CGFloat.random(in: 5...10)
+					
+					button.update(percent: percent)
+					if percent > 105 {
+						percent = 100
+						self.tempTimer4?.invalidate()
+					}
+				}
+			}
             self.tempTimer4?.fire()
         default:
             break;
