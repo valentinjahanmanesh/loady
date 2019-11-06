@@ -23,7 +23,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 
 
 ## Installation, cocoapods
-**loady minimum target requirement is iOS 10.0**
+**loady minimum target requirement is iOS 9.0+**
 
 just add this line into your podfile
 ```swift
