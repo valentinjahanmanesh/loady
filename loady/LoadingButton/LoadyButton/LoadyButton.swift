@@ -6,4 +6,12 @@
 //  Copyright © 2019 farshadJahanmanesh. All rights reserved.
 //
 
-import Foundation
+import UIKit
+class LoadyButton: Loady {
+	func setAnimation(_ animation: LoadyAnimation) {
+		self.animationType = type(of: animation).animationTypeKey
+		animation.inject(loady: self)
+		self.currentAnimation = animation
+	}
+}
+

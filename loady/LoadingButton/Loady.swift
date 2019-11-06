@@ -9,18 +9,27 @@
 
 import UIKit
 
-// yes i know i can emit that number, i've specfied them to find the number quickly.
-public enum LoadyAnimationType {
-	case none
-	case topLine
-	case indicator
-	case backgroundHighlighter
-	case circleAndTick
-	case all
-	case appstore
-	case android
-	case downloading
+public struct LoadyAnimationType: RawRepresentable {
+	public var rawValue: Key
+	public init(rawValue: Key) {
+		self.rawValue = rawValue
+	}
+	public struct Key: RawRepresentable, Equatable {
+		public init(rawValue: String) {
+			self.rawValue = rawValue
+		}
+		public var rawValue: String
+	}
 }
+
+extension LoadyAnimationType {
+	static let none: LoadyAnimationType.Key = .init(rawValue: "none")
+	static let topLine: LoadyAnimationType.Key = .init(rawValue: "topLine")
+	static let backgroundHighlighter: LoadyAnimationType.Key = .init(rawValue: "backgroundHighlighter")
+	static let all: LoadyAnimationType.Key = .init(rawValue: "all")
+	static let downloading: LoadyAnimationType.Key = .init(rawValue: "downloading")
+}
+
 public typealias IndicatorViewStyle = Bool
 extension IndicatorViewStyle {
 	static let light = false
@@ -28,11 +37,11 @@ extension IndicatorViewStyle {
 }
 
 open class Loady : UIButton, Loadiable {
-	func addSublayer(_ layer: CALayer) {
+	public func addSublayer(_ layer: CALayer) {
 		self.layer.addSublayer(layer)
 	}
 	
-	func cleanCanvas() {
+	public func cleanCanvas() {
 		copyBeforeAnyChanges()
 		self.setTitle("", for: .normal);
 	}
@@ -50,7 +59,7 @@ open class Loady : UIButton, Loadiable {
 		self.layoutIfNeeded()
 	}
 	
-	func reloadDefaultState(duration: TimeInterval = 0, done: (() -> Void)?) {
+	public func reloadDefaultState(duration: TimeInterval = 0, done: (() -> Void)?) {
 		let otherStuff = {
 			UIView.performWithoutAnimation {
 				self.setTitle(self._cacheButtonBeforeAnimation?.titleLabel?.text, for: .normal)
@@ -124,14 +133,12 @@ open class Loady : UIButton, Loadiable {
 	
 	override public init(frame: CGRect) {
 		super.init(frame: frame)
-		self.animationType = .none;
 		_percentFilled = 0;
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 		_percentFilled = 0;
-		self.animationType = .none;
 		self.backgroundFillColor = .black;
 		self.loadingColor = .black
 	}
@@ -169,76 +176,65 @@ open class Loady : UIButton, Loadiable {
 		}
 	}
 	
-	open internal(set) var animationType: LoadyAnimationType = .none
+	open internal(set) var animationType: LoadyAnimationType.Key = LoadyAnimationType.none
 	// MARK: - Starting Point (everything starts here)
 	/**
 	start loading,this is our public api to start loading
 	
 	@param animationType the loading style
 	*/
-	private func startLoading(animationType: LoadyAnimationType){
-		if self.loadingIsShowing(){
-			//self.stopLoading()
-			return;
-		}
-		self.animationType = animationType
-
-		switch animationType {
-		case .topLine:
-			self.createTopLineLoading()
-			break;
-		case .indicator :
-			currentAnimation = LoadyIndicatorAnimation(loady: self)
-			break;
-		case .backgroundHighlighter :
-			self.createFillingLoading()
-			break;
-		case .circleAndTick :
-			currentAnimation = LoadyCircleAndTickAnimation(loady: self)
-			break;
-		case .android :
-//			self.createCircleAndTick(withAndroidAnimation: true)
-			break;
-		case .appstore :
-			currentAnimation = LoadyAppStoreAnimation(loady: self)
-			break;
-		case .all:
-			//top line animation
-			self.createTopLineLoading()
-			
-			//indicator view animation
-			//            self.createIndicatorLoading()
-			
-			//filling animation
-			self.createFillingLoading()
-			break;
-		case .downloading :
-			self.createDownloadingLayer()
-			break
-		case .none:
-			break
-		}
-		currentAnimation?.run()
-		//indicates that loading is showing
-		_isloadingShowing = true;
+	private func startLoading(animationType: LoadyAnimationType.Key){
+		
+//		self.animationType = animationType
+//
+//		switch animationType {
+//		case .topLine:
+//			self.createTopLineLoading()
+//			break;
+//		case .indicator :
+//			currentAnimation = LoadyIndicatorAnimation(loady: self)
+//			break;
+//		case .backgroundHighlighter :
+//			self.createFillingLoading()
+//			break;
+//		case .circleAndTick :
+//			currentAnimation = LoadyCircleAndTickAnimation(loady: self)
+//			break;
+//		case .android :
+////			self.createCircleAndTick(withAndroidAnimation: true)
+//			break;
+//		case .appstore :
+//			currentAnimation = LoadyAppStoreAnimation(loady: self)
+//			break;
+//		case .all:
+//			//top line animation
+//			self.createTopLineLoading()
+//			
+//			//indicator view animation
+//			//            self.createIndicatorLoading()
+//			
+//			//filling animation
+//			self.createFillingLoading()
+//			break;
+//		case .downloading :
+//			self.createDownloadingLayer()
+//			break
+//		case .none:
+//			break
+//		}
+//		currentAnimation?.run()
+//		//indicates that loading is showing
+//		_isloadingShowing = true;
 	}
 	open func startLoading(){
-		self.startLoading(animationType: self.animationType)
+		if self.currentAnimation?.isLoading() ?? false {
+			return;
+		}
+		currentAnimation?.run()
 	}
-	func createBasicAnimation(keypath : String, from : Any,to:Any,duration : Double = 1) -> CABasicAnimation{
-		let animation = CABasicAnimation()
-		animation.keyPath = keypath
-		animation.fromValue = from
-		animation.toValue = to
-		animation.duration = duration;
-		
-		return animation
-	}
-	
 	
 	private func removeIndicatorView(){
 		currentAnimation?.stop()
-		currentAnimation = nil
 	}
 	
 	open func fillTheButton(with percent : CGFloat){
@@ -302,12 +298,12 @@ open class Loady : UIButton, Loadiable {
 		let animatedPath = UIBezierPath()
 		animatedPath.move(to: CGPoint(x:loadingLayer.bounds.size.width / 1.2,y: -1))
 		animatedPath.addLine(to: CGPoint(x:loadingLayer.bounds.size.width,y: -1))
-		let animateOpacity = createBasicAnimation(keypath: "opacity", from: 0, to: 1,duration : 0.6)
+		let animateOpacity = LoadyCore.createBasicAnimation(keypath: "opacity", from: 0, to: 1,duration : 0.6)
 		animateOpacity.isRemovedOnCompletion = false
 		animateOpacity.fillMode  = .forwards
 		
 		//create our animation and add it to the layer, animate indictor from left to right
-		let animation = createBasicAnimation(keypath: "path", from: path.cgPath, to: animatedPath.cgPath)
+		let animation = LoadyCore.createBasicAnimation(keypath: "path", from: path.cgPath, to: animatedPath.cgPath)
 		animation.autoreverses = true;
 		animation.repeatCount = 100;
 		animation.isRemovedOnCompletion = false
@@ -320,7 +316,7 @@ open class Loady : UIButton, Loadiable {
 		//Reset button
 		self.layer.sublayers?.forEach({layer in
 			if layer.accessibilityHint == "button_topline_loading" {
-				let animateOpacity = createBasicAnimation(keypath: "opacity", from: 1, to: 0,duration : 0.2)
+				let animateOpacity = LoadyCore.createBasicAnimation(keypath: "opacity", from: 1, to: 0,duration : 0.2)
 				layer.add(animateOpacity, forKey: nil)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.15 , execute: {
 					layer.removeAllAnimations()
@@ -342,22 +338,7 @@ open class Loady : UIButton, Loadiable {
 	*/
 	
 	open func loadingIsShowing() -> Bool{
-		if self.currentAnimation != nil{
-			return true;
-		}
-		
-		if self._filledLoadingLayer != nil || self._circleStrokeLoadingLayer != nil{
-			return true;
-		}
-		
-		if let subs = self.layer.sublayers {
-			for layer in subs {
-				if layer.accessibilityHint == "button_topline_loading" {
-					return true
-				}
-			}
-		}
-		return false;
+		return self.currentAnimation?.isLoading() ?? false
 	}
 	
 	
@@ -369,7 +350,6 @@ open class Loady : UIButton, Loadiable {
 		_isloadingShowing = false;
 		_percentFilled = 0;
 		currentAnimation?.stop()
-		currentAnimation = nil
 	}
 	
 	/**
@@ -441,67 +421,10 @@ open class Loady : UIButton, Loadiable {
 			return;
 		}
 		
-		let animation = createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(old / 100)), to: NSNumber(floatLiteral: Double( new / 100)),duration : 0.2)
+		let animation = LoadyCore.createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(old / 100)), to: NSNumber(floatLiteral: Double( new / 100)),duration : 0.2)
 		animation.isRemovedOnCompletion = false;
 		animation.fillMode = .forwards;
 		self._circleStrokeLoadingLayer?.add(animation, forKey: nil)
-	}
-}
-
-// MARK: - Some Handy functions
-extension Loady {
-	private func calculateTextHeight(string : String,withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
-		let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-		let boundingBox = string.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
-		
-		return ceil(boundingBox.height)
-	}
-	
-	private  func calculateTextWidth(string : String,withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
-		let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
-		let boundingBox = string.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
-		
-		return ceil(boundingBox.width)
-	}
-	
-	/// convert degree to radian
-	///
-	/// - Parameter degree: degree
-	/// - Returns: calculated radian
-	private func degreeToRadian(degree : CGFloat)->CGFloat{
-		return degree * .pi / 180;
-	}
-	
-	/// Resizes Images to idle size
-	///
-	/// - Parameters:
-	///   - image: the UIImage to resize
-	///   - targetSize: target size
-	/// - Returns: the image with new size
-	private func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-		let size = image.size
-		
-		let widthRatio  = targetSize.width  / size.width
-		let heightRatio = targetSize.height / size.height
-		
-		// Figure out what our orientation is, and use that to form the rectangle
-		var newSize: CGSize
-		if(widthRatio > heightRatio) {
-			newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-		} else {
-			newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-		}
-		
-		// This is the rect that we've calculated out and this is what is actually used below
-		let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-		
-		// Actually do the resizing to the rect using the ImageContext stuff
-		UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-		image.draw(in: rect)
-		let newImage = UIGraphicsGetImageFromCurrentImageContext()
-		UIGraphicsEndImageContext()
-		
-		return newImage!
 	}
 }
 
@@ -649,7 +572,7 @@ extension Loady {
 	}
 }
 
-protocol Loadiable where Self: UIView {
+public protocol Loadiable where Self: UIView {
 	/// some animations has a indicator like a line, this is that line color
 	var loadingColor : UIColor {set get}
 	/// some animations shows an image inside of the button, this is that image

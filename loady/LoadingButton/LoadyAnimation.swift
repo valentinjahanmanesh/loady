@@ -6,4 +6,25 @@
 //  Copyright © 2019 farshadJahanmanesh. All rights reserved.
 //
 
-import Foundation
+import UIKit
+// each animation needs to conform to this protocol
+public protocol LoadyAnimation: LoadyPercentageObserver {
+	static var animationTypeKey: LoadyAnimationType.Key { get }
+	func inject(loady: Loadiable)
+	mutating func run()
+	mutating func stop()
+	func isLoading()->Bool
+}
+
+extension LoadyAnimation {
+	mutating func change(from: CGFloat, to: CGFloat) {}
+}
+
+public protocol LoadyPercentageObserver {
+	/// notifies other functions about percent changes
+	///
+	/// - Parameters:
+	///   - new: new value
+	///   - old: current value
+	mutating func change(from: CGFloat, to: CGFloat)
+}

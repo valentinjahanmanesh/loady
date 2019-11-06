@@ -6,7 +6,7 @@
 //  Copyright © 2019 farshadJahanmanesh. All rights reserved.
 //
 import UIKit
-public protocol LoadyActivityIndicator{
+public protocol LoadyActivityIndicator where Self: UIView{
     /**
      Start animating.
      */

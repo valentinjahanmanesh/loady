@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,22 +17,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="Iux-eY-Cvl">
-                                <rect key="frame" x="16" y="36" width="343" height="615"/>
+                                <rect key="frame" x="16" y="16" width="343" height="635"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="dYA-7Y-STq">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="103"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="107"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ylu-gg-xy2">
-                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uber Like" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ii5-Js-pgm">
-                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="49"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qk1-Nf-WBp" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qk1-Nf-WBp" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="PZJ-vb-OVq"/>
@@ -58,16 +56,16 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Hww-km-one">
-                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filling" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Fi-yn-bAQ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="47.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="47.5" height="49"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dvZ-Ay-ICx" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dvZ-Ay-ICx" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="wSp-2H-U7b"/>
@@ -96,19 +94,19 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="scH-aG-fLf">
-                                        <rect key="frame" x="0.0" y="128" width="343" height="103"/>
+                                        <rect key="frame" x="0.0" y="132" width="343" height="107"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="iEz-xZ-WER">
-                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Indicator View" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okO-hH-rW1">
-                                                        <rect key="frame" x="0.0" y="0.0" width="114.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="114.5" height="49"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dNG-Yx-Lw4" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dNG-Yx-Lw4" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="iQR-49-5DL"/>
@@ -132,13 +130,13 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4yk-Sj-dxn">
-                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="aUv-VZ-3Sk">
-                                                        <rect key="frame" x="0.0" y="0.0" width="63.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="63.5" height="49"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Android" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J8W-eM-CnR">
-                                                                <rect key="frame" x="0.0" y="12.5" width="63.5" height="20.5"/>
+                                                                <rect key="frame" x="0.0" y="14.5" width="63.5" height="20.5"/>
                                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -158,8 +156,8 @@
                                                             </mask>
                                                         </variation>
                                                     </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvP-BF-ppk" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvP-BF-ppk" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="S9q-Dn-nK8"/>
@@ -188,19 +186,19 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5qh-Y9-Vl3">
-                                        <rect key="frame" x="0.0" y="256" width="343" height="103"/>
+                                        <rect key="frame" x="0.0" y="264" width="343" height="107"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sAi-aL-N5b">
-                                                <rect key="frame" x="0.0" y="0.0" width="134.5" height="45"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="134.5" height="49"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tJE-BA-HAX">
-                                                        <rect key="frame" x="0.0" y="12.5" width="104.5" height="20.5"/>
+                                                        <rect key="frame" x="0.0" y="14.5" width="104.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image" translatesAutoresizingMaskIntoConstraints="NO" id="19i-wz-hBB">
-                                                        <rect key="frame" x="104.5" y="7.5" width="30" height="30"/>
+                                                        <rect key="frame" x="104.5" y="9.5" width="30" height="30"/>
                                                         <color key="tintColor" red="0.80000000000000004" green="0.2666666667" blue="0.21960784310000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="30" id="Dz3-MA-rj3"/>
@@ -210,7 +208,7 @@
                                                 </subviews>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5KV-Po-YmJ" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="53" width="343" height="50"/>
+                                                <rect key="frame" x="0.0" y="57" width="343" height="50"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="aUX-Xi-ClS"/>
@@ -239,19 +237,19 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="pmu-3a-dMm">
-                                        <rect key="frame" x="0.0" y="384" width="343" height="103"/>
+                                        <rect key="frame" x="0.0" y="396" width="343" height="107"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="m9t-WT-W1q">
-                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All In One" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFb-Dz-yDb">
-                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="49"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVP-fB-uYe" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVP-fB-uYe" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="tN8-27-ipN"/>
@@ -281,13 +279,13 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aq1-X0-Evm">
-                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pIO-yT-5Kl">
-                                                        <rect key="frame" x="0.0" y="0.0" width="73.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="73.5" height="49"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4 Phases" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Co-BR-omE">
-                                                                <rect key="frame" x="0.0" y="12.5" width="73.5" height="20.5"/>
+                                                                <rect key="frame" x="0.0" y="14.5" width="73.5" height="20.5"/>
                                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -307,8 +305,8 @@
                                                             </mask>
                                                         </variation>
                                                     </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pmh-LP-J2E" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pmh-LP-J2E" customClass="LoadyFourPhaseButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="L74-sB-jaB"/>
@@ -340,25 +338,25 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="rGW-bi-hEM">
-                                        <rect key="frame" x="0.0" y="512" width="343" height="103"/>
+                                        <rect key="frame" x="0.0" y="528" width="343" height="107"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="d8B-2q-Hc9">
-                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Circle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6HY-hY-79d">
-                                                        <rect key="frame" x="0.0" y="0.0" width="46.5" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="46.5" height="49"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfM-fM-OXK" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfM-fM-OXK" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="9ku-vc-Dcu"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                                        <state key="normal" title="Please Wait">
+                                                        <state key="normal" title="Load Data">
                                                             <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
@@ -385,23 +383,23 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7UO-6x-tnN">
-                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="103"/>
+                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="107"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Appstore" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hts-Cr-NDq">
-                                                        <rect key="frame" x="0.0" y="0.0" width="74" height="45"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="74" height="49"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Duk-Yo-0ql" customClass="Loady" customModule="loady" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="53" width="163.5" height="50"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Duk-Yo-0ql" customClass="LoadyButton" customModule="loady" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="57" width="163.5" height="50"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="Hfy-Bs-xip"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                         <color key="tintColor" red="0.17621115070000001" green="0.48836829370000001" blue="0.94369518760000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                        <state key="normal" title="Please Wait">
+                                                        <state key="normal" title="Install">
                                                             <color key="titleColor" red="0.17621115070000001" green="0.48836829370000001" blue="0.94369518760000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
@@ -455,6 +453,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="138" y="130"/>
         </scene>
     </scenes>
     <resources>

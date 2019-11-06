@@ -10,7 +10,7 @@ import UIKit
 class LoadyFourPhaseButton: Loady {
 	private var animation: LoadyFourPhaseAnimation? = nil
 	open func setPhases(phases: LoadyAnimationOptions.FourPhases){
-		animation = LoadyFourPhaseAnimation(loady: self, phases: phases)
+		animation = LoadyFourPhaseAnimation(phases: phases)
 	}
 	open override func startLoading() {
 		if self.loadingIsShowing(){
@@ -18,6 +18,9 @@ class LoadyFourPhaseButton: Loady {
 		}
 		currentAnimation = animation
 		currentAnimation?.run()
+	}
+	open func loadingPhase(){
+		(currentAnimation as? LoadyFourPhaseAnimation)?.loadingPhase()
 	}
 	open func normalPhase(){
 		(currentAnimation as? LoadyFourPhaseAnimation)?.normalPhase()

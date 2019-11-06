@@ -15,42 +15,46 @@ class ViewController: UIViewController {
     var tempTimer4 : Timer?
     var tempTimer : Timer?
     var fourPhaseTempTimer : Timer?
-    @IBOutlet weak var circleView : Loady?
-    @IBOutlet weak var allInOneview : Loady?
-    @IBOutlet weak var uberLikeView : Loady?
-    @IBOutlet weak var fillingView : Loady?
-    @IBOutlet weak var indicatorViewLike : Loady?
-    @IBOutlet weak var appstore : Loady?
-    @IBOutlet weak var fourPhases : Loady?
-    @IBOutlet weak var androidLoading : Loady?
-    @IBOutlet weak var downloading : Loady?
+    @IBOutlet var circleView : LoadyButton!
+    @IBOutlet var allInOneview : LoadyButton!
+    @IBOutlet var uberLikeView : LoadyButton!
+    @IBOutlet var fillingView : LoadyButton!
+    @IBOutlet var indicatorViewLike : LoadyButton!
+    @IBOutlet var appstore : LoadyButton!
+    @IBOutlet var androidLoading : LoadyButton!
+    @IBOutlet var downloading : LoadyButton!
+    @IBOutlet var fourPhases : LoadyFourPhaseButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // start and stop animating on user touch
-        self.circleView?.addTarget(self, action: #selector(animateView(_:)), for: .touchUpInside)
-        self.allInOneview?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.uberLikeView?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.fillingView?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.indicatorViewLike?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.appstore?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.fourPhases?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.androidLoading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
-        self.downloading?.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.circleView.addTarget(self, action: #selector(animateView(_:)), for: .touchUpInside)
+        self.allInOneview.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.uberLikeView.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.fillingView.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.indicatorViewLike.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.appstore.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.fourPhases.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.androidLoading.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
+        self.downloading.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
      
-        
+		self.circleView.setAnimation(LoadyAnimationType.circleAndTick())
+		self.allInOneview.setAnimation(LoadyAnimationType.all)
+		self.uberLikeView.setAnimation(LoadyAnimationType.topLine)
+		self.fillingView.setAnimation(LoadyAnimationType.backgroundHighlighter)
+		self.indicatorViewLike.setAnimation(LoadyAnimationType.indicator(with: .init(indicatorViewStyle: .light)))
+		self.androidLoading.setAnimation(LoadyAnimationType.android)
+//		self.downloading.setAnimation(type: .downloading)
         // setup download button details
         self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
             downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
             percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
             downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
         )
-
+		self.appstore.setAnimation(LoadyAnimationType.appstore(with: .init(shrinkFrom: .fromLeft)))
         self.appstore?.pauseImage =  UIImage(named: "pause-button")
-        
-        // sets animation type
-        self.allInOneview?.animationType = LoadingType.all.rawValue
+		self.appstore?.backgroundFillColor = UIColor.lightGray.withAlphaComponent(0.4)
 
         // sets the color that fills the button after percent value changed
         self.allInOneview?.backgroundFillColor = UIColor(red:0.118, green:0.509, blue:0.299, alpha:1)
@@ -69,40 +73,53 @@ class ViewController: UIViewController {
         
         // some animations have filling background, or change the circle stroke, this sets the filling percent, number is something between 0 to 100
         self.allInOneview?.fillTheButton(with: 10)
-        
-        self.fourPhases?.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
-        self.fourPhases?.fourPhases = (
-            // normal phase
-            LoadyAnimationOptions.FourPhase.Phases.normal(title: "Lock", image: UIImage(named: "unlocked"), background: UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)),
-            
-            // loading phase
-            LoadyAnimationOptions.FourPhase.Phases.loading(title: "Waiting...", image: UIImage(named: ""), background: UIColor(red:0.17, green:0.24, blue:0.31, alpha:1.0)),
-            
-            // success phase
-            LoadyAnimationOptions.FourPhase.Phases.success(title: "Activated", image: UIImage(named: "locked"), background: UIColor(red:0.15, green:0.68, blue:0.38, alpha:1.0)),
-            
-            // error phase
-            LoadyAnimationOptions.FourPhase.Phases.error(title: "Error", image: UIImage(named: "unlocked"), background: UIColor(red:0.64, green:0.00, blue:0.15, alpha:1.0))
-        )
-        
-        
-    }
+        self.fourPhases.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
+		self.fourPhases.setPhases(phases: .init(normalPhase:
+		(title: "Lock", image: UIImage(named: "unlocked"), background: UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)), loadingPhase:
+		(title: "Waiting...", image: UIImage(named: ""), background: UIColor(red:0.17, green:0.24, blue:0.31, alpha:1.0)), successPhase:
+		(title: "Activated", image: UIImage(named: "locked"), background: UIColor(red:0.15, green:0.68, blue:0.38, alpha:1.0)), errorPhase:
+		(title: "Error", image: UIImage(named: "unlocked"), background: UIColor(red:0.64, green:0.00, blue:0.15, alpha:1.0))))
+	}
     
     @IBAction func animateView(_ sender : UIButton){
-        // check for nil
-        guard let button = sender as? Loady else {
-            return
-        }
-        
-        // start animating based on button animation style type
-        if button.loadingIsShowing() {
-            button.stopLoading()
-            return
-        }
-        button.startLoading(loadingType: LoadingType(rawValue: button.animationType) ?? .none)
+		if let button = sender as? LoadyFourPhaseButton {
+			if button.loadingIsShowing() {
+				button.stopLoading()
+				return
+			}
+			button.startLoading()
+			self.fourPhaseTempTimer?.invalidate()
+            self.fourPhaseTempTimer = nil
+			self.fourPhases.loadingPhase()
+            self.fourPhaseTempTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){(t) in
+                    if self.fourPhases.tag  == 0 {
+                        self.fourPhases.errorPhase()
+                        self.fourPhases.tag = 1
+                    }else if self.fourPhases?.tag  == 1{
+                        self.fourPhases.successPhase()
+                        self.fourPhases.tag = 2
+                    } else{
+                        self.fourPhases.normalPhase()
+                        self.fourPhases.tag = 0
+                    }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.fourPhaseTempTimer?.fire()
+            }
+			return
+		}
+		
+		guard let button = sender as? LoadyButton else {
+			return
+		}
+		if button.loadingIsShowing() {
+			button.stopLoading()
+			return
+		}
+		button.startLoading()
         var percent : CGFloat = 0
-        switch button._animationType {
-        case .backgroundHighlighter:
+        switch button.animationType {
+        case LoadyAnimationType.backgroundHighlighter:
             self.tempTimer1?.invalidate()
             self.tempTimer1 = nil
             self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
@@ -114,7 +131,7 @@ class ViewController: UIViewController {
                 }
             }
             self.tempTimer1?.fire()
-        case .circleAndTick:
+        case LoadyAnimationType.circleAndTick:
             self.tempTimer2?.invalidate()
             self.tempTimer2 = nil
             self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
@@ -126,7 +143,7 @@ class ViewController: UIViewController {
                 }
             }
             self.tempTimer2?.fire()
-        case .appstore:
+		case LoadyAppStoreAnimation.animationTypeKey:
             self.tempTimer3?.invalidate()
             self.tempTimer3 = nil
             self.tempTimer3 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
@@ -140,7 +157,7 @@ class ViewController: UIViewController {
 
             }
             self.tempTimer3?.fire()
-        case .all:
+        case LoadyAnimationType.all:
             self.tempTimer?.invalidate()
             self.tempTimer = nil
             self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
@@ -152,7 +169,7 @@ class ViewController: UIViewController {
                 }
             }
             self.tempTimer?.fire()
-        case .downloading:
+        case LoadyAnimationType.downloading:
             self.tempTimer4?.invalidate()
             self.tempTimer4 = nil
             self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in
@@ -165,29 +182,6 @@ class ViewController: UIViewController {
                 }
             }
             self.tempTimer4?.fire()
-        case .fourPhases:
-            self.fourPhaseTempTimer?.invalidate()
-            self.fourPhaseTempTimer = nil
-            self.fourPhaseTempTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){(t) in
-                guard let _ = self.fourPhases?._fourPhasesNextPhase else {
-                    if self.fourPhases?.tag  == 0 {
-                        self.fourPhases?.errorPhase()
-                        self.fourPhases?.tag = 1
-                    }else if self.fourPhases?.tag  == 1{
-                        self.fourPhases?.successPhase()
-                        self.fourPhases?.tag = 2
-                    } else{
-                        self.fourPhases?.normalPhase()
-                        self.fourPhases?.tag = 0
-                    }
-                    return
-                }
-                
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                
-                self.fourPhaseTempTimer?.fire()
-            }
         default:
             break;
         }
