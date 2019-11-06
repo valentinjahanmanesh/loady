@@ -7,7 +7,7 @@
 //
 
 import UIKit
-class LoadyFourPhaseButton: Loady {
+open class LoadyFourPhaseButton: LoadyButton {
 	private var animation: LoadyFourPhaseAnimation? = nil
 	open func setPhases(phases: LoadyAnimationOptions.FourPhases){
 		animation = LoadyFourPhaseAnimation(phases: phases)

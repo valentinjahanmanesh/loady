@@ -14,6 +14,12 @@ extension LoadyAnimationType {
 	}
 }
 
+public typealias IndicatorViewStyle = Bool
+extension IndicatorViewStyle {
+	static let light = false
+	static let black = true
+}
+
 class LoadyIndicatorAnimation: LoadyAnimation {
 	public struct AnimationOption {
 		var indicatorViewStyle: IndicatorViewStyle = .light

@@ -21,11 +21,7 @@ public struct LoadyAnimationOptions {
 		let loadingPhase: Phase
 		let successPhase: Phase
 		let errorPhase: Phase
-		public init(
-		normalPhase: Phase,
-		loadingPhase: Phase,
-		successPhase: Phase,
-		errorPhase: Phase) {
+		public init(normalPhase: Phase, loadingPhase: Phase, successPhase: Phase, errorPhase: Phase) {
 			self.normalPhase = normalPhase
 			self.loadingPhase = loadingPhase
 			self.successPhase = successPhase

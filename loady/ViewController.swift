@@ -13,10 +13,8 @@ class ViewController: UIViewController {
     var tempTimer2 : Timer?
     var tempTimer3 : Timer?
     var tempTimer4 : Timer?
-    var tempTimer : Timer?
     var fourPhaseTempTimer : Timer?
     @IBOutlet var circleView : LoadyButton!
-    @IBOutlet var allInOneview : LoadyButton!
     @IBOutlet var uberLikeView : LoadyButton!
     @IBOutlet var fillingView : LoadyButton!
     @IBOutlet var indicatorViewLike : LoadyButton!
@@ -30,7 +28,6 @@ class ViewController: UIViewController {
         
         // start and stop animating on user touch
         self.circleView.addTarget(self, action: #selector(animateView(_:)), for: .touchUpInside)
-        self.allInOneview.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.uberLikeView.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.fillingView.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
         self.indicatorViewLike.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
@@ -40,7 +37,6 @@ class ViewController: UIViewController {
         self.downloading.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
      
 		self.circleView.setAnimation(LoadyAnimationType.circleAndTick())
-//		self.allInOneview.setAnimation(LoadyAnimationType.all)
 		self.uberLikeView.setAnimation(LoadyAnimationType.topLine())
 		self.fillingView.setAnimation(LoadyAnimationType.backgroundHighlighter())
 		self.indicatorViewLike.setAnimation(LoadyAnimationType.indicator(with: .init(indicatorViewStyle: .light)))
@@ -52,31 +48,18 @@ class ViewController: UIViewController {
 			)
 		))
 
-		self.appstore.setAnimation(LoadyAnimationType.appstore(with: .init(shrinkFrom: .fromLeft)))
+		self.appstore.setAnimation(LoadyAnimationType.appstore(with: .init(shrinkFrom: .fromRight)))
         self.appstore?.pauseImage =  UIImage(named: "pause-button")
 		self.appstore?.backgroundFillColor = UIColor.lightGray.withAlphaComponent(0.4)
 
-        // sets the color that fills the button after percent value changed
-        self.allInOneview?.backgroundFillColor = UIColor(red:0.118, green:0.509, blue:0.299, alpha:1)
-        
-        // sets the indicator color above the button
-        self.allInOneview?.loadingColor = UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)
-        
-        // sets the indictore view color (dark or light) inside the button
-        self.allInOneview?.indicatorViewStyle = .light
-        
-        // some animations have image inside (e.g appstore pause image), this line sets that image
-        self.allInOneview?.pauseImage = UIImage(named: "pause-button")
-        
         // starts loading animation
         // self.allInOneview?.startLoading()
         
         // some animations have filling background, or change the circle stroke, this sets the filling percent, number is something between 0 to 100
-        self.allInOneview?.fillTheButton(with: 10)
         self.fourPhases.loadingColor = UIColor(red:0.38, green:0.66, blue:0.09, alpha:1.0)
 		self.fourPhases.setPhases(phases: .init(normalPhase:
 		(title: "Lock", image: UIImage(named: "unlocked"), background: UIColor(red:0.00, green:0.49, blue:0.90, alpha:1.0)), loadingPhase:
-		(title: "Waiting...", image: UIImage(named: ""), background: UIColor(red:0.17, green:0.24, blue:0.31, alpha:1.0)), successPhase:
+		(title: "Waiting...", image: nil, background: UIColor(red:0.17, green:0.24, blue:0.31, alpha:1.0)), successPhase:
 		(title: "Activated", image: UIImage(named: "locked"), background: UIColor(red:0.15, green:0.68, blue:0.38, alpha:1.0)), errorPhase:
 		(title: "Error", image: UIImage(named: "unlocked"), background: UIColor(red:0.64, green:0.00, blue:0.15, alpha:1.0))))
 	}
@@ -124,7 +107,7 @@ class ViewController: UIViewController {
             self.tempTimer1 = nil
             self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
                 percent += CGFloat.random(in: 0...10)
-                button.fillTheButton(with: percent)
+                button.update(percent: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer1?.invalidate()
@@ -136,7 +119,7 @@ class ViewController: UIViewController {
             self.tempTimer2 = nil
             self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
                 percent += CGFloat.random(in: 0...10)
-                button.fillTheButton(with: percent)
+                button.update(percent: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer2?.invalidate()
@@ -148,7 +131,7 @@ class ViewController: UIViewController {
             self.tempTimer3 = nil
             self.tempTimer3 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
                 percent += CGFloat.random(in: 0...10)
-                button.fillTheButton(with: percent)
+                button.update(percent: percent)
 
                 if percent > 105 {
                     percent = 100
@@ -157,25 +140,13 @@ class ViewController: UIViewController {
 
             }
             self.tempTimer3?.fire()
-//        case LoadyAnimationType.all:
-//            self.tempTimer?.invalidate()
-//            self.tempTimer = nil
-//            self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
-//                percent += CGFloat.random(in: 0...10)
-//                button.fillTheButton(with: percent)
-//                if percent > 105 {
-//                    percent = 100
-//                    self.tempTimer?.invalidate()
-//                }
-//            }
-//            self.tempTimer?.fire()
         case LoadyDownloadingAnimation.animationTypeKey:
             self.tempTimer4?.invalidate()
             self.tempTimer4 = nil
             self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in
                 percent += CGFloat.random(in: 5...10)
                 
-                button.fillTheButton(with: percent)
+                button.update(percent: percent)
                 if percent > 105 {
                     percent = 100
                     self.tempTimer4?.invalidate()
