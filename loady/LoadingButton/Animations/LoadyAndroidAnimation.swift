@@ -74,13 +74,6 @@ extension LoadyAndroidAnimation: LoadyAnimation, LoadyPercentageObserver {
 		self.loady = loady
 	}
 	
-	func change(from: CGFloat, to: CGFloat) {
-		let animation = LoadyCore.createBasicAnimation(keypath: "strokeEnd", from: NSNumber(floatLiteral: Double(from / 100)), to: NSNumber(floatLiteral: Double(to / 100)),duration : 0.2)
-		animation.isRemovedOnCompletion = false;
-		animation.fillMode = .forwards;
-		self.strokeFillerLayer?.add(animation, forKey: nil)
-	}
-	
 	func stop() {
 		loading = false
 		strokeFillerLayer?.removeAllAnimations()
@@ -97,22 +90,19 @@ extension LoadyAndroidAnimation: LoadyAnimation, LoadyPercentageObserver {
 		self.loady.cleanCanvas()
 		let radius = min(self.loady.bounds.width, self.loady.bounds.height)
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-			UIView.animate(withDuration: 0.5, animations: {
+			UIView.animate(withDuration: 0.3, animations: {
 				self.loady.center = center
-				self.loady.bounds = CGRect(x:self.loady.center.x,y: self.loady.center.y,width: radius,height: radius)
+				self.loady.layer.bounds = CGRect(x: self.loady.center.x, y: self.loady.center.y, width: radius, height: radius)
 				self.loady.layer.cornerRadius = radius / 2
 				self.loady.backgroundColor = self.loady.backgroundFillColor
 				self.loady.layoutIfNeeded()
 			}, completion: { (finished) in
 				if(finished){
-					self.strokeFillerLayer = LoadyCore.createCircleInside(bounds: self.loady.bounds, strokeColor: self.loady.loadingColor)
+					self.strokeFillerLayer = LoadyCore.createCircleInside(bounds: self.loady.bounds.insetBy(dx: -4, dy: -4), strokeColor: self.loady.loadingColor)
 					self.loady.addSublayer(self.strokeFillerLayer!)
 					self.startCircluarLoadingAnimation(self.strokeFillerLayer!)
-					
 				}
 			})
-		}
 	}
 	
 }

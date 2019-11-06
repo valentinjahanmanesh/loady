@@ -9,83 +9,168 @@
 import UIKit
 
 extension LoadyAnimationType {
-	static func topLine()->LoadyTopLineAnimation{
-		return LoadyTopLineAnimation()
+	static func downloading(with options: LoadyDownloadingAnimation.AnimationOption)->LoadyDownloadingAnimation{
+		return LoadyDownloadingAnimation(options: options)
 	}
 }
 
-class LoadyTopLineAnimation {
+class LoadyDownloadingAnimation {
+	public struct AnimationOption {
+		typealias Label = (title:String,font : UIFont, textColor : UIColor)
+		var downloadingLabel : Label?
+		var percentageLabel: (font : UIFont, textColor : UIColor)?
+		var downloadedLabel : Label?
+		public init(downloadingLabel : Label?,percentageLabel: (font : UIFont, textColor : UIColor)?,downloadedLabel : Label?) {
+			self.downloadingLabel = downloadingLabel
+			self.percentageLabel = percentageLabel
+			self.downloadedLabel = downloadedLabel
+		}
+	}
+	private let options: AnimationOption
+	init(options: AnimationOption) {
+		self.options = options
+	}
 	static var animationTypeKey: LoadyAnimationType.Key = .init(rawValue: "indicator")
 	lazy var activiyIndicator : LoadyActivityIndicator = { UIActivityIndicatorView() }()
-	private unowned var loady: Loadiable!
-	var loadingLayer: CAShapeLayer?
+	private unowned var loady: (Loadiable & UIButton)!
 	private var loading: Bool = false
-
-	///line loading
-	private func createTopLineLoading(){
-		//create our loading layer and line path
-		let loadingLayer = CAShapeLayer();
-		let path = UIBezierPath();
+	var fillingLayer: CAShapeLayer?
+	var containerLayer: CAShapeLayer?
+	private func createFillingLoading(){
+		//a shape for filling the button
+		let fillingLayer = CAShapeLayer();
+		fillingLayer.backgroundColor = self.loady.backgroundFillColor.cgColor
+		fillingLayer.bounds = CGRect(x:0,y:0, width: 0,height: 4);
+		fillingLayer.anchorPoint = CGPoint(x:0,y:0.5);
+		fillingLayer.position = CGPoint(x:0,y: self.loady.frame.size.height / 2);
+		fillingLayer.masksToBounds = true
+		self.fillingLayer = fillingLayer
+		//create aniamtion
+		let containerLayer = CAShapeLayer()
+		containerLayer.bounds = CGRect(x:0,y:0,width: self.loady.frame.size.width,height: 4)
+		containerLayer.position = CGPoint(x:self.loady.frame.size.width / 2, y: self.loady.frame.size.height / 2)
+		containerLayer.masksToBounds = true
+		containerLayer.cornerRadius = self.loady.layer.cornerRadius
+		containerLayer.insertSublayer(fillingLayer,at:0)
+		self.containerLayer = containerLayer
+		self.loady.addSublayer(self.containerLayer!, at: 0);
+	}
+	private func createDownloadingLayer(){
+		let center = self.loady.center
+		self.loady.cleanCanvas()
+		UIView.animate(withDuration: 0.25, animations: {
+			self.loady.center = center;
+			self.loady.layer.bounds.size.height = 5
+			self.loady.layer.cornerRadius = 5 / 2;
+			self.loady.layoutIfNeeded()
+		}, completion: { (finished) in
+			if(finished){
+				//filling animation
+				self.createFillingLoading()
+				if let _ = self.options.downloadingLabel {
+					self.createDownloadingLabelLayer()
+				}
+				if let _ = self.options.percentageLabel {
+					self.createPercentageLabelLayer()
+				}
+			}
+		})
 		
-		//height of the line
-		let lineHeight : CGFloat = 2.0;
+	}
+	var labelLayer: CATextLayer?
+	var percentageLayer: CATextLayer?
+	
+	
+	private func createDownloadingLabelLayer(){
+		// create a temp layer to hide animation behide it
+		let containerLayer = CAShapeLayer()
+		let size = CGSize(width: self.loady.bounds.width, height: 30)
+		containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+		containerLayer.position.x = containerLayer.bounds.midX
+		containerLayer.position.y = size.height / -2
+		let text = LoadyCore.createTextLayers(layer:containerLayer,string: options.downloadingLabel!.title, font: options.downloadingLabel!.font)
+		text.foregroundColor = options.downloadingLabel!.textColor.cgColor
+		containerLayer.addSublayer(text)
+		labelLayer = text
 		
-		//center the layer in our view and set the bounds
-		loadingLayer.position = CGPoint(x:self.loady.frame.size.width / 2,y: -1);
-		loadingLayer.bounds = CGRect(x:0,y: 0, width: self.loady.frame.size.width, height: lineHeight);
+		// add animation
+		UIView.beginAnimations("changeTextTransition", context: nil)
+		let animation = LoadyCore.createTextPushAnimation(type: .fromTop, duration: 0.3)
+		text.add(animation, forKey:"changeTextTransition")
+		containerLayer.masksToBounds = true
+		self.loady.addSublayer(containerLayer, at: 0)
+		UIView.commitAnimations()
+	}
+	
+	private func finishDownloading(){
+		guard let downloadLabel = labelLayer, let downloadedOption = options.downloadedLabel else {
+			return
+		}
+		// add animation
+		UIView.beginAnimations("changeTextTransition", context: nil)
+		downloadLabel.string = downloadedOption.title
+		downloadLabel.foregroundColor = downloadedOption.textColor.cgColor
+		downloadLabel.font = downloadedOption.font
+		downloadLabel.position.x = self.loady.layer.position.x
+		downloadLabel.fontSize = downloadedOption.font.pointSize
+		let animation = LoadyCore.createTextPushAnimation(type: .fromTop, duration: 0.3)
+		downloadLabel.add(animation, forKey:"changeTextTransition")
+		UIView.commitAnimations()
+	}
+	
+	private func createPercentageLabelLayer(){
+		// create a temp layer to hide animation behide it
+		let containerLayer = CAShapeLayer()
+		let size = CGSize(width: self.loady.bounds.width, height: 30)
+		containerLayer.bounds = CGRect(x: 0, y:  0, width: size.width, height: size.height)
+		containerLayer.position.x = containerLayer.bounds.midX
+		containerLayer.position.y = (self.loady.bounds.height + size.height / 2) + 8
+		//layer.backgroundColor = UIColor.green.cgColor
+		let text = LoadyCore.createTextLayers(layer:containerLayer,string: "0%", font: options.percentageLabel!.font)
+		text.foregroundColor = options.percentageLabel!.textColor.cgColor
+		containerLayer.addSublayer(text)
+		percentageLayer = text
 		
-		//draw our line
-		path.move(to: CGPoint(x:0,y: -1))
-		path.addLine(to: CGPoint(x:loadingLayer.bounds.size.width/2.4,y: -1))
-		
-		//set the path layer, and costumizing it
-		loadingLayer.path = path.cgPath;
-		loadingLayer.strokeColor = self.loady.loadingColor.cgColor;
-		loadingLayer.strokeEnd = 1;
-		loadingLayer.lineWidth = lineHeight;
-		loadingLayer.lineCap = CAShapeLayerLineCap(rawValue: "round");
-		loadingLayer.contentsScale = UIScreen.main.scale;
-		loadingLayer.accessibilityHint = "button_topline_loading";
-		loadingLayer.opacity = 0
-		//add the new layer
-		self.loady.addSublayer(loadingLayer);
-		
-		//animated path
-		let animatedPath = UIBezierPath()
-		animatedPath.move(to: CGPoint(x:loadingLayer.bounds.size.width / 1.2,y: -1))
-		animatedPath.addLine(to: CGPoint(x:loadingLayer.bounds.size.width,y: -1))
-		let animateOpacity = LoadyCore.createBasicAnimation(keypath: "opacity", from: 0, to: 1,duration : 0.6)
-		animateOpacity.isRemovedOnCompletion = false
-		animateOpacity.fillMode  = .forwards
-		
-		//create our animation and add it to the layer, animate indictor from left to right
-		let animation = LoadyCore.createBasicAnimation(keypath: "path", from: path.cgPath, to: animatedPath.cgPath)
-		animation.autoreverses = true;
-		animation.repeatCount = 100;
-		animation.isRemovedOnCompletion = false
-		loadingLayer.add(animation,forKey:nil);
-		loadingLayer.add(animateOpacity,forKey:nil);
-		self.loadingLayer = loadingLayer
+		// add animation
+		UIView.beginAnimations("changeTextTransition", context: nil)
+		let animation = LoadyCore.createTextPushAnimation(type: .fromBottom, duration: 0.3)
+		text.add(animation, forKey:"changeTextTransitionPercent")
+		containerLayer.masksToBounds = true
+		self.loady.addSublayer(containerLayer, at: 1)
+		UIView.commitAnimations()
 	}
 }
 
-extension LoadyTopLineAnimation: LoadyAnimation {
+extension LoadyDownloadingAnimation: LoadyAnimation, LoadyPercentageObserver  {
 	func inject(loady: Loadiable) {
+		guard let loady = loady as? Loadiable & UIButton else {
+			assertionFailure("this animation will apply only on UIbutton")
+			return
+		}
 		self.loady = loady
 	}
-	
+	func completed(lastetValue: CGFloat) {
+		finishDownloading()
+	}
+	func change(from: CGFloat, to: CGFloat) {
+		self.fillingLayer?.bounds =  CGRect(x : 0, y: (self.loady.frame.size.height / 2), width: (self.loady.frame.size.width * (to  / 100)), height: self.loady.frame.size.height)
+		percentageLayer?.string = String(format:"%.1f%%", to)
+	}
 	func isLoading() -> Bool {
 		return loading
 	}
 	
 	func run() {
 		loading = true
-		createTopLineLoading()
+		createDownloadingLayer()
 	}
 	
 	func stop() {
 		loading = false
-		self.loadingLayer?.removeFromSuperlayer()
+		self.containerLayer?.removeFromSuperlayer()
+		labelLayer?.removeFromSuperlayer()
+		percentageLayer?.removeFromSuperlayer()
+		loady.reloadDefaultState(duration: 0.5, done: nil)
 	}
 }
 

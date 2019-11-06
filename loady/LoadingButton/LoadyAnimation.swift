@@ -27,4 +27,8 @@ public protocol LoadyPercentageObserver {
 	///   - new: new value
 	///   - old: current value
 	mutating func change(from: CGFloat, to: CGFloat)
+	mutating func completed(lastetValue: CGFloat)
+}
+extension LoadyPercentageObserver {
+	mutating func completed(lastetValue: CGFloat) {}
 }

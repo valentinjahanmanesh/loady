@@ -11,6 +11,7 @@ class LoadyFourPhaseButton: Loady {
 	private var animation: LoadyFourPhaseAnimation? = nil
 	open func setPhases(phases: LoadyAnimationOptions.FourPhases){
 		animation = LoadyFourPhaseAnimation(phases: phases)
+		animation?.inject(loady: self)
 	}
 	open override func startLoading() {
 		if self.loadingIsShowing(){

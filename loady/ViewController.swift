@@ -40,18 +40,18 @@ class ViewController: UIViewController {
         self.downloading.addTarget(self, action:#selector(animateView(_:)), for:.touchUpInside)
      
 		self.circleView.setAnimation(LoadyAnimationType.circleAndTick())
-		self.allInOneview.setAnimation(LoadyAnimationType.all)
-		self.uberLikeView.setAnimation(LoadyAnimationType.topLine)
-		self.fillingView.setAnimation(LoadyAnimationType.backgroundHighlighter)
+//		self.allInOneview.setAnimation(LoadyAnimationType.all)
+		self.uberLikeView.setAnimation(LoadyAnimationType.topLine())
+		self.fillingView.setAnimation(LoadyAnimationType.backgroundHighlighter())
 		self.indicatorViewLike.setAnimation(LoadyAnimationType.indicator(with: .init(indicatorViewStyle: .light)))
-		self.androidLoading.setAnimation(LoadyAnimationType.android)
-//		self.downloading.setAnimation(type: .downloading)
-        // setup download button details
-        self.downloading?.animationsOptions.downloading = LoadyAnimationOptions.Downloading.init(
-            downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
-            percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
-            downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
-        )
+		self.androidLoading.setAnimation(LoadyAnimationType.android())
+		self.downloading.setAnimation(LoadyAnimationType.downloading(with: .init(
+			downloadingLabel: (title: "Copying Data...", font: UIFont.boldSystemFont(ofSize: 18), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+			percentageLabel: (font: UIFont.boldSystemFont(ofSize: 14), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1)),
+			downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
+			)
+		))
+
 		self.appstore.setAnimation(LoadyAnimationType.appstore(with: .init(shrinkFrom: .fromLeft)))
         self.appstore?.pauseImage =  UIImage(named: "pause-button")
 		self.appstore?.backgroundFillColor = UIColor.lightGray.withAlphaComponent(0.4)
@@ -119,7 +119,7 @@ class ViewController: UIViewController {
 		button.startLoading()
         var percent : CGFloat = 0
         switch button.animationType {
-        case LoadyAnimationType.backgroundHighlighter:
+        case LoadyBackgroundHighlighterAnimation.animationTypeKey:
             self.tempTimer1?.invalidate()
             self.tempTimer1 = nil
             self.tempTimer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
@@ -131,7 +131,7 @@ class ViewController: UIViewController {
                 }
             }
             self.tempTimer1?.fire()
-        case LoadyAnimationType.circleAndTick:
+        case LoadyCircleAndTickAnimation.animationTypeKey:
             self.tempTimer2?.invalidate()
             self.tempTimer2 = nil
             self.tempTimer2 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (t) in
@@ -157,19 +157,19 @@ class ViewController: UIViewController {
 
             }
             self.tempTimer3?.fire()
-        case LoadyAnimationType.all:
-            self.tempTimer?.invalidate()
-            self.tempTimer = nil
-            self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
-                percent += CGFloat.random(in: 0...10)
-                button.fillTheButton(with: percent)
-                if percent > 105 {
-                    percent = 100
-                    self.tempTimer?.invalidate()
-                }
-            }
-            self.tempTimer?.fire()
-        case LoadyAnimationType.downloading:
+//        case LoadyAnimationType.all:
+//            self.tempTimer?.invalidate()
+//            self.tempTimer = nil
+//            self.tempTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){(t) in
+//                percent += CGFloat.random(in: 0...10)
+//                button.fillTheButton(with: percent)
+//                if percent > 105 {
+//                    percent = 100
+//                    self.tempTimer?.invalidate()
+//                }
+//            }
+//            self.tempTimer?.fire()
+        case LoadyDownloadingAnimation.animationTypeKey:
             self.tempTimer4?.invalidate()
             self.tempTimer4 = nil
             self.tempTimer4 = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true){(t) in

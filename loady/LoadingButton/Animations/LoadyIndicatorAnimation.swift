@@ -26,14 +26,16 @@ class LoadyIndicatorAnimation: LoadyAnimation {
 	func inject(loady: Loadiable) {
 		self.loady = loady
 	}
-	
+	private var loading: Bool = false
+
 	func isLoading() -> Bool {
-		return false
+		return loading
 	}
 	static var animationTypeKey: LoadyAnimationType.Key = .init(rawValue: "indicator")
 	lazy var activiyIndicator : LoadyActivityIndicator = { UIActivityIndicatorView() }()
 	private unowned var loady: Loadiable!
 	func run() {
+		loading = true
 		let indicator = self.activiyIndicator
 		indicator.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
 		if let button = self.loady as? UIButton, let titleLabel = button.titleLabel {
@@ -64,6 +66,13 @@ class LoadyIndicatorAnimation: LoadyAnimation {
 	}
 	
 	func stop() {
+		loading = false
 		self.activiyIndicator.removeFromSuperview()
+		if let button = self.loady as? UIButton {
+			UIView.animate(withDuration: 0.3) {
+				button.titleEdgeInsets = .zero
+				self.loady.layoutIfNeeded()
+			}
+		}
 	}
 }
