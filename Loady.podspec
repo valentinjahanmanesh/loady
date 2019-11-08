@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   # 1
   s.platform = :ios
   s.ios.deployment_target = '9.0'
-  s.name = "loady"
+  s.name = "Loady"
   s.summary = "fully customizable loading button with 8 different styles."
   s.requires_arc = true
   
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.framework = "UIKit"
   
   # 8
-  s.source_files = "Loady/Classes/**/*.{swift}"
+  s.source_files = "Loady/Classes/"
   
   # 9
   #s.resources = "RWPickFlavor/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
