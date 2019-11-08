@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.framework = "UIKit"
   
   # 8
-  s.source_files = "Loady/Classes/"
+  s.source_files = "Loady/Classes/**/*"
   
   # 9
   #s.resources = "RWPickFlavor/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
