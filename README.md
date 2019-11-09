@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/logo.png" width="100%" style="text-align:center">
+<img src="examples/logo.png" width="100%" style="text-align:center">
  
 [![Version](https://img.shields.io/cocoapods/v/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
 [![License](https://img.shields.io/cocoapods/l/Whisper.svg?style=flat)](http://cocoadocs.org/docsets/Whisper)
@@ -19,7 +19,7 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 - [ ] Carthage Support
 
 
-![TOP_LINE](https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_gif.gif)
+![TOP_LINE](examples/_gif.gif)
 
 
 ## Installation, cocoapods
@@ -32,7 +32,7 @@ just add this line into your podfile
 or for **manual installation** simply copy the [Source Code](https://github.com/farshadjahanmanesh/loady/tree/master/loady/LoadingButton) into your project, take a look at the example project for more info
 
 ## Configs
-<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_specs.jpeg" width="50%" style="text-align:center">
+<img src="examples/_specs.jpeg" width="50%" style="text-align:center">
 
 ## Setup programmatically :
 ```swift
@@ -98,7 +98,7 @@ ___
 
 | Loading To Normal | Loading To Success | Loading To Error |
 | ------------- | ------------- | ------------- |
-| <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_cancelPhase.gif" height="200px" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_successPhase.gif" height="200px" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_errorPhasee.gif" height="200px" style="text-align:center"> |
+| <img src="examples/_cancelPhase.gif" height="200px" style="text-align:center"> | <img src="examples/_successPhase.gif" height="200px" style="text-align:center"> | <img src="examples/_errorPhasee.gif" height="200px" style="text-align:center"> |
 
 ___
 ### Downloading Animation :
@@ -110,7 +110,7 @@ ___
             downloadedLabel: (title: "Completed.", font: UIFont.boldSystemFont(ofSize: 20), textColor : UIColor(red:0, green:0.71, blue:0.8, alpha:1))
         )
 ```
-<img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_download.gif" width="50%" style="text-align:center"> 
+<img src="examples/_download.gif" width="50%" style="text-align:center"> 
 
 ___
 
@@ -118,7 +118,7 @@ ___
 ## Setup in interface builder
 | Set class | change attributes |
 | ------------- | ------------- |
-| <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_setClass.png" width="100%" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_properties.png" width="100%" style="text-align:center"> |
+| <img src="examples/_setClass.png" width="100%" style="text-align:center"> | <img src="examples/_properties.png" width="100%" style="text-align:center"> |
 
 ___ 
 
@@ -139,7 +139,7 @@ nv.color = .red
 nv.padding = 12
 self.loadyButton?.activiyIndicator = nv
 ```
-| <img src="https://raw.githubusercontent.com/ninjaprox/NVActivityIndicatorView/master/Demo.gif" width="20%" style="text-align:center"> | <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_nvacctivityindicator1.gif"  style="text-align:center"> <img src="https://raw.githubusercontent.com/farshadjahanmanesh/loady/master/loady/examples/_nvacctivityindicator2.gif"  style="text-align:center">|
+| <img src="https://raw.githubusercontent.com/ninjaprox/NVActivityIndicatorView/master/Demo.gif" width="20%" style="text-align:center"> | <img src="examples/_nvacctivityindicator1.gif"  style="text-align:center"> <img src="examples/_nvacctivityindicator2.gif"  style="text-align:center">|
 
 
 ## troubleshoot 
