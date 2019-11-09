@@ -13,9 +13,10 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 ## Todo
 - [x] animation style : like appstore download button
 - [x] animation style : 4 phases Animation(normal, loading, success, error)
-- [ ] animation style : like telegram sharing
 - [x] animation style : like android
 - [x] animation style : downloading
+- [x] extendable to accept new animations
+- [ ] animation style : like telegram sharing
 - [ ] Carthage Support
 
 
