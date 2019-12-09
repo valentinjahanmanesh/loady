@@ -4,12 +4,11 @@ Pod::Spec.new do |s|
   s.platform = :ios
   s.ios.deployment_target = '9.0'
   s.name = "loady"
-  s.module_name = "Loady"
   s.summary = "fully customizable loading button with 8 different styles."
   s.requires_arc = true
   
   # 2
-  s.version = "1.0.3"
+  s.version = "1.0.1"
   
   # 3
   s.license = { :type => "MIT", :file => "LICENSE" }

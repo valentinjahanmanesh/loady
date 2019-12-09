@@ -21,11 +21,11 @@ public class LoadyFourPhaseAnimation {
 	private unowned var loady: (Loadiable & UIButton)!
 	init(phases: LoadyAnimationOptions.FourPhases) {
 		self.phases = phases
-		nextPhase = .normal(phases.normalPhase)
+		currentPhase = .normal(phases.normalPhase)
 	}
 	
 	private var phases: LoadyAnimationOptions.FourPhases
-	private(set) var nextPhase : LoadyAnimationOptions.FourPhases.Phases? = nil
+	open private(set) var currentPhase : LoadyAnimationOptions.FourPhases.Phases
 	// these keys are used to mark some layers as temps layer and we will remove them after animation is done
 	private enum LayerTempKeys: String {
 		case tempLayer = "temps"
@@ -35,11 +35,8 @@ public class LoadyFourPhaseAnimation {
 	}
 	
 	private func createFourPhaseButton(){
-		guard let nextPhase = nextPhase else {
-			return
-		}
 		UIView.animate(withDuration: 0.3) {
-			self.loady.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0);
+			self.loady.titleEdgeInsets = UIEdgeInsets(top: 0, left: 28, bottom: 0, right: 0);
 			self.loady.layoutIfNeeded()
 		}
 		UIView.beginAnimations("changeTextTransition", context: nil)
@@ -51,32 +48,28 @@ public class LoadyFourPhaseAnimation {
 		animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		self.loady.titleLabel!.layer.add(animation, forKey:"changeTextTransition")
 		
-		switch nextPhase {
+		switch currentPhase {
 		case .normal(let name, let image , let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
-			self.nextPhase  = .loading(phases.loadingPhase)
 			setupImagesInFourPhases(image)
 			
 			break
 		case .loading(let name, let image, let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
-			self.nextPhase  = nil
 			let circle = setupImagesInFourPhases(image,shrinkContainerLayer: true)
 			createCircularLoading(bounds: circle.bounds, center : circle.position)
 			break
 		case .success(let name, let image, let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
-			self.nextPhase  = .normal(phases.normalPhase)
 			setupImagesInFourPhases(image)
 			cleanCircularLoading()
 			break
 		case .error(let name, let image, let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
-			self.nextPhase  = .normal(phases.normalPhase)
 			setupImagesInFourPhases(image)
 			cleanCircularLoading()
 			break
@@ -85,21 +78,21 @@ public class LoadyFourPhaseAnimation {
 		
 	}
 	open func normalPhase(){
-		self.nextPhase = .normal(phases.normalPhase)
+		self.currentPhase = .normal(phases.normalPhase)
 		createFourPhaseButton()
 		cleanCircularLoading()
 	}
 	open func successPhase(){
-		self.nextPhase = .success(phases.successPhase)
+		self.currentPhase = .success(phases.successPhase)
 		createFourPhaseButton()
 	}
 	open func errorPhase(){
-		self.nextPhase = .error(phases.errorPhase)
+		self.currentPhase = .error(phases.errorPhase)
 		createFourPhaseButton()
 	}
 	
 	open func loadingPhase(){
-		self.nextPhase = .loading(phases.loadingPhase)
+		self.currentPhase = .loading(phases.loadingPhase)
 		createFourPhaseButton()
 	}
 	@discardableResult private func setupImagesInFourPhases(_ image : UIImage? , shrinkContainerLayer : Bool = false)->CAShapeLayer{
@@ -123,7 +116,7 @@ public class LoadyFourPhaseAnimation {
 			let radius = self.loady.bounds.height / 3
 			let circleContainer = LoadyCore.createCircleInside(bounds: self.loady.bounds, strokeColor: self.loady.loadingColor, radius: radius)
 			circleContainer.fillColor = UIColor.white.cgColor
-			circleContainer.position.x = radius * 2
+			circleContainer.position.x = (radius * 2) - 4
 			let imageLayer = CAShapeLayer()
 			imageLayer.bounds = CGRect(x:0,y: 0,width: radius,height: radius);
 			imageLayer.position = CGPoint(x:circleContainer.bounds.midY,y: circleContainer.bounds.midY);
@@ -140,15 +133,15 @@ public class LoadyFourPhaseAnimation {
 	}
 	
 	private func cleanCircularLoading(){
-		if let loading = self.loady.layer.sublayers?.first(where: { $0.accessibilityHint == LayerTempKeys.circularLoading.rawValue}) {
+		guard let loading = self.loady.layer.sublayers?.first(where: { $0.accessibilityHint == LayerTempKeys.circularLoading.rawValue}) else { return }
 			let animation = LoadyCore.createBasicAnimation(keypath: "opacity", from: 1.0, to: 0.0,duration: 0.5)
 			animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 			loading.add(animation, forKey: "fade")
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 				loading.removeFromSuperlayer()
 			}
-		}
 	}
+	
 	private func createCircularLoading(bounds : CGRect, center : CGPoint){
 		cleanCircularLoading()
 		let circularLoadingLayer = CAShapeLayer()

@@ -9,6 +9,9 @@
 import UIKit
 open class LoadyFourPhaseButton: LoadyButton {
 	private var animation: LoadyFourPhaseAnimation? = nil
+	open var currentPhase: LoadyAnimationOptions.FourPhases.Phases? {
+		(currentAnimation as? LoadyFourPhaseAnimation)?.currentPhase
+	}
 	open func setPhases(phases: LoadyAnimationOptions.FourPhases){
 		animation = LoadyFourPhaseAnimation(phases: phases)
 		animation?.inject(loady: self)
