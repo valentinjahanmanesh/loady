@@ -33,6 +33,7 @@ public class LoadyBackgroundHighlighterAnimation: LoadyAnimation, LoadyPercentag
 		containerLayer.cornerRadius = self.loady.layer.cornerRadius
 		containerLayer.insertSublayer(fillingLayer,at:0)
 		self.containerLayer = containerLayer
+		
 		self.loady.addSublayer(self.containerLayer!, at: 0);
 	}
 	
@@ -50,6 +51,7 @@ public class LoadyBackgroundHighlighterAnimation: LoadyAnimation, LoadyPercentag
 	private var strokeFillerLayer: CAShapeLayer?
 	
 	public func change(from: CGFloat, to: CGFloat) {
+		
 		self.fillingLayer?.bounds =  CGRect(x : 0, y: (self.loady.frame.size.height / 2), width: (self.loady.frame.size.width * (to  / 100)), height: self.loady.frame.size.height)
 	}
 	

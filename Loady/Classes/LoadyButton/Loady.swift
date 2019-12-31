@@ -15,9 +15,18 @@ extension LoadyAnimationType {
 open class LoadyButton : UIButton, Loadiable {
 	public func addSublayer(_ layer: CALayer) {
 		self.layer.addSublayer(layer)
+		// some shit swift bug
+		if let imageview = self.imageView {
+			self.bringSubviewToFront(imageview)
+		}
 	}
 	public func addSublayer(_ layer: CALayer, at: UInt32) {
 		self.layer.insertSublayer(layer, at: at)
+		
+		// some shit swift bug
+		if let imageview = self.imageView {
+			self.bringSubviewToFront(imageview)
+		}
 	}
 	
 	public func cleanCanvas() {
