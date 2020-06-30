@@ -118,8 +118,9 @@ public class LoadyIndicatorAnimation: LoadyAnimation {
                 }
             }
         }) { (done) in
+            guard done else {return}
             self.activiyIndicator.removeFromSuperview()
-            guard self.loady != nil, let button = self.loady as? UIButton else {return}
+            guard let button = self.loady as? UIButton else {return}
             if let titleLabel = button.titleLabel, titleLabel.superview == nil {
                 titleLabel.isHidden = true
                 button.addSubview(titleLabel)
