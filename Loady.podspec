@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.module_name = "Loady"
   s.summary = "fully customizable loading button with 8 different styles."
   s.requires_arc = true
-  s.version = "1.0.6"
+  s.version = "1.0.7"
   s.license = { :type => "MIT", :file => "LICENSE" }
   s.author = { "farshad jahanmanesh" => "farshadjahanmanesh@gmail.com" }
   s.homepage = "https://github.com/farshadjahanmanesh/loady"

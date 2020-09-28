@@ -92,10 +92,10 @@ public class LoadyIndicatorAnimation: LoadyAnimation {
         }
         
         indicator.startAnimating()
-        self.loady.insertSubview(indicator, at: 0)
+        self.loady?.insertSubview(indicator, at: 0)
         UIView.animate(withDuration: 0.05, delay: 0.3, options: .curveLinear, animations: {
             indicator.transform  = .identity
-            self.loady.layoutIfNeeded()
+            self.loady?.layoutIfNeeded()
         }, completion: nil)
         
     }
@@ -117,10 +117,9 @@ public class LoadyIndicatorAnimation: LoadyAnimation {
                     self.loady.layoutIfNeeded()
                 }
             }
-        }) { (done) in
-            guard done else {return}
-            self.activiyIndicator.removeFromSuperview()
-            guard let button = self.loady as? UIButton else {return}
+        }) {[weak self] (done) in
+            self?.activiyIndicator.removeFromSuperview()
+            guard let loady = self?.loady, let button = loady as? UIButton else {return}
             if let titleLabel = button.titleLabel, titleLabel.superview == nil {
                 titleLabel.isHidden = true
                 button.addSubview(titleLabel)
