@@ -49,29 +49,25 @@ public class LoadyFourPhaseAnimation {
 		self.loady.titleLabel!.layer.add(animation, forKey:"changeTextTransition")
 		
 		switch currentPhase {
-		case .normal(let phase):
-			let (name, image ,background) = phase
+		case .normal(let name, let image , let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
 			setupImagesInFourPhases(image)
 			
 			break
-		case .loading(let phase):
-			let (name, image ,background) = phase
+		case .loading(let name, let image, let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
 			let circle = setupImagesInFourPhases(image,shrinkContainerLayer: true)
 			createCircularLoading(bounds: circle.bounds, center : circle.position)
 			break
-		case .success(let phase):
-			let (name, image ,background) = phase
+		case .success(let name, let image, let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
 			setupImagesInFourPhases(image)
 			cleanCircularLoading()
 			break
-		case .error(let phase):
-			let (name, image ,background) = phase
+		case .error(let name, let image, let background):
 			self.loady.setTitle(name , for: .normal)
 			self.loady.backgroundColor = background
 			setupImagesInFourPhases(image)
