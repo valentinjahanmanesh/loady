@@ -41,7 +41,7 @@ open class LoadyButton : UIButton, Loadiable {
 		
 		self.bounds = CGRect(x:0,y: 0,width: cached.frame.size.width,height: cached.frame.size.height)
 		self.layer.cornerRadius = cached.layer.cornerRadius
-		self.frame.origin.x = 0
+//		self.frame.origin.x = 0
 		self.backgroundColor = cached.backgroundColor
 		self.transform = .identity
 		self.layoutIfNeeded()
