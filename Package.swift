@@ -8,8 +8,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "loady",
-            targets: ["loady"]),
+            name: "Loady",
+            targets: ["Loady"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -17,7 +17,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "loady",
+            name: "Loady",
             dependencies: [],
             path: "Loady/Classes"),
     ]
