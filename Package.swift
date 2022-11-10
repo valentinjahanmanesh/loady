@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "loady",
+    name: "loady", platforms: [.iOS(.v14)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -15,10 +15,12 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
+    
     targets: [
         .target(
             name: "Loady",
             dependencies: [],
-            path: "Loady/Classes"),
+            path: "Loady/Classes/V2"),
+        .testTarget(name: "LoadyTests", dependencies: ["Loady"], path: "Loady/Tests")
     ]
 )
