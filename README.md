@@ -23,14 +23,29 @@ this is a small library to show loading and indicator in UIButton, with fully cu
 ![TOP_LINE](examples/_gif.gif)
 
 
-## Installation, cocoapods
-**loady minimum target requirement is iOS 10.0**
+## Requirements
+loady minimum target requirement is iOS 10.0
 
-just add this line into your podfile
-```swift
-  pod 'loady'
+
+## Installation
+loady is available through [Swift Package Manager](https://www.swift.org/package-manager/) or [Cocoapods](http://cocoapods.org)
+
+### Swift Package Manager (Recommended)
 ```
-or for **manual installation** simply copy the [Source Code](https://github.com/farshadjahanmanesh/loady/tree/master/loady/LoadingButton) into your project, take a look at the example project for more info
+dependencies: [
+    .package(url: "https://github.com/farshadjahanmanesh/loady.git", .upToNextMajor(from: "1.0.8"))
+]
+```
+
+### Cocoapods
+```swift
+pod "loady"
+```
+
+### Manual 
+simply copy the [Source Code](https://github.com/farshadjahanmanesh/loady/tree/master/loady/LoadingButton) into your project, take a look at the example project for more info
+
+
 
 ## Configs
 <img src="examples/_specs.jpeg" width="50%" style="text-align:center">
