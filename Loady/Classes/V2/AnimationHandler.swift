@@ -13,3 +13,4 @@ public protocol AnimationHandler {
     func stop()
     func set(canvas: LoadingableAnimationCanvas)
 }
+

@@ -7,38 +7,17 @@
 
 import UIKit
 
-open class UberAnimator: LoadingableButtonAnimator {
-    public private(set) unowned var canvas: LoadingableAnimationCanvas?
+open class UberAnimator: BaseLoadingableAnimator {
     public let options: Options
     public init(options: Options = .default) {
         self.options = options
-    }
-    public var id: UUID = .init()
-    
-    /// indicates if the button is in loading state
-    public var isLoading: Bool = false
- 
-    /// changes the state of the button to loading state
-    public func start() {
-        self.isLoading = true
-        createTopLineLoading()
-    }
-    
-    /// changes the state of the button to normal state
-    public func stop() {
-        self.isLoading = false
-        self.canvas?.removeAllAnimationLayers()
-    }
-    
-    public func set(canvas: LoadingableAnimationCanvas) {
-        self.canvas = canvas
     }
     /// it would be a number in rage of `0 <= 1` and it indicates how big would be the indicator in compare to the canvas, 1 means indicator would have the same length as the canvas width
     private var indicatorSize: Float16 {
         self.options.indicatorLength
     }
     
-    private func createTopLineLoading(){
+    open override func makeAnimation(){
         guard let canvas else {
             fatalError("Canvas for drawing is needed, you need to set the canvas by using the set(canvas) function.")
         }
@@ -56,9 +35,7 @@ open class UberAnimator: LoadingableButtonAnimator {
         }
         
         topLine.path = originalPath.cgPath
-        
         canvas.addLayer(forLoading: topLine);
-        
         //animated path
         let opacityAnimation = createOpacityAnimation()
         let pathAnimation = createPathAnimation(from: originalPath, to: destinationPath)

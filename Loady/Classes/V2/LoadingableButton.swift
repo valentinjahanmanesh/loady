@@ -7,7 +7,7 @@
 
 import UIKit
 open class LoadingableButton: UIButton {
-    public private (set) var animatorDelegate: any LoadingableButtonAnimator = UberAnimator()
+    public private (set) var animatorDelegate: any LoadingableAnimator = UberAnimator()
     /// indicates if the button is in loading state
     public var isLoading: Bool {
         return animatorDelegate.isLoading
@@ -23,7 +23,7 @@ open class LoadingableButton: UIButton {
         self.animatorDelegate.stop()
     }
     
-    public func set(delegate: any LoadingableButtonAnimator) {
+    public func set(delegate: any LoadingableAnimator) {
         self.animatorDelegate = delegate
         delegate.set(canvas: self)
     }

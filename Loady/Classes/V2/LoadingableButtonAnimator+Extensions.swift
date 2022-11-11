@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public extension LoadingableButtonAnimator {
+public extension LoadingableAnimator {
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }

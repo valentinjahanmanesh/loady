@@ -7,6 +7,6 @@
 
 import Foundation
 
-public protocol LoadingableButtonAnimator: AnyObject, AnimationHandler, Identifiable, Equatable {
+public protocol LoadingableAnimator: AnyObject, AnimationHandler, AnimationMaker, Identifiable, Equatable {
     
 }
