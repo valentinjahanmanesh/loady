@@ -58,4 +58,26 @@ final class LoadyTests: XCTestCase {
         button.stopLoading()
         XCTAssertLessThanOrEqual(button.layer.sublayers?.count ?? 0, sublayersCount)
     }
+    
+    func testShouldAccept_ProgressWhenTypeOfAnimatorIsProgressive() {
+        let loadingAnimator = BackgroundFillingAnimator()
+        button.set(delegate: loadingAnimator)
+        button.startLoading()
+        try! button.update(progress: .init(rawValue: 0.5))
+        button.stopLoading()
+        XCTAssert(true)
+    }
+    
+    func testShouldNotAccept_ProgressValueWhenTypeOfAnimationIsNotProgressive() {
+        let loadingAnimator = UberAnimator()
+        button.set(delegate: loadingAnimator)
+        button.startLoading()
+        XCTAssertThrowsError(try button.update(progress: .init(rawValue: 0.5))) { error in
+            guard let loadingableError = error as? LoadingableButtonError, case .typeOfAnimationIsNotProgressive(error: _) = loadingableError else {
+                    XCTFail("the type of error is mismatched.")
+                return
+            }
+        }
+        button.stopLoading()
+    }
 }

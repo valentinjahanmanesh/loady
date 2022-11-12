@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     var body: some View {
@@ -24,6 +25,7 @@ import SnapKit
 import Loady
 final class MainViewController: UIViewController {
     private lazy var box =  UIView()
+    private var cancellables: [AnyCancellable] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,19 +41,26 @@ final class MainViewController: UIViewController {
         button.backgroundColor = .red
         button.layer.cornerRadius = 12
         box.addSubview(button)
-        button.set(delegate: UberAnimator())
+        let animation = BackgroundFillingAnimator()
+        button.set(delegate: animation)
         button.snp.makeConstraints { make in
             make.width.equalTo(200)
             make.height.equalTo(70)
             make.center.equalTo(box).priority(.high)
         }
+        button.clipsToBounds = true
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             button.startLoading()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//            button.stopLoading()
+            var progress: Float16 = 0
+            Timer.publish(every: 1, on: .main, in: .default)
+                .autoconnect()
+                .receive(on: DispatchQueue.main)
+                .sink { _ in
+                    progress += (0...10).map({Float16($0 / 10)}).randomElement()!
+                    animation.set(progress: .init(rawValue: progress / 10))
+                }
+                .store(in: &self.cancellables)
         }
     }
 }
