@@ -39,18 +39,18 @@ final class LoadingableUberAnimator: XCTestCase {
     }
     
     func testShouldDefaultOption_OnStart() {
-        let options = UberAnimator.Options.default
+        let options = UberAnimator.Configuration.default
         XCTAssertEqual(options, animator.options)
     }
     
     func testShouldChangeOptions_OnNewOptionPass() {
-        let options = UberAnimator.Options(indicatorLength: 0.9, indicatorTickness: 10, indicatorDirection: .rtl, indicatorColor: .red)
+        let options = UberAnimator.Configuration(indicatorLength: 0.9, indicatorTickness: 10, indicatorDirection: .rtl, indicatorColor: .red)
         animator = UberAnimator(options: options)
         XCTAssertEqual(options, animator.options)
     }
     
     func testShouldValidateLength_WouldBeLessThanOrEqualToCanvas() {
-        let options = UberAnimator.Options(indicatorLength: 1.9, indicatorTickness: 10, indicatorDirection: .rtl, indicatorColor: .red)
+        let options = UberAnimator.Configuration(indicatorLength: 1.9, indicatorTickness: 10, indicatorDirection: .rtl, indicatorColor: .red)
         animator = UberAnimator(options: options)
         XCTAssertEqual(min(options.indicatorLength, 1), animator.options.indicatorLength)
     }

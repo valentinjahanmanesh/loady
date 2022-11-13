@@ -14,8 +14,8 @@ open class BackgroundFillingAnimator: BaseLoadingableAnimator, ProgressableAnima
         try! updateProgress(progress.rawValue)
     }
     
-    public let options: Options
-    public init(options: Options = .default) {
+    public let options: Configuration
+    public init(options: Configuration = .default) {
         self.options = options
     }
     
@@ -26,12 +26,11 @@ open class BackgroundFillingAnimator: BaseLoadingableAnimator, ProgressableAnima
         
         let fillingLayer = createFillingLayer(with: canvas.frame.size, color: options.fillColor)
         canvas.addLayer(forLoading: fillingLayer);
-        //animated path
+        
+        animationLayer = fillingLayer
         if progress > 0 {
             try! updateProgress(progress)
         }
-        
-        animationLayer = fillingLayer
     }
     
     private func calculateStep(canvasWidth: CGFloat, currentSize: CGFloat, progress: Float16) -> (current: CGFloat, new: CGFloat) {
@@ -41,7 +40,7 @@ open class BackgroundFillingAnimator: BaseLoadingableAnimator, ProgressableAnima
     }
     
     private func updateProgress(_ progress: Float16) throws  {
-        guard let canvas, let animationLayer else {
+        guard self.isLoading, let canvas, let animationLayer else {
             throw LoadingableButtonError.missingObjects(error: .noCanvas)
         }
         

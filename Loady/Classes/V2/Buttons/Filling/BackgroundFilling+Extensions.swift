@@ -8,7 +8,7 @@
 import Foundation
 import class UIKit.UIColor
 public extension BackgroundFillingAnimator {
-    struct Options: Equatable {
+    struct Configuration: Equatable {
         public enum Direction {
             case rtl, ltr
         }
@@ -24,7 +24,7 @@ public extension BackgroundFillingAnimator {
     }
 }
 
-public extension BackgroundFillingAnimator.Options {
+public extension BackgroundFillingAnimator.Configuration {
     static var `default`: Self {
         return .init()
     }

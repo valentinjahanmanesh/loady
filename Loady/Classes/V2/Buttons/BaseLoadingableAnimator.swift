@@ -15,14 +15,18 @@ open class BaseLoadingableAnimator: LoadingableAnimator {
  
     /// changes the state of the button to loading state
     open func start() {
+        self.canvas?.animationWillStart()
         self.isLoading = true
         makeAnimation()
+        self.canvas?.animationDidStart()
     }
     
     /// changes the state of the button to normal state
     open func stop() {
+        self.canvas?.animationWillStop()
         self.isLoading = false
         self.canvas?.removeAllAnimationLayers()
+        self.canvas?.animationDidStop()
     }
     
     open func set(canvas: LoadingableAnimationCanvas) {

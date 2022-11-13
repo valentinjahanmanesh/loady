@@ -8,7 +8,7 @@
 import Foundation
 import class UIKit.UIColor
 public extension UberAnimator {
-    struct Options: Equatable {
+    struct Configuration: Equatable {
         public enum Direction {
             case rtl, ltr
         }
@@ -32,7 +32,7 @@ public extension UberAnimator {
     }
 }
 
-public extension UberAnimator.Options {
+public extension UberAnimator.Configuration {
     static var `default`: Self {
         return .init()
     }

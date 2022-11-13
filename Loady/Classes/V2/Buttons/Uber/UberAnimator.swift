@@ -8,8 +8,8 @@
 import UIKit
 
 open class UberAnimator: BaseLoadingableAnimator {
-    public let options: Options
-    public init(options: Options = .default) {
+    public let options: Configuration
+    public init(options: Configuration = .default) {
         self.options = options
     }
     /// it would be a number in rage of `0 <= 1` and it indicates how big would be the indicator in compare to the canvas, 1 means indicator would have the same length as the canvas width

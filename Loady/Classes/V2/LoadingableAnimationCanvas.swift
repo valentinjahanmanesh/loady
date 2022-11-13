@@ -12,6 +12,7 @@ public protocol LoadingableAnimationCanvas: UIView {
     func animationWillStop()
     func animationDidStop()
     func animationDidStart()
-    func addLayer(forLoading: CAShapeLayer)
+    func addLayer(forLoading: CALayer)
+    func addSubview(forLoading: UIView)
     func removeAllAnimationLayers()
 }

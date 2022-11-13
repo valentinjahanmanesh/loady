@@ -6,13 +6,15 @@
 //
 
 import UIKit
-open class LoadingableButton: UIButton {
+open class LoadingableButton: UIButton, LoadingableAnimationCanvas  {
+    public typealias DoAction = (LoadingableButton)->Void
+    private var animationLayer: CALayer? 
     public private (set) var animatorDelegate: any LoadingableAnimator = UberAnimator()
     /// indicates if the button is in loading state
     public var isLoading: Bool {
         return animatorDelegate.isLoading
     }
- 
+    
     /// changes the state of the button to loading state
     public func startLoading() {
         self.animatorDelegate.start()
@@ -27,29 +29,64 @@ open class LoadingableButton: UIButton {
         self.animatorDelegate = delegate
         delegate.set(canvas: self)
     }
-}
-
-public struct LoadingableError: LocalizedError, Equatable {
-    /// A localized message describing what error occurred.
-    public let errorDescription: String?
-
-    /// A localized message describing the reason for the failure.
-    public let failureReason: String?
-
-    /// A localized message describing how one might recover from the failure.
-    public let recoverySuggestion: String?
-}
-
-public enum LoadingableButtonError: Error{
-    case typeOfAnimationIsNotProgressive(error: LoadingableError)
-    case missingObjects(error: LoadingableError)
-}
-
-public extension LoadingableError {
-    static let animatorTypeMismatched = LoadingableError(errorDescription: "You are doing it wrong, the type of the animation that you have chosen is not progressive", failureReason: "The type of the animator is mismatched.", recoverySuggestion: "Replace the animator with a progressive one or remove the calling please")
     
-    static let noCanvas = LoadingableError(errorDescription: "It seems that the canvas is not alive or you don't set the canvas yet, because for the rest of the function, Existance of the canvas is a most", failureReason: "No canvas is found.", recoverySuggestion: "Make sure you have set the canvas or you've had strong reference to it so it can be alive and living in memory.")
+    var beforeLoading:  DoAction? = nil
+    var loadingStarted: DoAction? = nil
+    var beforeFinishing:  DoAction? = nil
+    var loadingFinished: DoAction? = nil
+    
+    
+    public func addSubview(forLoading view: UIView) {
+        fatalError("Needs to be implemented where ever needed.")
+    }
+    
+    public func removeAllAnimationLayers() {
+        animationLayer?.removeAllAnimations()
+        animationLayer?.removeFromSuperlayer()
+        animationLayer = nil
+    }
+    
+    public func addLayer(forLoading layer: CALayer) {
+        if animationLayer == nil{
+            animationLayer = CALayer()
+            self.layer.insertSublayer(animationLayer!, at: 0)
+        }
+        
+        animationLayer?.addSublayer(layer)
+    }
+    
+    public func animationWillStart() {
+        self.beforeLoading?(self)
+    }
+    
+    public func animationWillStop() {
+        self.beforeFinishing?(self)
+    }
+    
+    public func animationDidStop() {
+        self.loadingFinished?(self)
+    }
+    
+    public func animationDidStart() {
+        self.loadingStarted?(self)
+    }
 }
+
+public extension LoadingableButton {
+    func `do`(beforeLoading: DoAction? = nil,
+              loadingStarted:  DoAction? = nil,
+              beforeFinishing:  DoAction? = nil,
+              loadingFinished:  DoAction? = nil
+    ) -> Self {
+        self.beforeLoading = beforeLoading
+        self.loadingStarted = loadingStarted
+        self.beforeFinishing = beforeFinishing
+        self.loadingFinished = loadingFinished
+        
+        return self
+    }
+}
+
 
 extension LoadingableButton {
     public func update(progress: AnimationProgressValue) throws {
