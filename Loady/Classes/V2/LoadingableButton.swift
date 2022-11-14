@@ -8,7 +8,7 @@
 import UIKit
 open class LoadingableButton: UIButton, LoadingableAnimationCanvas  {
     public typealias DoAction = (LoadingableButton)->Void
-    private var animationLayer: CALayer? 
+    internal var animationLayer: CALayer? 
     public private (set) var animatorDelegate: any LoadingableAnimator = UberAnimator()
     /// indicates if the button is in loading state
     public var isLoading: Bool {

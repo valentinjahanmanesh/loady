@@ -69,6 +69,17 @@ final class LoadyCore {
 		animation.isRemovedOnCompletion = false
 		layer.add(animation, forKey: animation.keyPath)
 	}
+    
+    class func animateKeyPath(keyPath: String, duration: CFTimeInterval, times: [CFTimeInterval], values: [CGFloat]) -> CAKeyframeAnimation {
+        let animation = CAKeyframeAnimation(keyPath: keyPath)
+        animation.keyTimes = times as [NSNumber]?
+        animation.values = values
+        animation.calculationMode = .linear
+        animation.duration = duration
+        animation.repeatCount = Float.infinity
+        animation.isRemovedOnCompletion = false
+        return animation
+    }
 	
 	/// creates a copy of specific properties of the layer and makes a new layer with those
 	///

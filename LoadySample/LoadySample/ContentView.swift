@@ -25,6 +25,7 @@ import SnapKit
 import Loady
 final class MainViewController: UIViewController {
     private lazy var box =  UIView()
+    private var progressValue: Float16 = 0
     private var cancellables: [AnyCancellable] = []
     let timer = Timer.publish(every: 1, on: .main, in: .default)
         .autoconnect()
@@ -47,26 +48,31 @@ final class MainViewController: UIViewController {
         let offsetForTop: CGFloat = 16
         let buttonDefaultSize = CGSize(width: self.view.frame.width / 2 - offsetForLeftOrRight - (offsetForCenter / 2), height: 50)
         
+        // Background Filling Animator
         let backgroundFillingButton = createBackgroundFillingButton()
         bind(button: backgroundFillingButton, size: buttonDefaultSize, to: box, leftOffset: offsetForLeftOrRight, topOffset: 0)
         
+        // TopLine (Uber) Animator
         let rightButtonOffset = buttonDefaultSize.width + offsetForLeftOrRight + offsetForCenter
         let topLineButton = createTopLineButton()
         bind(button: topLineButton, size: buttonDefaultSize, to: box, leftOffset: rightButtonOffset, topOffset: 0)
 
+        // Activity Indicator Animator
         let activityIndicatorButton = createActivityIndicatorButton()
         bind(button: activityIndicatorButton, size: buttonDefaultSize, to: box, leftOffset: rightButtonOffset, topOffset: buttonDefaultSize.height + offsetForTop)
         
+        // Android Indicator Animator
+        let androidButton = createAndroidIndicatorButton()
+        bind(button: androidButton, size: buttonDefaultSize, to: box, leftOffset: offsetForLeftOrRight, topOffset: buttonDefaultSize.height + offsetForTop)
         
-        var progressValue: Float16 = 0
-        self.timer.sink { _ in
+        self.timer.sink {[unowned self] _ in
             guard backgroundFillingButton.isLoading else {return}
-            if progressValue == 1.0 {
-                progressValue = 0
+            if self.progressValue == 1.0 {
+                self.progressValue = 0
             }
-            progressValue += 0.1
+            self.progressValue += 0.1
             
-            try! backgroundFillingButton.update(progress: .init(rawValue: progressValue))
+            try! backgroundFillingButton.update(progress: .init(rawValue: self.progressValue))
         }
         .store(in: &self.cancellables)
     }
@@ -124,6 +130,21 @@ final class MainViewController: UIViewController {
         defaultStyle(&button)
         return button
     }
+    
+    private func createAndroidIndicatorButton() -> LoadingableButton{
+        var button: LoadingableButton = AndroidLoadingableButton()
+            .set(options: .init(fillColor: .systemBlue))
+            .do(beforeLoading: { button in
+                button.setTitle("", for: .normal)
+            }, loadingFinished: { button in
+                button.setTitle("Do Action", for: .normal)
+            })
+        
+        button.clipsToBounds = true
+        defaultStyle(&button)
+        return button
+    }
+    
     
     private func bind(button: LoadingableButton, size buttonSize: CGSize ,to box: UIView, leftOffset: CGFloat, topOffset: CGFloat) {
         box.addSubview(button)
